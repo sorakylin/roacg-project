@@ -4,6 +4,9 @@ if (!JavaVersion.current().java11Compatible) {
     throw new GradleException("Gradle must be run with Java 11")
 }
 
+include ':roacg-core:common-base'
+include ':roacg-core:common-utils'
+//findProject(':roacg-core:common-dependency')?.name = 'common-dependency'
 //include ':roacg-core:common-dependency'
 //include ':roacg-security'
 //include ':roacg-service'

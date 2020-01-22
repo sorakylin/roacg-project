@@ -1,0 +1,5 @@
+dependencies {
+    compile libs["guava"]
+    compile libs["spring-boot-actuator"]
+    compile libs["spring-boot-test"]
+}

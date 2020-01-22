@@ -1,3 +1,4 @@
 dependencies {
     compile project(':roacg-core:common-base')
+    compile libs['hibernate-validator']
 }

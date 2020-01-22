@@ -1,10 +1,11 @@
 ext {
     ver = [
             utils : [
-                    guava     : "28.2-jre",
-                    lombok    : "1.18.8",
-                    junit     : "4.12",
-                    groovy_all: "2.4.13"
+                    guava              : "28.2-jre",
+                    lombok             : "1.18.8",
+                    junit              : "4.12",
+                    groovy_all         : "2.4.13",
+                    hibernate_validator: "6.1.0.Final",
 
             ],
             spring: [
@@ -24,6 +25,7 @@ ext {
             "lombok"                             : "org.projectlombok:lombok:$ver.utils.lombok",
             "guava"                              : "com.google.guava:guava:$ver.utils.guava",
             "groovy-all"                         : "org.codehaus.groovy:groovy-all:$ver.utils.groovy_all",
+            "hibernate-validator"                : "org.hibernate:hibernate-validator:$ver.utils.hibernate_validator",
 
             //TEST
             "junit"                              : "junit:junit:$ver.utils.junit",

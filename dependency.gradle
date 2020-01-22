@@ -6,6 +6,8 @@ ext {
                     junit              : "4.12",
                     groovy_all         : "2.4.13",
                     hibernate_validator: "6.1.0.Final",
+                    hibernate_jpa      : "1.0.0.Final",
+                    javax_jpa          : "2.2",
 
             ],
             spring: [
@@ -29,6 +31,8 @@ ext {
             "guava"                              : "com.google.guava:guava:$ver.utils.guava",
             "groovy-all"                         : "org.codehaus.groovy:groovy-all:$ver.utils.groovy_all",
             "hibernate-validator"                : "org.hibernate:hibernate-validator:$ver.utils.hibernate_validator",
+            "hibernate-jpa"                      : "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:$ver.utils.hibernate_jpa",
+            "javax.persistence-api"              : "javax.persistence:javax.persistence-api:$ver.utils.javax_jpa",
 
             //TEST
             "junit"                              : "junit:junit:$ver.utils.junit",

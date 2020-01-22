@@ -1,16 +1,5 @@
-plugins {
-    id 'java'
-}
-
-group 'com.roacg'
-version '0.0.1-SNAPSHOT'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile project(':roacg-core:common-base')
+//    compile libs['hibernate-jpa']
+    compile libs['javax.persistence-api']
 }

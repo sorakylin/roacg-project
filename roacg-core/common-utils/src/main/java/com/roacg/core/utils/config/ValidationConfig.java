@@ -1,4 +1,4 @@
-package com.roacg.core.config;
+package com.roacg.core.utils.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

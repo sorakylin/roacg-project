@@ -1,2 +1,32 @@
 rootProject.name = 'roacg-project'
 
+if ( !JavaVersion.current().java11Compatible ) {
+    throw new GradleException( "Gradle must be run with Java 11" )
+}
+
+include ':roacg-core:common-dependency'
+include ':roacg-security'
+include ':roacg-service'
+
+/**
+ * 递归检查build.gradle文件是否根据模块名生成
+ * @param dirs
+ * @return
+ */
+def assertProjectBuildFile(Set<ProjectDescriptor> dirs){
+    if(dirs.size()>0){
+        dirs.each { project ->
+            project.buildFileName = "${project.name}.gradle"
+            assert project.projectDir.isDirectory()
+            assert project.buildFile.exists()
+            assert project.buildFile.isFile()
+        }
+        if(dirs.children.size()>0){
+            dirs.children.each {project->
+                assertProjectBuildFile(project)
+            }
+        }
+    }
+}
+
+assertProjectBuildFile(rootProject.children)

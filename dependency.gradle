@@ -1,0 +1,44 @@
+ext {
+    ver = [
+            utils : [
+                    guava     : "28.2-jre",
+                    lombok    : "1.18.8",
+                    junit     : "4.12",
+                    groovy_all: "2.4.13"
+
+            ],
+            spring: [
+                    boot      : "2.2.0.RELEASE",
+                    cloud     : "Hoxton.SR1",
+                    management: "1.0.8.RELEASE",
+            ],
+            cloud : [
+            ],
+            common: [
+                    //数据库
+                    mysql: '8.0.13',
+            ]
+    ]
+    libs = [
+            //UTILS
+            "lombok"                             : "org.projectlombok:lombok:$ver.utils.lombok",
+            "guava"                              : "com.google.guava:guava:$ver.utils.guava",
+            "groovy-all"                         : "org.codehaus.groovy:groovy-all:$ver.utils.groovy_all",
+
+            //TEST
+            "junit"                              : "junit:junit:$ver.utils.junit",
+
+            //SPRING-BOOT
+            "spring-boot-gradle-plugin"          : "org.springframework.boot:spring-boot-gradle-plugin:$ver.spring.boot",
+            "spring-dependency-management-plugin": "io.spring.dependency-management:$ver.spring.management",
+            "spring-security-oauth2"             : "org.springframework.security.oauth:spring-security-oauth2:$ver.spring.boot",
+
+            //SPRING
+            "spring-dependency-management"       : "org.springframework.boot:$ver.spring.boot",
+            "spring-cloud-dependencies"          : "org.springframework.cloud:spring-cloud-dependencies:$ver.spring.cloud",
+
+            //DBc
+            "mysql-connector-java"               : "mysql:mysql-connector-java:$ver.common.mysql",
+
+    ]
+}

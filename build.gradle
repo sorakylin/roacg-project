@@ -1,14 +1,62 @@
-group 'com.roacg'
-version '1.0-SNAPSHOT'
+allprojects {
+    group = 'com.roacg'
+    version = '0.0.1-SNAPSHOT'
 
-apply plugin: 'java'
+    apply from: "${rootDir}/dependency.gradle"
 
-sourceCompatibility = 1.8
+    apply plugin: 'maven'
 
-repositories {
-    mavenCentral()
+    ext.gradleScriptDir = "${rootProject.projectDir}/gradle"
+
+    apply from: "${gradleScriptDir}/task.gradle"
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+//容器模块名字
+def holderProjects = Arrays.asList('roacg-core', 'roacg-security', 'roacg-service')
+
+configure(subprojects) { subp ->
+    //此处主要为了过滤容器模块中的插件配置，容器模块的主要用来管理下属部分的模块，无需添加依赖和插件
+    if (!holderProjects.contains(subp.name)) {
+
+        plugins {
+            //spring boot 插件
+            libs["spring-boot-gradle-plugin"]
+            //Gradle插件，提供类似Maven的依赖关系管理功能
+            id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+            id 'java'
+        }
+
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+
+        [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+        apply from: "${rootDir}/dependency.gradle"
+
+        repositories {
+            maven { url = 'https://maven.aliyun.com/repository/jcenter' }
+            maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
+            maven { url = "https://plugins.gradle.org/m2/" }
+            jcenter()
+            mavenCentral()
+        }
+
+        dependencyManagement {
+            imports {
+                mavenBom libs['spring-cloud-dependencies']
+            }
+        }
+
+        dependencies {
+//            implementation libs['commons-lang3']
+            //lombok
+            annotationProcessor libs['lombok']
+            compileOnly libs['lombok']
+            testAnnotationProcessor libs['lombok']
+            testCompileOnly libs['lombok']
+
+            testImplementation libs['junit']
+        }
+
+    }
 }

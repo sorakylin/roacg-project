@@ -36,6 +36,7 @@ ext {
             //SPRING
             "spring-dependency-management"       : "org.springframework.boot:$ver.spring.boot",
             "spring-cloud-dependencies"          : "org.springframework.cloud:spring-cloud-dependencies:$ver.spring.cloud",
+            "spring-boot-test"                   : "org.springframework.boot:spring-boot-starter-test:$ver.spring.cloud",
 
             //DBc
             "mysql-connector-java"               : "mysql:mysql-connector-java:$ver.common.mysql",

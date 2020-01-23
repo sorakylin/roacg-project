@@ -30,6 +30,7 @@ build/
 .gradle/
 target/out/
 target/
+gradle/
 
 #files
 HELP.md

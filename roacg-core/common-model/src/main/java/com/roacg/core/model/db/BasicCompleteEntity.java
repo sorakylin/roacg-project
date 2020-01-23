@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public class BasicCompleteEntity implements DBMapEntity {
 
+    private static final long serialVersionUID = -1;
+
     @Column(name = "CREATE_TIME")
     private LocalDateTime createTime;
 
@@ -32,4 +34,9 @@ public class BasicCompleteEntity implements DBMapEntity {
     @Version
     @Column(name = "VERSION")
     private int version;
+
+
+    public boolean hasDeleted() {
+        return DeletedStatusEnum.DELETED.equals(deleted);
+    }
 }

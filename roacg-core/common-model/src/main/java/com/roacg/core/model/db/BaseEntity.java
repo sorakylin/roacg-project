@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public class BaseEntity implements DBMapEntity {
 
+    private static final long serialVersionUID = -1;
+
     @Column(name = "CREATE_TIME")
     private LocalDateTime createTime;
 

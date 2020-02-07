@@ -8,6 +8,7 @@ ext {
                     hibernate_validator: "6.1.0.Final",
                     hibernate_jpa      : "1.0.0.Final",
                     javax_jpa          : "2.2",
+                    jaxb_api          : "2.3.1",
 
             ],
             spring: [
@@ -33,14 +34,15 @@ ext {
             "hibernate-validator"                : "org.hibernate:hibernate-validator:$ver.utils.hibernate_validator",
             "hibernate-jpa"                      : "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:$ver.utils.hibernate_jpa",
             "javax.persistence-api"              : "javax.persistence:javax.persistence-api:$ver.utils.javax_jpa",
+            "jaxb-api"                           : "javax.xml.bind:jaxb-api:$ver.utils.jaxb_api",
 
             //TEST
             "junit"                              : "junit:junit:$ver.utils.junit",
 
             //plugin/context
             "spring-boot-gradle-plugin"          : "org.springframework.boot:spring-boot-gradle-plugin:$ver.spring.boot",
-            "spring-dependency-management-plugin": "io.spring.dependency-management:$ver.spring.management",
-            "spring-dependency-management"       : "org.springframework.boot:$ver.spring.boot",
+            "spring-dependency-management-plugin": "io.spring.dependency-management",
+            "spring-dependency-management"       : "org.springframework.boot",
 
             //SPRING-BOOT
             "spring-security-oauth2"             : "org.springframework.security.oauth:spring-security-oauth2:$ver.spring.boot",

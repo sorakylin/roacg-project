@@ -2,5 +2,5 @@ dependencies {
     compile libs["servlet-api"]
     compile libs["guava"]
     compile libs["spring-boot-actuator"]
-    compile libs["spring-boot-test"]
+    testCompile libs["spring-boot-test"]
 }

@@ -2,4 +2,5 @@ dependencies {
 //    compile project(':roacg-core:common-base')
     compile project(':roacg-core:common-model')
     compile libs['hibernate-validator']
+    compile libs['jaxb-api']
 }

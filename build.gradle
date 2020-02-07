@@ -37,11 +37,6 @@ configure(subprojects) { subp ->
         apply from: "${rootDir}/dependency.gradle"
 
 
-//        dependencyManagement {
-//            imports {
-//                mavenBom libs['spring-cloud-dependencies']
-//            }
-//        }
 
         dependencies {
 //            implementation libs['commons-lang3']

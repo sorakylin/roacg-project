@@ -46,12 +46,13 @@ ext {
             "spring-cloud-dependencies"          : "org.springframework.cloud:spring-cloud-dependencies:$ver.spring.cloud",
 
             //SPRING
-            "spring-security-oauth2"             : "org.springframework.security.oauth:spring-security-oauth2:$ver.spring.boot",
+//            "spring-security-oauth2"             : "org.springframework.security.oauth:spring-security-oauth2:$ver.spring.boot",
             "spring-boot-actuator"               : "org.springframework.boot:spring-boot-starter-actuator:$ver.spring.boot",
             "spring-boot-test"                   : "org.springframework.boot:spring-boot-starter-test:$ver.spring.boot",
             "spring-boot-redis"                  : "org.springframework.boot:spring-boot-starter-data-redis",
             "spring-boot-redis-reactive"         : "org.springframework.boot:spring-boot-starter-data-redis-reactive",
             "spring-cloud-gateway"               : "org.springframework.cloud:spring-cloud-starter-gateway",
+            "spring-cloud-security-oauth2"       : "org.springframework.cloud:spring-cloud-starter-oauth2",
 
             //DBc
             "mysql-connector-java"               : "mysql:mysql-connector-java:$ver.other.mysql",

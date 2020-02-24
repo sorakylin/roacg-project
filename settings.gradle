@@ -7,7 +7,7 @@ if (!JavaVersion.current().java11Compatible) {
 include ':roacg-core:common-base'
 include ':roacg-core:common-utils'
 include ':roacg-core:common-model'
-include ':roacg-service:service-auth'
+include ':roacg-service:service-system'
 include ':roacg-service:service-gateway'
 //findProject(':roacg-core:common-dependency')?.name = 'common-dependency'
 //include ':roacg-core:common-dependency'

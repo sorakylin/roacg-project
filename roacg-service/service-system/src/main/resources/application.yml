@@ -4,4 +4,4 @@ server:
 
 spring:
   application:
-    name: service-auth
+    name: service-system

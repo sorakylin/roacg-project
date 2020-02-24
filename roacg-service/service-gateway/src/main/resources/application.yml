@@ -1,0 +1,7 @@
+#设置服务器端口号
+server:
+  port: 7081
+
+spring:
+  application:
+    name: service-gateway

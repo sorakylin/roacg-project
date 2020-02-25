@@ -55,6 +55,7 @@ ext {
             "spring-boot-configuration-processor": "org.springframework.boot:spring-boot-configuration-processor:$ver.spring.boot",
             "spring-boot-test"                   : "org.springframework.boot:spring-boot-starter-test:$ver.spring.boot",
             "spring-boot-web"                    : "org.springframework.boot:spring-boot-starter-web:$ver.spring.boot",
+            "spring-boot-jdbc"                   : "org.springframework.boot:spring-boot-starter-jdbc:$ver.spring.boot",
             "spring-boot-redis"                  : "org.springframework.boot:spring-boot-starter-data-redis",
             "spring-boot-redis-reactive"         : "org.springframework.boot:spring-boot-starter-data-redis-reactive",
             "spring-cloud-gateway"               : "org.springframework.cloud:spring-cloud-starter-gateway",

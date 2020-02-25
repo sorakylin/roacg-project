@@ -28,6 +28,7 @@ dependencies {
     compile libs['spring-cloud-security-oauth2']
     compile libs['spring-boot-web']
     compile libs['common-pool']
+    compile libs['spring-boot-jdbc']
     compile libs['spring-boot-redis']
 }
 

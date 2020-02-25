@@ -11,7 +11,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.194.132:3306/roacg-service-system?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+    jdbc-url: jdbc:mysql://192.168.194.132:3306/roacg-service-system?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: 614
     hikari:
@@ -33,3 +33,4 @@ spring:
         max-idle: 8
         max-active: 8
         max-wait: -1ms
+

@@ -1,4 +1,4 @@
-package com.roacg.service.auth;
+package com.roacg.service.sys;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

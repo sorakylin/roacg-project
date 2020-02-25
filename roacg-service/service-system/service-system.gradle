@@ -24,8 +24,10 @@ apply plugin: libs["spring-dependency-management"]
 dependencies {
     compile project(':roacg-core:common-utils')
     compile libs['mysql-connector-java']
+    compile libs['dbpoll-hikari']
     compile libs['spring-cloud-security-oauth2']
     compile libs['spring-boot-web']
+    compile libs['common-pool']
     compile libs['spring-boot-redis']
 }
 

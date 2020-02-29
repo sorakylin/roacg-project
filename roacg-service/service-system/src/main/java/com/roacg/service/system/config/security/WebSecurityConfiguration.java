@@ -1,4 +1,4 @@
-package com.roacg.service.sys.security.config;
+package com.roacg.service.system.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

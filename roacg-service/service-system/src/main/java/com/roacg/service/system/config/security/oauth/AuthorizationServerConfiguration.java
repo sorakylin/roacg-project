@@ -1,5 +1,6 @@
-package com.roacg.service.sys.security.config.oauth;
+package com.roacg.service.system.config.security.oauth;
 
+import com.roacg.service.system.config.security.properties.Oauth2SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private Oauth2SecurityProperties oauth2SecurityProperties;
 
 
     /**
@@ -89,7 +93,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
         //认证端点映射
-        this.oauthEndpointUrlSetting();
+//        this.oauthEndpointUrlSetting();
 
         // 用户信息查询服务
         endpoints.userDetailsService(userDetailsService);

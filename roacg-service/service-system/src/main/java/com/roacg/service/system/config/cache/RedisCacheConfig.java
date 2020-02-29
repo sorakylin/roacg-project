@@ -1,4 +1,4 @@
-package com.roacg.service.sys.config;
+package com.roacg.service.system.config.cache;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.CacheManager;

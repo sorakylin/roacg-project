@@ -1,4 +1,4 @@
-package com.roacg.service.sys.config;
+package com.roacg.service.system.config.db;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;

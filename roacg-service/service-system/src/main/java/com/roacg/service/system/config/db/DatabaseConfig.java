@@ -1,4 +1,4 @@
-package com.roacg.service.sys.config;
+package com.roacg.service.system.config.db;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;

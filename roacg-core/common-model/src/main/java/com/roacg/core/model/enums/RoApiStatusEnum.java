@@ -11,6 +11,7 @@ public enum RoApiStatusEnum {
     TIME_OUT(30),//超时
     SYSTEM_ERROR(50),//系统内部错误
     ILLEGAL_VERSION(51),//非法版本
+    UNAUTHORIZED(401),//未经授权
     ILLEGAL_PARAM(614);//非法参数
 
     private int code;

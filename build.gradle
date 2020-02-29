@@ -60,7 +60,7 @@ configure(subprojects) { subp ->
         //指定编译的目录
         sourceSets {
             main {
-
+                //https://www.jianshu.com/p/3d5ca604f0a0
                 //保留环境包目录的方式
                 /*resources {
                     sourceSets.main.resources.srcDirs.each {
@@ -76,7 +76,7 @@ configure(subprojects) { subp ->
                 //直接将环境包目录下的文件打包到resources根目录下
                 resources {
                     srcDir "src/main/resources/${env}"
-                    println "Current environment [${env}] by ${project.name}."
+                    println "Current environment [${env}] by ${project.name}. "
 
                     sourceSets.main.resources.srcDirs.each   {
                         it.listFiles().each {

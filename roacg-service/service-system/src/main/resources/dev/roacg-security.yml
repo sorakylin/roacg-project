@@ -1,0 +1,4 @@
+
+oauth2:
+  refreshTokenSupport: true
+  accessTokenValiditySeconds: 3600

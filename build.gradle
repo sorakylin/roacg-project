@@ -51,11 +51,6 @@ configure(subprojects) { subp ->
             testImplementation libs['junit']
         }
 
-//
-//        sourceSets{
-//            dev.resource.srcDirs=['src/main/resource/dev']
-//            pro.resource.srcDirs=['src/main/resource/pro']
-//        }
 
         //指定编译的目录
         sourceSets {

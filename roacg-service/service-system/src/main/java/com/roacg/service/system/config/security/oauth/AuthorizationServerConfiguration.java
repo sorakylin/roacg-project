@@ -1,6 +1,8 @@
 package com.roacg.service.system.config.security.oauth;
 
 import com.roacg.service.system.config.security.properties.Oauth2SecurityProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +24,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
+import java.util.Objects;
 
 /**
  * 声明为 OAuth2 认证服务器
@@ -29,6 +32,8 @@ import javax.sql.DataSource;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+
+    private static Logger preloadLog = LoggerFactory.getLogger("AT_STARTUP_PRELOAD");
 
     @Autowired
     private DataSource dataSource;
@@ -92,11 +97,12 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
-        //认证端点映射
-//        this.oauthEndpointUrlSetting();
 
         // 用户信息查询服务
         endpoints.userDetailsService(userDetailsService);
+
+        //认证端点映射
+        this.oauthEndpointUrlSetting(oauth2SecurityProperties.getEndpoint(), endpoints);
 
 
         // Redis管理access_token和refresh_token
@@ -111,9 +117,14 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         DefaultTokenServices tokenServices = new DefaultTokenServices();
         tokenServices.setTokenStore(jdbcTokenStore);
         tokenServices.setClientDetailsService(jdbcClientDetailsService);
-        tokenServices.setSupportRefreshToken(true);
-        // tokenServices.setAccessTokenValiditySeconds(180);
-        // tokenServices.setRefreshTokenValiditySeconds(180);
+
+        preloadLog.info("[security-oauth2] Refresh token support enable: {}.", oauth2SecurityProperties.getRefreshTokenSupport());
+        preloadLog.info("[security-oauth2] Refresh token validity seconds: {}.", oauth2SecurityProperties.getRefreshTokenValiditySeconds());
+        preloadLog.info("[security-oauth2] Access token validity seconds: {}.", oauth2SecurityProperties.getAccessTokenValiditySeconds());
+
+        tokenServices.setSupportRefreshToken(oauth2SecurityProperties.getRefreshTokenSupport());
+        tokenServices.setAccessTokenValiditySeconds(180);
+        tokenServices.setRefreshTokenValiditySeconds(180);
 
         endpoints.tokenServices(tokenServices);
 
@@ -145,8 +156,31 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
      * /oauth/token_key：提供公有密匙的端点，如果你使用JWT令牌的话。
      *
      * <p>注: 授权端点（默认 /oauth/authorize ）这个URL应该被Spring Security保护起来只供授权用户访问
+     *
+     * @param endpointMapping 端点映射实例
+     * @param endpoints       设置端点映射
      */
-    private void oauthEndpointUrlSetting() {
+    private void oauthEndpointUrlSetting(Oauth2SecurityProperties.Oauth2Endpoint endpointMapping,
+                                         AuthorizationServerEndpointsConfigurer endpoints) {
+
+        if (Objects.nonNull(endpointMapping.getAuthorize())) {
+            endpoints.pathMapping("/oauth/authorize", endpointMapping.getAuthorize());
+        }
+        if (Objects.nonNull(endpointMapping.getToken())) {
+            endpoints.pathMapping("/oauth/token", endpointMapping.getToken());
+        }
+        if (Objects.nonNull(endpointMapping.getConfirmAccess())) {
+            endpoints.pathMapping("/oauth/confirm_access", endpointMapping.getConfirmAccess());
+        }
+        if (Objects.nonNull(endpointMapping.getError())) {
+            endpoints.pathMapping("/oauth/error", endpointMapping.getError());
+        }
+        if (Objects.nonNull(endpointMapping.getCheckToken())) {
+            endpoints.pathMapping("/oauth/check_token", endpointMapping.getCheckToken());
+        }
+        if (Objects.nonNull(endpointMapping.getTokenKey())) {
+            endpoints.pathMapping("/oauth/token_key", endpointMapping.getTokenKey());
+        }
 
     }
 

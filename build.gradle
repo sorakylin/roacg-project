@@ -10,6 +10,8 @@ allprojects {
     ext.gradleScriptDir = "${rootProject.projectDir}/tasks"
 
     apply from: "${gradleScriptDir}/task.gradle"
+
+
 }
 
 //容器模块名字
@@ -49,5 +51,43 @@ configure(subprojects) { subp ->
             testImplementation libs['junit']
         }
 
+//
+//        sourceSets{
+//            dev.resource.srcDirs=['src/main/resource/dev']
+//            pro.resource.srcDirs=['src/main/resource/pro']
+//        }
+
+        //指定编译的目录
+        sourceSets {
+            main {
+
+                //保留环境包目录的方式
+                /*resources {
+                    sourceSets.main.resources.srcDirs.each {
+                        it.listFiles().each {
+                            if (it.isDirectory() && it.name != "${env}") {
+                                println "Exclude environment [${it.name}]"
+                                exclude "${it.name}"
+                            }
+                        }
+                    }
+                }*/
+
+                //直接将环境包目录下的文件打包到resources根目录下
+                resources {
+                    srcDir "src/main/resources/${env}"
+                    println "Current environment [${env}] by ${project.name}."
+
+                    sourceSets.main.resources.srcDirs.each   {
+                        it.listFiles().each {
+                            if(it.isDirectory()) {
+                                exclude "${it.name}"
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
+

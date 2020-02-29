@@ -31,6 +31,7 @@ build/
 target/out/
 target/
 gradle/
+**/src/main/resources/pro/
 
 #files
 HELP.md

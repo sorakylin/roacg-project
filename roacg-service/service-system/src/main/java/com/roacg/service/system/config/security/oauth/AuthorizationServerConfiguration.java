@@ -5,6 +5,7 @@ import com.roacg.core.base.log.RoLoggerFactory;
 import com.roacg.service.system.config.security.properties.Oauth2SecurityProperties;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -42,6 +43,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Qualifier("authenticationUserService")
     @Autowired
     private UserDetailsService userDetailsService;
 

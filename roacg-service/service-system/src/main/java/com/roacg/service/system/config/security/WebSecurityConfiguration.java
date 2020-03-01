@@ -4,8 +4,10 @@ import com.roacg.core.base.log.RoCommonLoggerEnum;
 import com.roacg.core.base.log.RoLoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,6 +17,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +30,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static Logger preloadLog = RoLoggerFactory.getCommonLogger(RoCommonLoggerEnum.AT_STARTUP_PRELOAD, "security-web");
 
+    @Qualifier("authenticationUserService")
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -42,28 +50,55 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return authenticationProvider;
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.userDetailsService(userDetailsService);
-        auth.authenticationProvider(this.authenticationProvider());
-    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.inMemoryAuthentication()
-                // 在内存中创建用户并为密码加密
-                .withUser("user").password(passwordEncoder().encode("123456")).roles("USER")
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder())
                 .and()
-                .withUser("admin").password(passwordEncoder().encode("123456")).roles("ADMIN");
-
+                .authenticationProvider(this.authenticationProvider());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests(authorizeRequests ->
-                authorizeRequests
-                        .anyRequest().authenticated());
+        //默认所有请求都需要认证
+        http.authorizeRequests(authReq -> authReq.anyRequest().authenticated())
+                .csrf().disable()//禁用CSRF
+                .formLogin().disable();//禁用form登录
     }
+
+
+    /**
+     * AuthenticationManager:
+     * 用户认证的管理类，所有的认证请求（比如login）都会通过提交一个 token 给 AuthenticationManager 的 authenticate() 方法来实现。
+     * 具体校验动作会由 AuthenticationManager 将请求转发给具体的实现类来做。根据实现反馈的结果再调用具体的 Handler 来给用户以反馈。
+     *
+     * @return default AuthenticationManager
+     * @throws Exception
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    //跨域设置
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        //跨域请求访问配置
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");//请求方法限制:如GET/POST，*表示所有都允许
+        //configuration.setAllowCredentials(true);
+        configuration.addAllowedOrigin("*");//容许任何来源的跨域访问
+//        configuration.addExposedHeader();
+        //对当前这个服务器下所有有的请求都启用这个配置
+        source.registerCorsConfiguration("/**", configuration);
+
+        return new CorsFilter(source);
+    }
+
 }

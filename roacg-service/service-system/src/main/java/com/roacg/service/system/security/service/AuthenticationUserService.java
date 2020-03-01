@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,10 +39,10 @@ public class AuthenticationUserService implements UserDetailsService {
         List<MinimumRoleDTO> roles = userService.findUserMinimumRole(user.getUserId());
 
 
-        ArrayList<SimpleGrantedAuthority> authorities = roles
+        List<SimpleGrantedAuthority> authorities = roles
                 .stream()
                 .map(per -> new SimpleGrantedAuthority(per.getEnName()))
-                .collect(Collectors.toCollection(() -> new ArrayList(roles.size())));
+                .collect(Collectors.toList());
 
         return AuthenticationUser.from(user).setAuthorities(authorities);
     }

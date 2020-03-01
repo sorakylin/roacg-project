@@ -90,7 +90,7 @@ CREATE TABLE `oauth_refresh_token`
   DEFAULT CHARSET = utf8;CREATE DATABASE `roacg-service-system` CHARACTER SET UTF8MB4;
 
 
--- 初始化一个客户端 client_id=0001] client_secret=123456
+-- 初始化一个客户端 client_id=0001 client_secret=123456
 INSERT INTO `roacg-service-system`.oauth_client_details
 (client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove)
 VALUES ('0001', null, '$2a$10$9ZhDOBp.sRKat4l14ygu/.LscxrMUcDAfeVOEPiYwbcRkoB09gCmi', 'web', 'authorization_code', 'https://www.github.com', null, null, null, null, null)
@@ -99,3 +99,78 @@ VALUES ('0001', null, '$2a$10$9ZhDOBp.sRKat4l14ygu/.LscxrMUcDAfeVOEPiYwbcRkoB09g
 -- ==============================================================
 -- -------OAuth2 table script end--------
 -- ==============================================================
+
+
+
+-- ==============================================================
+-- -------System user table script start--------
+-- ==============================================================
+
+CREATE TABLE `tb_resource_permission` (
+  `permission_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) NOT NULL COMMENT '资源路径',
+  `method` varchar(8) NOT NULL COMMENT '访问方法',
+  `name` varchar(64) NOT NULL COMMENT '权限名称',
+  `en_name` varchar(64) NOT NULL COMMENT '权限英文名称',
+  `description` varchar(200) DEFAULT NULL COMMENT '备注',
+  `create_time` datetime NULL,
+  `update_time` datetime NULL,
+  `create_at` varchar(64) NULL,
+  `update_at` varchar(64) NULL,
+  `update_id` bigint(20) NULL,
+  PRIMARY KEY (`permission_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='资源权限表';
+
+CREATE TABLE `tb_role` (
+  `role_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `parent_id` bigint(20) DEFAULT NULL COMMENT '父角色',
+  `name` varchar(64) NOT NULL COMMENT '角色名称',
+  `en_name` varchar(64) NOT NULL COMMENT '角色英文名称',
+  `description` varchar(200) DEFAULT NULL COMMENT '备注',
+  `create_time` datetime NULL,
+  `update_time` datetime NULL,
+  `create_at` varchar(64) NULL,
+  `update_at` varchar(64) NULL,
+  `update_id` bigint(20) NULL,
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='角色表';
+
+
+
+
+CREATE TABLE `tb_role_resource_permission` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role_id` bigint(20) NOT NULL COMMENT '角色 ID',
+  `permission_id` bigint(20) NOT NULL COMMENT '资源权限 ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='角色-资源权限表';
+
+
+CREATE TABLE `tb_ro_user` (
+  `user_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(50) NOT NULL COMMENT '用户名',
+  `password` varchar(64) NOT NULL COMMENT '密码，加密存储',
+  `create_time` datetime NULL,
+  `update_time` datetime NULL,
+  `create_at` varchar(64) NULL,
+  `update_at` varchar(64) NULL,
+  `update_id` bigint(20) NULL,
+  `deleted` tinyint(3) NOT NULL ,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `username` (`user_name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+
+CREATE TABLE `tb_rouser_role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL COMMENT '用户 ID',
+  `role_id` bigint(20) NOT NULL COMMENT '角色 ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='用户角色表';
+
+
+-- ==============================================================
+-- -------System user table script start--------
+-- ==============================================================
+
+

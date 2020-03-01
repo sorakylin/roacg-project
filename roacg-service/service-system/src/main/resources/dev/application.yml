@@ -34,3 +34,5 @@ spring:
         max-active: 8
         max-wait: -1ms
 
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml

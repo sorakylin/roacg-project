@@ -30,6 +30,7 @@ dependencies {
     compile libs['common-pool']
     compile libs['spring-boot-jdbc']
     compile libs['spring-boot-redis']
+    compile libs['spring-boot-mybatis']
 }
 
 dependencyManagement {

@@ -1,6 +1,6 @@
 ext {
     ver = [
-            utils   : [
+            utils : [
                     guava              : "28.2-jre",
                     lombok             : "1.18.8",
                     junit              : "4.12",
@@ -12,18 +12,19 @@ ext {
                     commons_pool       : "2.8.0",
 
             ],
-            spring  : [
+            spring: [
                     boot      : "2.2.4.RELEASE",
                     cloud     : "Hoxton.SR1",
                     management: "1.0.8.RELEASE",
+                    mybatis   : "2.1.1",
             ],
-            cloud   : [
+            cloud : [
             ],
-            db      : [
+            db    : [
                     mysql : '8.0.13',
                     hikari: '3.4.2',
             ],
-            other   : [
+            other : [
                     servlet_api: '4.0.1',
             ]
     ]
@@ -56,6 +57,7 @@ ext {
             "spring-boot-test"                   : "org.springframework.boot:spring-boot-starter-test:$ver.spring.boot",
             "spring-boot-web"                    : "org.springframework.boot:spring-boot-starter-web:$ver.spring.boot",
             "spring-boot-jdbc"                   : "org.springframework.boot:spring-boot-starter-jdbc:$ver.spring.boot",
+            "spring-boot-mybatis"                : "org.mybatis.spring.boot:mybatis-spring-boot-starter:$ver.spring.mybatis",
             "spring-boot-redis"                  : "org.springframework.boot:spring-boot-starter-data-redis",
             "spring-boot-redis-reactive"         : "org.springframework.boot:spring-boot-starter-data-redis-reactive",
             "spring-cloud-gateway"               : "org.springframework.cloud:spring-cloud-starter-gateway",

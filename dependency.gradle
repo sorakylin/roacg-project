@@ -1,6 +1,6 @@
 ext {
     ver = [
-            utils : [
+            utils   : [
                     guava              : "28.2-jre",
                     lombok             : "1.18.8",
                     junit              : "4.12",
@@ -12,18 +12,18 @@ ext {
                     commons_pool       : "2.8.0",
 
             ],
-            spring: [
+            spring  : [
                     boot      : "2.2.4.RELEASE",
                     cloud     : "Hoxton.SR1",
                     management: "1.0.8.RELEASE",
             ],
-            cloud : [
+            cloud   : [
             ],
-            db    : [
+            db      : [
                     mysql : '8.0.13',
                     hikari: '3.4.2',
             ],
-            other : [
+            other   : [
                     servlet_api: '4.0.1',
             ]
     ]

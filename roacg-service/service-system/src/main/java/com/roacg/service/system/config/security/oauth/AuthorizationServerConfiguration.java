@@ -1,8 +1,9 @@
 package com.roacg.service.system.config.security.oauth;
 
+import com.roacg.core.base.log.RoCommonLoggerEnum;
+import com.roacg.core.base.log.RoLoggerFactory;
 import com.roacg.service.system.config.security.properties.Oauth2SecurityProperties;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +34,7 @@ import java.util.Objects;
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    private static Logger preloadLog = LoggerFactory.getLogger("AT_STARTUP_PRELOAD");
+    private static Logger preloadLog = RoLoggerFactory.getCommonLogger(RoCommonLoggerEnum.AT_STARTUP_PRELOAD,"security-oauth2");
 
     @Autowired
     private DataSource dataSource;
@@ -118,9 +119,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         tokenServices.setTokenStore(jdbcTokenStore);
         tokenServices.setClientDetailsService(jdbcClientDetailsService);
 
-        preloadLog.info("[security-oauth2] Refresh token support enable: {}.", oauth2SecurityProperties.getRefreshTokenSupport());
-        preloadLog.info("[security-oauth2] Refresh token validity seconds: {}.", oauth2SecurityProperties.getRefreshTokenValiditySeconds());
-        preloadLog.info("[security-oauth2] Access token validity seconds: {}.", oauth2SecurityProperties.getAccessTokenValiditySeconds());
+        preloadLog.info("Refresh token support enable: {}.", oauth2SecurityProperties.getRefreshTokenSupport());
+        preloadLog.info("Refresh token validity seconds: {}.", oauth2SecurityProperties.getRefreshTokenValiditySeconds());
+        preloadLog.info("Access token validity seconds: {}.", oauth2SecurityProperties.getAccessTokenValiditySeconds());
 
         tokenServices.setSupportRefreshToken(oauth2SecurityProperties.getRefreshTokenSupport());
         tokenServices.setAccessTokenValiditySeconds(180);

@@ -22,6 +22,7 @@ configure(subprojects) { subp ->
     if (!holderProjects.contains(subp.name)) {
 
         repositories {
+            mavenLocal()
             maven { url = 'https://maven.aliyun.com/repository/jcenter' }
             maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
             maven { url = "https://plugins.gradle.org/m2/" }
@@ -70,12 +71,17 @@ configure(subprojects) { subp ->
 
                 //直接将环境包目录下的文件打包到resources根目录下
                 resources {
+
+                    //所有的环境文件夹
+                    String[] envDirs = envdirs.split(",")
+
                     srcDir "src/main/resources/${env}"
                     println "Current environment [${env}] by ${project.name}. "
 
                     sourceSets.main.resources.srcDirs.each   {
                         it.listFiles().each {
-                            if(it.isDirectory()) {
+                            if(it.isDirectory() && envDirs.contains(it.name)) {
+                                println("${it.name} "+envDirs.contains(it.name))
                                 exclude "${it.name}"
                             }
                         }

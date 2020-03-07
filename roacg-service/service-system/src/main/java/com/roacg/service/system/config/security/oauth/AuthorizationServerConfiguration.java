@@ -18,12 +18,12 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import javax.sql.DataSource;
@@ -36,7 +36,12 @@ import java.util.Objects;
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
+
     private static Logger preloadLog = RoLoggerFactory.getCommonLogger(RoCommonLoggerEnum.AT_STARTUP_PRELOAD, "security-oauth2");
+
+    @Qualifier("authenticationUserService")
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private DataSource dataSource;
@@ -51,12 +56,11 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Qualifier("authenticationUserService")
-    @Autowired
-    private UserDetailsService userDetailsService;
-
     @Autowired
     private TokenStore tokenStore;
+
+    @Autowired
+    private TokenEnhancer tokenEnhancer;
 
     /**
      * 客户端详情服务
@@ -102,7 +106,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public AuthorizationServerTokenServices tokenServices() {
 
         DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(tokenStore);
+        tokenServices.setTokenStore(tokenStore);//令牌保存方式
+        tokenServices.setTokenEnhancer(tokenEnhancer);//增强令牌
         tokenServices.setClientDetailsService(clientDetails());
 
         preloadLog.info("Refresh token support enable: {}.", oauth2SecurityProperties.getRefreshTokenSupport());
@@ -148,10 +153,10 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
         // 数据库管理授权信息
 //        ApprovalStore approvalStore = new JdbcApprovalStore(dataSource);
-        TokenApprovalStore tokenApprovalStore = new TokenApprovalStore();
-        tokenApprovalStore.setTokenStore(tokenStore);
-
-        endpoints.approvalStore(tokenApprovalStore);
+//        TokenApprovalStore tokenApprovalStore = new TokenApprovalStore();
+//        tokenApprovalStore.setTokenStore(tokenStore);
+//
+//        endpoints.approvalStore(tokenApprovalStore);
 
         //.accessTokenConverter(defaultAccessTokenConverter);
 

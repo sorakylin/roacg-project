@@ -1,11 +1,15 @@
 package com.roacg.service.system.config.security.oauth;
 
+import com.google.common.collect.ImmutableMap;
 import com.roacg.core.base.log.RoCommonLoggerEnum;
 import com.roacg.core.base.log.RoLoggerFactory;
+import com.roacg.service.system.security.model.AuthenticationUser;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
@@ -19,7 +23,6 @@ public class TokenConfig {
 
     @Autowired
     private DataSource dataSource;
-
 
 
     /**
@@ -39,6 +42,31 @@ public class TokenConfig {
         // 基于 JDBC 实现，令牌保存到数据库
         JdbcTokenStore jdbcTokenStore = new JdbcTokenStore(dataSource);
         return jdbcTokenStore;
+    }
+
+    /**
+     * 令牌增强器，可以对默认的令牌进行修改
+     * 例如 实现一个 jwt (真要用jwt，还是用 SpringSecurity 自带的吧)
+     *
+     * @return
+     */
+    @Bean
+    public TokenEnhancer tokenEnhancer() {
+        return (accessToken, authentication) -> {
+
+            AuthenticationUser user = (AuthenticationUser) authentication.getUserAuthentication().getPrincipal();
+
+            final ImmutableMap<String, Object> additionalInfo = ImmutableMap.of(
+                    "rouser", ImmutableMap.of(
+                            "uid", user.getUserId(),
+                            "userName", user.getUsername(),
+                            "userAuthorities", user.getAuthorities()
+                    )
+            );
+            //加入自定义信息
+            ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
+            return accessToken;
+        };
     }
 
 }

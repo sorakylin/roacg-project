@@ -13,7 +13,7 @@ ext {
 
             ],
             spring: [
-                    boot      : "2.2.4.RELEASE",
+                    boot      : "2.2.5.RELEASE",
                     cloud     : "Hoxton.SR1",
                     management: "1.0.8.RELEASE",
                     mybatis   : "2.1.1",

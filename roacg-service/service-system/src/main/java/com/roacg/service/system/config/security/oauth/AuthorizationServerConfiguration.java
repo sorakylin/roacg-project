@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -16,14 +17,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.approval.ApprovalStore;
-import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
 import java.util.Objects;
@@ -50,19 +48,16 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private Oauth2SecurityProperties oauth2SecurityProperties;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    /**
-     * 持久化令牌是委托一个 TokenStore 接口来实现
-     * TokenStore 这个接口有一个默认的实现，就是 InMemoryTokenStore ，所有的令牌是被保存在了内存中。
-     *
-     * @return JdbcTokenStore
-     */
-    @Bean
-    public TokenStore tokenStore() {
-        // 基于 JDBC 实现，令牌保存到数据库
-        JdbcTokenStore jdbcTokenStore = new JdbcTokenStore(dataSource);
-        return jdbcTokenStore;
-    }
+    @Autowired
+    private TokenStore tokenStore;
+
+    @Autowired
+    private AuthorizationServerTokenServices tokenServices;
+
+
 
     /**
      * 客户端详情服务
@@ -75,7 +70,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
      *
      * <p> 客户端详情（Client Details）能够在应用程序运行的时候进行更新(访问底层的存储服务)
      * 比如我这里是使用 JdbcClientDetailsService, 就是将客户端详情存储在一个表中
-     * 可以自己手动实现 ClientDetailsService 接口来对客户端详情进行管理
+     * 可以自己手动实现 ClientDetailsService 、ClientRegistrationService 接口来对客户端详情进行管理
      *
      * @return JdbcClientDetailsService
      */
@@ -102,32 +97,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
 
         // 用户信息查询服务
-        endpoints.userDetailsService(userDetailsService);
+        endpoints.userDetailsService(userDetailsService)
+                .authenticationManager(authenticationManager);
 
         //认证端点映射
         this.oauthEndpointUrlSetting(oauth2SecurityProperties.getEndpoint(), endpoints);
 
-
-        // Redis管理access_token和refresh_token
-//        RedisTokenStore redisTokenStore = new RedisTokenStore(redisConnectionFactory);
-
-        // JBDC管理access_token和refresh_token
-        TokenStore jdbcTokenStore = this.tokenStore();
         ClientDetailsService jdbcClientDetailsService = this.jdbcClientDetails();
-//        endpoints.tokenStore(jdbcTokenStore);
-
-
-        DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(jdbcTokenStore);
-        tokenServices.setClientDetailsService(jdbcClientDetailsService);
-
-        preloadLog.info("Refresh token support enable: {}.", oauth2SecurityProperties.getRefreshTokenSupport());
-        preloadLog.info("Refresh token validity seconds: {}.", oauth2SecurityProperties.getRefreshTokenValiditySeconds());
-        preloadLog.info("Access token validity seconds: {}.", oauth2SecurityProperties.getAccessTokenValiditySeconds());
-
-        tokenServices.setSupportRefreshToken(oauth2SecurityProperties.getRefreshTokenSupport());
-        tokenServices.setAccessTokenValiditySeconds(180);
-        tokenServices.setRefreshTokenValiditySeconds(180);
 
         endpoints.tokenServices(tokenServices);
 
@@ -136,17 +112,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 //        endpoints.authorizationCodeServices(new RedisAuthorizationCodeServices(redisConnectionFactory));
 
         // 数据库管理授权信息
-        ApprovalStore approvalStore = new JdbcApprovalStore(dataSource);
+//        ApprovalStore approvalStore = new JdbcApprovalStore(dataSource);
 
         TokenApprovalStore tokenApprovalStore = new TokenApprovalStore();
-        tokenApprovalStore.setTokenStore(jdbcTokenStore);
-
+        tokenApprovalStore.setTokenStore(tokenStore);
         endpoints.approvalStore(tokenApprovalStore);
 
 
-//        DefaultAccessTokenConverter defaultAccessTokenConverter = new DefaultAccessTokenConverter();
-//        defaultAccessTokenConverter.setUserTokenConverter(new CustomUserAuthenticationConverter());
-//
 //        endpoints.accessTokenConverter(defaultAccessTokenConverter);
     }
 

@@ -25,7 +25,7 @@ class RedisCacheConfig extends CachingConfigurerSupport {
     /**
      * 默认的缓存key前缀
      */
-    public static final String DEFAULT_KEY_PREFIX = "ro:def-cache@";
+    public static final String DEFAULT_KEY_PREFIX = "RO:DEF-KEY@";
 
     @Bean
     public CacheManager cacheManager(@Qualifier("redisConnectionFactory") RedisConnectionFactory factory,

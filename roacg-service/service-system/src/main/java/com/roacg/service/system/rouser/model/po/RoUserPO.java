@@ -21,4 +21,7 @@ public class RoUserPO extends VirtualDeleteSupportEntity {
      */
     private String password;
 
+    private String phone;
+
+    private String email;
 }

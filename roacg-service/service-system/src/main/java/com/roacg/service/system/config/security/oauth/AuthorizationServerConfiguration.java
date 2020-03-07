@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,8 +20,10 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import javax.sql.DataSource;
@@ -33,7 +36,7 @@ import java.util.Objects;
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    private static Logger preloadLog = RoLoggerFactory.getCommonLogger(RoCommonLoggerEnum.AT_STARTUP_PRELOAD,"security-oauth2");
+    private static Logger preloadLog = RoLoggerFactory.getCommonLogger(RoCommonLoggerEnum.AT_STARTUP_PRELOAD, "security-oauth2");
 
     @Autowired
     private DataSource dataSource;
@@ -41,23 +44,19 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private Oauth2SecurityProperties oauth2SecurityProperties;
+
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @Qualifier("authenticationUserService")
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private Oauth2SecurityProperties oauth2SecurityProperties;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
     private TokenStore tokenStore;
-
-    @Autowired
-    private AuthorizationServerTokenServices tokenServices;
-
-
 
     /**
      * 客户端详情服务
@@ -75,12 +74,53 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
      * @return JdbcClientDetailsService
      */
     @Bean
-    public ClientDetailsService jdbcClientDetails() {
+    public ClientDetailsService clientDetails() {
         // 基于 JDBC 实现，需要事先在数据库配置客户端信息
         JdbcClientDetailsService jdbcClientDetailsService = new JdbcClientDetailsService(dataSource);
         return jdbcClientDetailsService;
     }
 
+    /**
+     * 授权码模式使用的管理器
+     *
+     * @return
+     */
+    @Bean
+    public AuthorizationCodeServices authorizationCodeServices() {
+        //new RedisAuthorizationCodeServices(redisConnectionFactory);
+        return new JdbcAuthorizationCodeServices(dataSource);
+    }
+
+
+    /**
+     * 授权令牌服务
+     * 主要是对于 token 的创建、刷新等流程进行管控
+     *
+     * @return jdbc service
+     */
+    @Bean
+    public AuthorizationServerTokenServices tokenServices() {
+
+        DefaultTokenServices tokenServices = new DefaultTokenServices();
+        tokenServices.setTokenStore(tokenStore);
+        tokenServices.setClientDetailsService(clientDetails());
+
+        preloadLog.info("Refresh token support enable: {}.", oauth2SecurityProperties.getRefreshTokenSupport());
+        preloadLog.info("Refresh token validity seconds: {}.", oauth2SecurityProperties.getRefreshTokenValiditySeconds());
+        preloadLog.info("Access token validity seconds: {}.", oauth2SecurityProperties.getAccessTokenValiditySeconds());
+
+        //设置token相关信息
+        tokenServices.setSupportRefreshToken(oauth2SecurityProperties.getRefreshTokenSupport());
+        tokenServices.setAccessTokenValiditySeconds(oauth2SecurityProperties.getAccessTokenValiditySeconds());
+        tokenServices.setRefreshTokenValiditySeconds(oauth2SecurityProperties.getRefreshTokenValiditySeconds());
+
+
+//        DefaultAccessTokenConverter defaultAccessTokenConverter = new DefaultAccessTokenConverter();
+//        defaultAccessTokenConverter.setUserTokenConverter(new CustomUserAuthenticationConverter());
+//
+
+        return tokenServices;
+    }
 
     /**
      * authenticationManager：认证管理器，当你选择了资源所有者密码（password）授权类型的时候，请设置这个属性注入一个 AuthenticationManager 对象。
@@ -95,31 +135,27 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
-
-        // 用户信息查询服务
-        endpoints.userDetailsService(userDetailsService)
-                .authenticationManager(authenticationManager);
-
         //认证端点映射
         this.oauthEndpointUrlSetting(oauth2SecurityProperties.getEndpoint(), endpoints);
 
-        ClientDetailsService jdbcClientDetailsService = this.jdbcClientDetails();
+        // 用户信息查询服务
+        endpoints.userDetailsService(userDetailsService)
+                .authenticationManager(authenticationManager)//认证管理器
+                .authorizationCodeServices(authorizationCodeServices())//授权码服务
+                .tokenServices(tokenServices())//token 管理服务
+                .allowedTokenEndpointRequestMethods(HttpMethod.POST);
 
-        endpoints.tokenServices(tokenServices);
-
-        // 数据库管理授权码
-        endpoints.authorizationCodeServices(new JdbcAuthorizationCodeServices(dataSource));
-//        endpoints.authorizationCodeServices(new RedisAuthorizationCodeServices(redisConnectionFactory));
 
         // 数据库管理授权信息
 //        ApprovalStore approvalStore = new JdbcApprovalStore(dataSource);
-
         TokenApprovalStore tokenApprovalStore = new TokenApprovalStore();
         tokenApprovalStore.setTokenStore(tokenStore);
+
         endpoints.approvalStore(tokenApprovalStore);
 
+        //.accessTokenConverter(defaultAccessTokenConverter);
 
-//        endpoints.accessTokenConverter(defaultAccessTokenConverter);
+
     }
 
     /**
@@ -162,11 +198,22 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         // 读取客户端配置
-        clients.withClientDetails(jdbcClientDetails());
+        clients.withClientDetails(clientDetails());
     }
 
+
+    /**
+     * 这个配置专门用来配置端点的安全约束。
+     *
+     * @param security
+     * @throws Exception
+     */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.passwordEncoder(passwordEncoder);
+        //检查token的和拿jwt token key的公开
+        security.passwordEncoder(passwordEncoder)
+                .tokenKeyAccess("permitAll()")
+                .checkTokenAccess("permitAll()")
+                .allowFormAuthenticationForClients();
     }
 }

@@ -111,11 +111,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         tokenServices.setClientDetailsService(clientDetails());
 
         preloadLog.info("Refresh token support enable: {}.", oauth2SecurityProperties.getRefreshTokenSupport());
+        preloadLog.info("Reuse refresh token enable: {}.", oauth2SecurityProperties.getReuseRefreshToken());
         preloadLog.info("Refresh token validity seconds: {}.", oauth2SecurityProperties.getRefreshTokenValiditySeconds());
         preloadLog.info("Access token validity seconds: {}.", oauth2SecurityProperties.getAccessTokenValiditySeconds());
 
         //设置token相关信息
         tokenServices.setSupportRefreshToken(oauth2SecurityProperties.getRefreshTokenSupport());
+        tokenServices.setReuseRefreshToken(oauth2SecurityProperties.getReuseRefreshToken());
         tokenServices.setAccessTokenValiditySeconds(oauth2SecurityProperties.getAccessTokenValiditySeconds());
         tokenServices.setRefreshTokenValiditySeconds(oauth2SecurityProperties.getRefreshTokenValiditySeconds());
 

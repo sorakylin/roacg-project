@@ -1,0 +1,43 @@
+
+version = 'v1.0.0'
+
+buildscript {
+
+    repositories {
+        mavenLocal()
+        maven { url = 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url = "https://plugins.gradle.org/m2/" }
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath libs["spring-boot-gradle-plugin"]
+    }
+}
+
+apply plugin: libs["spring-dependency-management-plugin"]
+apply plugin: libs["spring-dependency-management"]
+
+
+
+dependencies {
+    compile project(':roacg-core:common-utils')
+    compile libs['mysql-connector-java']
+    compile libs['dbpoll-hikari']
+    compile libs['spring-cloud-alibaba-nacos-discovery']
+    compile libs['spring-boot-web']
+    compile libs['common-pool']
+//    compile libs['spring-boot-jdbc']
+    compile libs['spring-boot-redis']
+    compile libs['spring-boot-data-jpa']
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom libs['spring-cloud-dependencies']
+        mavenBom libs['spring-cloud-alibaba-dependencies']
+    }
+}

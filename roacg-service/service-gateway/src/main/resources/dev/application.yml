@@ -9,6 +9,25 @@ spring:
     nacos:
       discovery:
         server-addr: 192.168.194.132:8848
+    gateway:
+      # 这里是设置与服务注册发现组件结合，这样可以采用服务名的路由策略
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: ROACG#service-system #这个是路由ID，需要保证在所有路由定义中唯一，值随便写就是了
+          # 采用 LoadBalanceClient 方式请求，以 lb:// 开头，后面的是注册在 Nacos 上的服务名
+          uri: lb://service-system
+          predicates:
+            - Method=GET,POST,DELETE,PUT
+            - Path=/s/**
+#          filters:
+#            - StripPrefix=1 # 表示在转发时去掉 /s/
+        - id: ROACG#service-tc
+          uri: lb://service-tc
+          predicates:
+            - Method=GET,POST,DELETE,PUT
+            - Path=/tc/**
   redis:
     database: 0
     host: 192.168.194.132
@@ -19,3 +38,10 @@ spring:
         max-idle: 8
         max-active: 8
         max-wait: -1ms
+  security:
+    oauth2:
+      resourceserver:
+        opaque-token:
+          introspection-uri: http://localhost:7080/oauth/check_token
+          client-id: 0001
+          client-secret: 123456

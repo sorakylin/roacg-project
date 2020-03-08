@@ -4,10 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
+/**
+ * TC == Translation collaboration
+ * 即翻译协同
+ */
 @SpringBootApplication
 @EnableDiscoveryClient
-public class TcApplication {
+public class RoacgTcApplication {
     public static void main(String[] args) {
-        SpringApplication.run(TcApplication.class, args);
+        SpringApplication.run(RoacgTcApplication.class, args);
     }
 }

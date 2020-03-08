@@ -1,4 +1,4 @@
-package com.roacg.service.system.config.cache;
+package com.roacg.service.tc.config.cache;
 
 import com.roacg.core.model.consts.RoCacheConst;
 import org.springframework.beans.factory.annotation.Qualifier;

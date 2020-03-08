@@ -1,13 +1,10 @@
-package com.roacg.service.tc.config;
+package com.roacg.service.tc.config.db.jpa;
 
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.tool.schema.Action;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -23,17 +20,7 @@ import java.util.Map;
 public class JpaConfig {
 
     @Bean
-    @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource dataSource() {
-//        new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).build();
-
-        // 配置数据源(用的是 HikariCP 连接池)，以上注解是指定数据源，否则会有冲突
-        return DataSourceBuilder.create().build();
-    }
-
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(true);
@@ -53,7 +40,7 @@ public class JpaConfig {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("com.roacg.service.tc.**.model");
-        factory.setDataSource(dataSource());
+        factory.setDataSource(dataSource);
         return factory;
     }
 

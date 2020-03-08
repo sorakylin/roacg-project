@@ -5,6 +5,10 @@ server:
 spring:
   application:
     name: service-system
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.194.132:8848
   jackson:
     serialization:
       indent_output: true

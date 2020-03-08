@@ -26,6 +26,7 @@ dependencies {
     compile libs['mysql-connector-java']
     compile libs['dbpoll-hikari']
     compile libs['spring-cloud-security-oauth2']
+    compile libs['spring-cloud-alibaba-nacos-discovery']
     compile libs['spring-boot-web']
     compile libs['common-pool']
     compile libs['spring-boot-jdbc']
@@ -36,5 +37,6 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom libs['spring-cloud-dependencies']
+        mavenBom libs['spring-cloud-alibaba-dependencies']
     }
 }

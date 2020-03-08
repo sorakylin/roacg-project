@@ -23,12 +23,15 @@ dependencies {
     compile project(':roacg-core:common-utils')
     compile libs['spring-cloud-gateway']
     compile libs['spring-cloud-security-oauth2']
+    compile libs['spring-cloud-alibaba-nacos-discovery']
 //    compile libs['spring-boot-redis']
+    compile libs['common-pool']
     compile libs['spring-boot-redis-reactive']
 }
 
 dependencyManagement {
     imports {
         mavenBom libs['spring-cloud-dependencies']
+        mavenBom libs['spring-cloud-alibaba-dependencies']
     }
 }

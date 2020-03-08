@@ -1,7 +1,8 @@
 package com.roacg.service.gateway;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.cloud.client.SpringCloudApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * 网关层本身需要是一个 Oauth2 Resource Server
@@ -10,7 +11,8 @@ import org.springframework.cloud.client.SpringCloudApplication;
  *
  *
  */
-@SpringCloudApplication
+@SpringBootApplication
+@EnableDiscoveryClient
 public class GatewayApplication {
     public static void main(String[] args) {
 

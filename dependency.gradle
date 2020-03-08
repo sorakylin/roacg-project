@@ -13,10 +13,11 @@ ext {
 
             ],
             spring: [
-                    boot      : "2.2.5.RELEASE",
-                    cloud     : "Hoxton.SR1",
-                    management: "1.0.8.RELEASE",
-                    mybatis   : "2.1.1",
+                    boot         : "2.2.5.RELEASE",
+                    cloud        : "Hoxton.SR2",
+                    cloud_alibaba: "2.2.0.RELEASE",
+                    management   : "1.0.8.RELEASE",
+                    mybatis      : "2.1.1",
             ],
             cloud : [
             ],
@@ -29,42 +30,48 @@ ext {
             ]
     ]
     libs = [
-            "servlet-api"                        : "javax.servlet:javax.servlet-api:$ver.other.servlet_api",
+            "servlet-api"                         : "javax.servlet:javax.servlet-api:$ver.other.servlet_api",
 
             //UTILS
-            "lombok"                             : "org.projectlombok:lombok:$ver.utils.lombok",
-            "guava"                              : "com.google.guava:guava:$ver.utils.guava",
-            "groovy-all"                         : "org.codehaus.groovy:groovy-all:$ver.utils.groovy_all",
-            "hibernate-validator"                : "org.hibernate:hibernate-validator:$ver.utils.hibernate_validator",
-            "hibernate-jpa"                      : "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:$ver.utils.hibernate_jpa",
-            "javax.persistence-api"              : "javax.persistence:javax.persistence-api:$ver.utils.javax_jpa",
-            "jaxb-api"                           : "javax.xml.bind:jaxb-api:$ver.utils.jaxb_api",
-            "common-pool"                        : "org.apache.commons:commons-pool2:$ver.utils.commons_pool",
+            "lombok"                              : "org.projectlombok:lombok:$ver.utils.lombok",
+            "guava"                               : "com.google.guava:guava:$ver.utils.guava",
+            "groovy-all"                          : "org.codehaus.groovy:groovy-all:$ver.utils.groovy_all",
+            "hibernate-validator"                 : "org.hibernate:hibernate-validator:$ver.utils.hibernate_validator",
+            "hibernate-jpa"                       : "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:$ver.utils.hibernate_jpa",
+            "javax.persistence-api"               : "javax.persistence:javax.persistence-api:$ver.utils.javax_jpa",
+            "jaxb-api"                            : "javax.xml.bind:jaxb-api:$ver.utils.jaxb_api",
+            "common-pool"                         : "org.apache.commons:commons-pool2:$ver.utils.commons_pool",
 
             //TEST
-            "junit"                              : "junit:junit:$ver.utils.junit",
+            "junit"                               : "junit:junit:$ver.utils.junit",
 
             //plugin/context
-            "spring-boot-gradle-plugin"          : "org.springframework.boot:spring-boot-gradle-plugin:$ver.spring.boot",
-            "spring-dependency-management-plugin": "io.spring.dependency-management",
-            "spring-dependency-management"       : "org.springframework.boot",
-            "spring-cloud-dependencies"          : "org.springframework.cloud:spring-cloud-dependencies:$ver.spring.cloud",
+            "spring-boot-gradle-plugin"           : "org.springframework.boot:spring-boot-gradle-plugin:$ver.spring.boot",
+            "spring-dependency-management-plugin" : "io.spring.dependency-management",
+            "spring-dependency-management"        : "org.springframework.boot",
+            "spring-cloud-dependencies"           : "org.springframework.cloud:spring-cloud-dependencies:$ver.spring.cloud",
+            "spring-cloud-alibaba-dependencies"   : "com.alibaba.cloud:spring-cloud-alibaba-dependencies:$ver.spring.cloud_alibaba",
 
             //SPRING
 //            "spring-security-oauth2"             : "org.springframework.security.oauth:spring-security-oauth2:$ver.spring.boot",
-            "spring-boot-actuator"               : "org.springframework.boot:spring-boot-starter-actuator:$ver.spring.boot",
-            "spring-boot-configuration-processor": "org.springframework.boot:spring-boot-configuration-processor:$ver.spring.boot",
-            "spring-boot-test"                   : "org.springframework.boot:spring-boot-starter-test:$ver.spring.boot",
-            "spring-boot-web"                    : "org.springframework.boot:spring-boot-starter-web:$ver.spring.boot",
-            "spring-boot-jdbc"                   : "org.springframework.boot:spring-boot-starter-jdbc:$ver.spring.boot",
-            "spring-boot-mybatis"                : "org.mybatis.spring.boot:mybatis-spring-boot-starter:$ver.spring.mybatis",
-            "spring-boot-redis"                  : "org.springframework.boot:spring-boot-starter-data-redis",
-            "spring-boot-redis-reactive"         : "org.springframework.boot:spring-boot-starter-data-redis-reactive",
-            "spring-cloud-gateway"               : "org.springframework.cloud:spring-cloud-starter-gateway",
-            "spring-cloud-security-oauth2"       : "org.springframework.cloud:spring-cloud-starter-oauth2",
+            "spring-boot-actuator"                : "org.springframework.boot:spring-boot-starter-actuator:$ver.spring.boot",
+            "spring-boot-configuration-processor" : "org.springframework.boot:spring-boot-configuration-processor:$ver.spring.boot",
+            "spring-boot-test"                    : "org.springframework.boot:spring-boot-starter-test:$ver.spring.boot",
+            "spring-boot-web"                     : "org.springframework.boot:spring-boot-starter-web:$ver.spring.boot",
+            "spring-boot-jdbc"                    : "org.springframework.boot:spring-boot-starter-jdbc:$ver.spring.boot",
+            "spring-boot-mybatis"                 : "org.mybatis.spring.boot:mybatis-spring-boot-starter:$ver.spring.mybatis",
+            "spring-boot-redis"                   : "org.springframework.boot:spring-boot-starter-data-redis",
+            "spring-boot-redis-reactive"          : "org.springframework.boot:spring-boot-starter-data-redis-reactive",
+            "spring-cloud-gateway"                : "org.springframework.cloud:spring-cloud-starter-gateway",
+            "spring-cloud-security-oauth2"        : "org.springframework.cloud:spring-cloud-starter-oauth2",
+            "spring-cloud-openfeign"              : "org.springframework.cloud:spring-cloud-starter-openfeign",
+            "spring-cloud-netflix-hystrix"        : "org.springframework.cloud:spring-cloud-starter-netflix-hystrix",
+            "spring-cloud-alibaba-nacos-discovery": "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+            "spring-cloud-alibaba-nacos-config"   : "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+            "spring-cloud-alibaba-sentinel"       : "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
 
             //DB
-            "mysql-connector-java"               : "mysql:mysql-connector-java:$ver.db.mysql",
-            "dbpoll-hikari"                      : "com.zaxxer:HikariCP:$ver.db.hikari",
+            "mysql-connector-java"                : "mysql:mysql-connector-java:$ver.db.mysql",
+            "dbpoll-hikari"                       : "com.zaxxer:HikariCP:$ver.db.hikari",
     ]
 }

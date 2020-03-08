@@ -5,3 +5,17 @@ server:
 spring:
   application:
     name: service-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.194.132:8848
+  redis:
+    database: 0
+    host: 192.168.194.132
+    port: 6379
+    lettuce:
+      pool:
+        min-idle: 0
+        max-idle: 8
+        max-active: 8
+        max-wait: -1ms

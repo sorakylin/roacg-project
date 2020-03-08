@@ -16,7 +16,7 @@ public class WebFluxSecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-
+        http.oauth2ResourceServer();
         return http.build();
     }
 }

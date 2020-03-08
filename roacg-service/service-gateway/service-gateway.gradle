@@ -1,9 +1,9 @@
-
 version = 'v1.0.0'
 
 buildscript {
 
     repositories {
+        mavenLocal()
         maven { url = 'https://maven.aliyun.com/repository/jcenter' }
         maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url = "https://plugins.gradle.org/m2/" }
@@ -22,11 +22,15 @@ apply plugin: libs["spring-dependency-management"]
 dependencies {
     compile project(':roacg-core:common-utils')
     compile libs['spring-cloud-gateway']
-    compile libs['spring-cloud-security-oauth2']
+//    compile libs['spring-cloud-security-oauth2']
     compile libs['spring-cloud-alibaba-nacos-discovery']
 //    compile libs['spring-boot-redis']
     compile libs['common-pool']
     compile libs['spring-boot-redis-reactive']
+    //gateway 要依赖这三个做安全
+    compile libs['spring-security-config']
+    compile libs['spring-security-oauth2-client']
+    compile libs['spring-security-oauth2-resource-server']
 }
 
 dependencyManagement {

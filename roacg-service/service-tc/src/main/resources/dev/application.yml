@@ -1,6 +1,6 @@
 #设置服务器端口号
 server:
-  port: 7081
+  port: 7082
 
 spring:
   application:

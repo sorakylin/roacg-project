@@ -15,6 +15,6 @@ import javax.persistence.Version;
 public class OptimisticLockSupportEntity extends BaseEntity {
 
     @Version
-    @Column(name = "VERSION")
+    @Column(name = "VERSION", columnDefinition = "tinyint(3)")
     private int version;
 }

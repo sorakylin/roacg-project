@@ -13,11 +13,11 @@ public class BasicCompleteEntity extends BaseEntity {
 
 
     @Enumerated(value = EnumType.ORDINAL)
-    @Column(name = "DELETED", length = 2, nullable = false)
+    @Column(name = "DELETED", length = 2, nullable = false, columnDefinition = "tinyint(3)")
     private DeletedStatusEnum deleted;
 
     @Version
-    @Column(name = "VERSION")
+    @Column(name = "VERSION", columnDefinition = "tinyint(3)")
     private int version;
 
 

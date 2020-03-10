@@ -12,19 +12,19 @@ public class BaseEntity implements DBMapEntity {
 
     private static final long serialVersionUID = -1;
 
-    @Column(name = "CREATE_TIME")
+    @Column(name = "CREATE_TIME", columnDefinition = "datetime")
     private LocalDateTime createTime;
 
-    @Column(name = "UPDATE_TIME")
+    @Column(name = "UPDATE_TIME", columnDefinition = "datetime")
     private LocalDateTime updateTime;
 
-    @Column(name = "CREATE_AT")
+    @Column(name = "CREATE_AT", columnDefinition = "varchar(64)")
     private String createAt;
 
-    @Column(name = "UPDATE_AT")
+    @Column(name = "UPDATE_AT", columnDefinition = "varchar(64)")
     private String updateAt;
 
-    @Column(name = "UPDATE_ID")
+    @Column(name = "UPDATE_ID", columnDefinition = "bigint(20)")
     private Long updateId;
 
 }

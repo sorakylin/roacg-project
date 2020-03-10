@@ -2,6 +2,7 @@ package com.roacg.service.tc.config.db.jpa;
 
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.tool.schema.Action;
+import org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy;
 import org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,24 +24,27 @@ public class JpaConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
-        vendorAdapter.setShowSql(false);
         Map<String, Object> jpaPropertyMap = vendorAdapter.getJpaPropertyMap();
 
         //自动更新
         jpaPropertyMap.put(AvailableSettings.HBM2DDL_AUTO, Action.UPDATE);
         //是否显示SQL
         jpaPropertyMap.put(AvailableSettings.SHOW_SQL, false);
-        //命名策略
+        /**
+         * 命名策略
+         * org.hibernate.cfg.ImprovedNamingStrategy 下划线，会导致@Column 的name属性失效，
+         */
         jpaPropertyMap.put(AvailableSettings.PHYSICAL_NAMING_STRATEGY, SpringPhysicalNamingStrategy.class);
+        jpaPropertyMap.put(AvailableSettings.IMPLICIT_NAMING_STRATEGY, SpringImplicitNamingStrategy.class);
         //数据库方言
         jpaPropertyMap.put(AvailableSettings.DIALECT, org.hibernate.dialect.MySQL5Dialect.class);
-//        AvailableSettings.IMPLICIT_NAMING_STRATEGY
+
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("com.roacg.service.tc.**.model");
         factory.setDataSource(dataSource);
+
         return factory;
     }
 

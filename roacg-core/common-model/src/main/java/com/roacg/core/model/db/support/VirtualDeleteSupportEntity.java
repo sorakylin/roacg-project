@@ -19,7 +19,7 @@ public class VirtualDeleteSupportEntity extends BaseEntity {
 
 
     @Enumerated(value = EnumType.ORDINAL)
-    @Column(name = "DELETED", length = 2, nullable = false)
+    @Column(name = "DELETED", length = 2, nullable = false, columnDefinition = "tinyint(3)")
     private DeletedStatusEnum deleted;
 
 

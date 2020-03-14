@@ -7,7 +7,7 @@ import java.util.Objects;
  * 表示一张表内某条数据的删除与否
  * 一般用于做软删除相关操作/判定时使用
  */
-public enum DeletedStatusEnum implements BaseCodeEnum {
+public enum DeletedStatusEnum implements BaseCodeEnum<DeletedStatusEnum> {
 
     UN_DELETE(0), DELETED(1);
 
@@ -30,4 +30,11 @@ public enum DeletedStatusEnum implements BaseCodeEnum {
     public int getCode() {
         return getValue();
     }
+
+    @Override
+    public DeletedStatusEnum codeOf(int code) {
+        return BaseCodeEnum.forCode(DeletedStatusEnum.class, code);
+    }
+
+
 }

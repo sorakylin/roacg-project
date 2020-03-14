@@ -3,11 +3,11 @@ package com.roacg.core.model.db.support;
 
 import com.roacg.core.model.db.BaseEntity;
 import com.roacg.core.model.enums.DeletedStatusEnum;
+import com.roacg.core.model.enums.convert.BaseCodeEnumConvertFactory;
 import lombok.Data;
 
 import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.Convert;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -18,7 +18,8 @@ import javax.persistence.MappedSuperclass;
 public class VirtualDeleteSupportEntity extends BaseEntity {
 
 
-    @Enumerated(value = EnumType.ORDINAL)
+//    @Enumerated(value = EnumType.ORDINAL)
+    @Convert(converter = BaseCodeEnumConvertFactory.DeletedStatusEnumConvert.class)
     @Column(name = "DELETED", length = 2, nullable = false, columnDefinition = "tinyint(3)")
     private DeletedStatusEnum deleted;
 

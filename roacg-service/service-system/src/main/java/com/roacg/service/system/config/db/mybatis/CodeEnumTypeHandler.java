@@ -1,7 +1,6 @@
 package com.roacg.service.system.config.db.mybatis;
 
 import com.roacg.core.model.enums.BaseCodeEnum;
-import com.roacg.core.utils.other.CodeEnumUtil;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
@@ -12,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @MappedTypes(BaseCodeEnum.class)
-public class CodeEnumTypeHandler<E extends Enum<?> & BaseCodeEnum> extends BaseTypeHandler<BaseCodeEnum> {
+public class CodeEnumTypeHandler<E extends Enum<E> & BaseCodeEnum> extends BaseTypeHandler<BaseCodeEnum> {
 
     private Class<E> type;
 
@@ -49,7 +48,7 @@ public class CodeEnumTypeHandler<E extends Enum<?> & BaseCodeEnum> extends BaseT
 
     private E codeOf(int code) {
         try {
-            return CodeEnumUtil.codeOf(type, code);
+            return BaseCodeEnum.forCode(type, code);
         } catch (Exception ex) {
             throw new IllegalArgumentException("Cannot convert " + code + " to " + type.getSimpleName() + " by code value.", ex);
         }

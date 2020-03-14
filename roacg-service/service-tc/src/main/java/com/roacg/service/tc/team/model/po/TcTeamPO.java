@@ -19,6 +19,10 @@ public class TcTeamPO extends BaseEntity {
     @Column(columnDefinition = "bigint(20)")
     private Long teamLeaderId;
 
+    //团队介绍
+    @Column(columnDefinition = "varchar(512)")
+    private String teamIntroduction;
+
     //团队等级,根据等级 相应的权限也有所不同
     @Column(columnDefinition = "tinyint(3)")
     private Integer teamGrade;
@@ -34,6 +38,5 @@ public class TcTeamPO extends BaseEntity {
     //团队已有的项目数量
     @Column
     private Integer existingProjectQuantity;
-
 
 }

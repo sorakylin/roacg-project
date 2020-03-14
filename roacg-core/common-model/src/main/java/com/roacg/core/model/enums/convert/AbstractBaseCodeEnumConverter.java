@@ -17,7 +17,7 @@ public abstract class AbstractBaseCodeEnumConverter<E extends Enum<E> & BaseCode
 
     private Class<E> codeEnumClass;
 
-    protected AbstractBaseCodeEnumConverter(Class<E> codeEnumClass) {
+    public AbstractBaseCodeEnumConverter(Class<E> codeEnumClass) {
         this.codeEnumClass = codeEnumClass;
     }
 

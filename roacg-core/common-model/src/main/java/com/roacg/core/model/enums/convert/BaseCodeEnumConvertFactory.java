@@ -9,8 +9,8 @@ public final class BaseCodeEnumConvertFactory {
     @Converter(autoApply = true)
     public static class DeletedStatusEnumConvert extends AbstractBaseCodeEnumConverter<DeletedStatusEnum>{
 
-        protected DeletedStatusEnumConvert(Class<DeletedStatusEnum> codeEnumClass) {
-            super(codeEnumClass);
+        public DeletedStatusEnumConvert() {
+            super(DeletedStatusEnum.class);
         }
     }
 

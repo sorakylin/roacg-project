@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * API 统一相应
- * 接口、RPC 等请求 都需要返回此对象
+ * Rest资源需要返回此对象
  *
  * @param <T> result data type
  */

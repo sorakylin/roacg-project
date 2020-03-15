@@ -148,10 +148,10 @@ CREATE TABLE `tb_role_resource_permission` (
 
 CREATE TABLE `tb_ro_user` (
   `user_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_name` varchar(50) NOT NULL COMMENT '用户名',
+  `user_name` varchar(50) binary NOT NULL COMMENT '用户名',
   `password` varchar(64) NOT NULL COMMENT '密码，加密存储',
   `phone` varchar(128) NULL COMMENT '电话号码',
-  `email` varchar(128) NULL COMMENT '邮箱',
+  `email` varchar(128) binary NULL COMMENT '邮箱',
   `create_time` datetime NULL,
   `update_time` datetime NULL,
   `create_at` varchar(64) NULL,

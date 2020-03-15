@@ -157,7 +157,7 @@ CREATE TABLE `tb_ro_user` (
   `create_at` varchar(64) NULL,
   `update_at` varchar(64) NULL,
   `update_id` bigint(20) NULL,
-  `deleted` tinyint(3) NOT NULL DEFAULT 0,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`user_name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='用户表';

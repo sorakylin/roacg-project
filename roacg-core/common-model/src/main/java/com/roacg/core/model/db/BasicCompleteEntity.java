@@ -18,11 +18,11 @@ public class BasicCompleteEntity extends BaseEntity {
 
 //    @Enumerated(value = EnumType.ORDINAL)
     @Convert(converter = BaseCodeEnumConvertFactory.DeletedStatusEnumConvert.class)
-    @Column(name = "DELETED", length = 2, nullable = false, columnDefinition = "tinyint(3)")
+    @Column(name = "DELETED", length = 2, nullable = false, columnDefinition = "tinyint(1)")
     private DeletedStatusEnum deleted;
 
     @Version
-    @Column(name = "VERSION", columnDefinition = "tinyint(3)")
+    @Column(name = "VERSION", columnDefinition = "tinyint(1)")
     private int version;
 
 

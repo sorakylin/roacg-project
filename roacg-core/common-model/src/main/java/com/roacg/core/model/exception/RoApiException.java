@@ -2,6 +2,8 @@ package com.roacg.core.model.exception;
 
 import com.roacg.core.model.enums.RoApiStatusEnum;
 
+import static com.roacg.core.model.enums.RoApiStatusEnum.*;
+
 /**
  * 系统内统一异常
  */
@@ -14,11 +16,19 @@ public class RoApiException extends RuntimeException {
      *
      * @see com.roacg.core.model.enums.RoApiStatusEnum
      */
-    private int code = RoApiStatusEnum.SYSTEM_ERROR.getCode();
+    private int code = SYSTEM_ERROR.getCode();
 
     private String msg;
 
     private Object data;
+
+    public static RoApiException illegalParam() {
+        return new RoApiException(ILLEGAL_PARAM);
+    }
+
+    public static RoApiException illegalParam(String msg) {
+        return new RoApiException(ILLEGAL_PARAM, msg);
+    }
 
     public RoApiException(RoApiStatusEnum status) {
         this(status, null);
@@ -29,8 +39,8 @@ public class RoApiException extends RuntimeException {
     }
 
     public RoApiException(RoApiStatusEnum status, String msg, Object data) {
-        if (!RoApiStatusEnum.SUCCESS.valueIs(code)) {
-            this.code = code;
+        if (!SUCCESS.valueIs(status.getCode())) {
+            this.code = status.getCode();
         }
         this.msg = msg;
         this.data = data;

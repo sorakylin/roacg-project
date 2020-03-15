@@ -19,7 +19,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Map;
 
-@EnableJpaRepositories(basePackages = {"com.roacg.service.tc.**.repository"})
+@EnableJpaRepositories(basePackages = {"com.roacg.service.tc.**.dao"})
 @EnableTransactionManagement
 @Configuration
 public class JpaConfig {

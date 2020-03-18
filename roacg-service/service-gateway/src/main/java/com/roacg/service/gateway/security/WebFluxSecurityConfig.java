@@ -15,6 +15,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 public class WebFluxSecurityConfig {
 
+    ///https://www.oauth.com/oauth2-servers/token-introspection-endpoint/
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http.formLogin().disable()
@@ -22,7 +23,7 @@ public class WebFluxSecurityConfig {
                 .authorizeExchange(exchangeSpec -> exchangeSpec
                         .pathMatchers(HttpMethod.POST, "/login", "/logout", "/s/oauth/*").permitAll()
                         .anyExchange().authenticated()
-                );
+                ).oauth2ResourceServer(oauth -> oauth.opaqueToken());
 
         return http.build();
     }

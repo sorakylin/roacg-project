@@ -220,7 +220,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         //检查token的和拿jwt token key的公开
         security.passwordEncoder(passwordEncoder)
                 .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("permitAll()")
+                .checkTokenAccess("isAuthenticated()")
                 .allowFormAuthenticationForClients();
     }
 }

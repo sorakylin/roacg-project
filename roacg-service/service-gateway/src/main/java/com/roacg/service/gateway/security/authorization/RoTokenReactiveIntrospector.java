@@ -22,6 +22,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.*;
 
@@ -56,9 +57,8 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
 
         this.introspectionUri = URI.create(introspectionUri);
         this.webClient = WebClient.builder()
-//                .defaultHeaders(h -> h.setBasicAuth(clientId, clientSecret))
+                .defaultHeaders(h -> h.setBasicAuth(clientId, clientSecret, StandardCharsets.UTF_8))
                 .build();
-
     }
 
     /**

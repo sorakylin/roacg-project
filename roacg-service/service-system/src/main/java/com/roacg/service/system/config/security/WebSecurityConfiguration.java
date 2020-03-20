@@ -64,7 +64,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         //默认所有请求都需要认证
         http.authorizeRequests(authReq -> authReq.anyRequest().authenticated())
                 .csrf().disable()//禁用CSRF
-                .formLogin().disable();//禁用form登录
+                .formLogin().disable()//禁用form登录
+                .httpBasic();//开启http基础认证，这是为了让OAuth2 服务器请求 check_token 端点时不被拒绝
     }
 
 

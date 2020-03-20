@@ -43,5 +43,5 @@ spring:
       resourceserver:
         opaque-token:
           introspection-uri: http://localhost:7080/oauth/check_token
-          client-id: 0001
-          client-secret: 123456
+          client-id: '0001'
+          client-secret: '123456'

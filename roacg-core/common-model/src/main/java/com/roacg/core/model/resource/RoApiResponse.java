@@ -89,14 +89,8 @@ public class RoApiResponse<T> {
     }
 
     public static <T> RoApiResponse<T> fail(RoApiException e) {
-        RoApiResponse response = new RoApiResponse(e.getCode());
-        response.setCode(e.getCode());
-        response.setData(e.getData());
-        response.setMsg(e.getMsg());
-        response.setSuccess(false);
-        return response;
+        return (RoApiResponse<T>) RoApiResponse.fail(RoApiStatusEnum.forCode(e.getCode()).orElse(RoApiStatusEnum.SYSTEM_ERROR), e.getMsg(), e.getData());
     }
-
 
     public void setSuccess(boolean success) {
         this.success = success;

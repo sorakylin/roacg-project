@@ -22,14 +22,6 @@ public class RoApiException extends RuntimeException {
 
     private Object data;
 
-    public static RoApiException illegalParam() {
-        return new RoApiException(ILLEGAL_PARAM);
-    }
-
-    public static RoApiException illegalParam(String msg) {
-        return new RoApiException(ILLEGAL_PARAM, msg);
-    }
-
     public RoApiException(RoApiStatusEnum status) {
         this(status, null);
     }

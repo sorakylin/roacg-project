@@ -1,6 +1,6 @@
 package com.roacg.service.tc.team.service.impl;
 
-import com.roacg.core.model.exception.RoApiException;
+import com.roacg.core.model.exception.ParameterValidationException;
 import com.roacg.service.tc.team.dao.TeamDAO;
 import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.po.TeamPO;
@@ -29,7 +29,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Optional<TeamDTO> findTeamInfo(Long teamId) {
         if (Objects.isNull(teamId)) {
-            throw RoApiException.illegalParam("团队ID不能为空!");
+            throw new ParameterValidationException("团队ID不能为空!");
         }
 
         //实体

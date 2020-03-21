@@ -1,13 +1,15 @@
 package com.roacg.core.utils;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationEvent;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class SpringContextUtil implements ApplicationContextAware {
+@Lazy(false)
+public final class SpringContextUtil implements ApplicationContextAware, DisposableBean {
 
     private static ApplicationContext applicationContext;
 
@@ -38,14 +40,9 @@ public final class SpringContextUtil implements ApplicationContextAware {
         return getApplicationContext().getBean(name, clazz);
     }
 
-    //事件机制，发布事件
-    public void publishEvent(ApplicationEvent event) {
-        getApplicationContext().publishEvent(event);
+
+    @Override
+    public void destroy() throws Exception {
+        applicationContext = null;
     }
-
-    public void publishEvent(Object event) {
-        getApplicationContext().publishEvent(event);
-    }
-
-
 }

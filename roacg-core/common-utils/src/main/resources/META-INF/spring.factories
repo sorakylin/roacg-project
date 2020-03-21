@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.roacg.core.utils.config.ValidationConfig,\
+  com.roacg.core.utils.SpringContextUtil

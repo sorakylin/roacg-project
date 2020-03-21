@@ -1,12 +1,14 @@
 package com.roacg.core.model.exception;
 
 import com.roacg.core.model.enums.RoApiStatusEnum;
+import lombok.Data;
 
 import static com.roacg.core.model.enums.RoApiStatusEnum.*;
 
 /**
  * 系统内统一异常
  */
+@Data
 public class RoApiException extends RuntimeException {
 
     /**
@@ -22,6 +24,8 @@ public class RoApiException extends RuntimeException {
 
     private Object data;
 
+    private Throwable cause;
+
     public RoApiException(RoApiStatusEnum status) {
         this(status, null);
     }
@@ -36,17 +40,5 @@ public class RoApiException extends RuntimeException {
         }
         this.msg = msg;
         this.data = data;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public Object getData() {
-        return data;
     }
 }

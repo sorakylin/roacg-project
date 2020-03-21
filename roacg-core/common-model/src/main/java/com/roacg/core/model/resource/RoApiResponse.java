@@ -15,13 +15,14 @@ public class RoApiResponse<T> {
 
     private static final long serialVersionUID = -1;
 
+
+    private boolean success = true;
+
     /**
      * 具体响应代码
      *
      * @see RoApiStatusEnum
      */
-    private boolean success = true;
-
     private int code = 0;
 
     private String msg;

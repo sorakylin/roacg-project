@@ -1,5 +1,6 @@
 package com.roacg.core.base.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -14,6 +15,8 @@ public class CommonConfig {
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
+        //序列化的时候序列对象的所有非空属性
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         //反序列化时候遇到不匹配的属性并不抛出异常
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         //序列化时候遇到空对象不抛出异常

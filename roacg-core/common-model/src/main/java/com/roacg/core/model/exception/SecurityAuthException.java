@@ -9,7 +9,7 @@ import com.roacg.core.model.enums.RoApiStatusEnum;
 public class SecurityAuthException extends RoApiException {
 
     public SecurityAuthException() {
-        super(RoApiStatusEnum.UNAUTHORIZED, "未认证!");
+        super(RoApiStatusEnum.UNAUTHORIZED, "Unauthorized");
     }
 
     public SecurityAuthException(String message) {

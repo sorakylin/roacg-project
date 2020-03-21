@@ -3,12 +3,12 @@ package com.roacg.core.model.exception;
 import com.roacg.core.model.enums.RoApiStatusEnum;
 
 /**
- * 403 未经认证
+ * 403 未经授权
  */
 public class SecurityDeniedException extends RoApiException {
 
     public SecurityDeniedException() {
-        super(RoApiStatusEnum.UNAUTHORIZED, "FORBIDDEN");
+        super(RoApiStatusEnum.UNAUTHORIZED, "Forbidden");
     }
 
     public SecurityDeniedException(String message) {

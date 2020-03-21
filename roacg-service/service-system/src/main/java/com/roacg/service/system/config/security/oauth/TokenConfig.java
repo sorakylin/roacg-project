@@ -1,6 +1,5 @@
 package com.roacg.service.system.config.security.oauth;
 
-import com.google.common.collect.ImmutableMap;
 import com.roacg.core.base.log.RoCommonLoggerEnum;
 import com.roacg.core.base.log.RoLoggerFactory;
 import com.roacg.service.system.security.model.AuthenticationUser;
@@ -14,6 +13,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
+import java.util.Map;
 
 @Configuration
 public class TokenConfig {
@@ -56,8 +56,8 @@ public class TokenConfig {
 
             AuthenticationUser user = (AuthenticationUser) authentication.getUserAuthentication().getPrincipal();
 
-            final ImmutableMap<String, Object> additionalInfo = ImmutableMap.of(
-                    "rouser", ImmutableMap.of(
+            final Map<String, Object> additionalInfo = Map.of(
+                    "rouser", Map.of(
                             "uid", user.getUserId(),
                             "userName", user.getUsername(),
                             "userAuthorities", user.getAuthorities()

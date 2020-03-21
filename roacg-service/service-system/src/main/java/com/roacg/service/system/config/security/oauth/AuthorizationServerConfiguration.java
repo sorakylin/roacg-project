@@ -221,7 +221,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         //检查token的和拿jwt token key的公开
         security.passwordEncoder(passwordEncoder)
-                .tokenKeyAccess("permitAll()")
+                .tokenKeyAccess("isAuthenticated()")
                 .checkTokenAccess("isAuthenticated()")
                 .allowFormAuthenticationForClients();
     }

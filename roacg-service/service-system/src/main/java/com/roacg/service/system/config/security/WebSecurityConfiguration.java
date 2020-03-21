@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
@@ -66,8 +67,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests(authReq -> authReq.anyRequest().authenticated())
                 .csrf().disable()//禁用CSRF
                 .formLogin().disable()//禁用form登录
-                .httpBasic()//开启http基础认证，这是为了让OAuth2 服务器请求 check_token 端点时不被拒绝
-                .authenticationEntryPoint(new RoAuthenticationFailEntryPoint());
+                .sessionManagement(se -> se.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  //禁用session
+                .exceptionHandling(eh -> eh.authenticationEntryPoint(new RoAuthenticationFailEntryPoint()));//异常处理
     }
 
 

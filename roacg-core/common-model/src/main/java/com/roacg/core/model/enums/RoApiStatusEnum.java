@@ -10,6 +10,7 @@ import java.util.Optional;
 public enum RoApiStatusEnum {
 
     SUCCESS(0),//成功
+    OTHER(7),//其他
     TIME_OUT(30),//超时
     SYSTEM_ERROR(50),//系统内部错误
     ILLEGAL_VERSION(51),//非法版本

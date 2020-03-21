@@ -2,6 +2,7 @@ package com.roacg.service.system.config.security;
 
 import com.roacg.core.base.log.RoCommonLoggerEnum;
 import com.roacg.core.base.log.RoLoggerFactory;
+import com.roacg.service.system.config.security.handler.RoAuthenticationFailEntryPoint;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -65,7 +66,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests(authReq -> authReq.anyRequest().authenticated())
                 .csrf().disable()//禁用CSRF
                 .formLogin().disable()//禁用form登录
-                .httpBasic();//开启http基础认证，这是为了让OAuth2 服务器请求 check_token 端点时不被拒绝
+                .httpBasic()//开启http基础认证，这是为了让OAuth2 服务器请求 check_token 端点时不被拒绝
+                .authenticationEntryPoint(new RoAuthenticationFailEntryPoint());
     }
 
 
@@ -94,8 +96,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");//请求方法限制:如GET/POST，*表示所有都允许
         //configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin("*");//容许任何来源的跨域访问
-//        configuration.addExposedHeader();
+        configuration.addAllowedOrigin("*");//容许任何来源的跨域访问 FIXME 开发调试用
+//        configuration.addExposedHeader("Authorization");
         //对当前这个服务器下所有有的请求都启用这个配置
         source.registerCorsConfiguration("/**", configuration);
 

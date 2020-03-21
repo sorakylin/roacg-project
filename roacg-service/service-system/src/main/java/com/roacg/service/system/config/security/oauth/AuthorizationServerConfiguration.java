@@ -2,6 +2,7 @@ package com.roacg.service.system.config.security.oauth;
 
 import com.roacg.core.base.log.RoCommonLoggerEnum;
 import com.roacg.core.base.log.RoLoggerFactory;
+import com.roacg.service.system.config.security.handler.RoWebResponseExceptionTranslator;
 import com.roacg.service.system.config.security.properties.Oauth2SecurityProperties;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,7 +151,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .authenticationManager(authenticationManager)//认证管理器
                 .authorizationCodeServices(authorizationCodeServices())//授权码服务
                 .tokenServices(tokenServices())//token 管理服务
-                .allowedTokenEndpointRequestMethods(HttpMethod.POST);
+                .allowedTokenEndpointRequestMethods(HttpMethod.POST)
+                .exceptionTranslator(new RoWebResponseExceptionTranslator());
 
 
         // 数据库管理授权信息

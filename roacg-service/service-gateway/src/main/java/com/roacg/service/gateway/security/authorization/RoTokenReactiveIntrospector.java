@@ -75,19 +75,16 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
         this.webClient = webClient;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Mono<OAuth2AuthenticatedPrincipal> introspect(String token) {
 
         return Mono.just(token)
-                .flatMap(this::makeRequest)
-                .flatMap(this::adaptToNimbusResponse)
-                .map(this::parseNimbusResponse)
-                .map(this::castToNimbusSuccess)
-                .doOnNext(response -> validate(token, response))
-                .map(this::convertClaimsSet)
+                .flatMap(this::makeRequest)//携带token请求 AuthorizationServer
+                .flatMap(this::adaptToNimbusResponse)//检查Http响应正确性 (看是不是200)
+                .map(this::parseNimbusResponse)//封装Http响应为Token内省响应
+                .map(this::castToNimbusSuccess)//检查Token内省响应正确性
+                .doOnNext(response -> validate(token, response))//效验返回值 (active == true?)
+                .map(this::convertClaimsSet)//解析返回值中携带的信息，封装成认证对象
                 .onErrorMap(e -> !(e instanceof OAuth2IntrospectionException), this::onError);
     }
 

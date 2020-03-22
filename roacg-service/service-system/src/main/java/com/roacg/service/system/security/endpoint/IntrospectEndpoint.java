@@ -54,7 +54,7 @@ class IntrospectEndpoint {
             var builder = ImmutableMap.<String, Object>builder();
             builder.put("active", false).put("msg", "Token has expired");
 
-            if (Objects.nonNull(token)) {
+            if (Objects.nonNull(token.getExpiration())) {
                 long exp = token.getExpiration().getTime() / 1000;
                 builder.put("exp", exp);
             }

@@ -41,4 +41,8 @@ public class RoApiException extends RuntimeException {
         this.msg = msg;
         this.data = data;
     }
+
+    public void setCode(RoApiStatusEnum status) {
+        this.code = status.getCode();
+    }
 }

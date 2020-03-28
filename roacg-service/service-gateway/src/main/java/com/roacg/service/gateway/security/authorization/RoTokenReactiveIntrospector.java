@@ -7,6 +7,7 @@ import com.nimbusds.oauth2.sdk.id.Audience;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrincipal;
@@ -24,6 +25,8 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionClaimNames.*;
@@ -91,7 +94,7 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
     private Mono<ClientResponse> makeRequest(String token) {
         return this.webClient.post()
                 .uri(this.introspectionUri)
-//                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .body(BodyInserters.fromFormData("token", token))
                 .exchange();
     }
@@ -127,9 +130,36 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
 
     private void validate(String token, TokenIntrospectionSuccessResponse response) {
         // relying solely on the authorization server to validate this token (not checking 'exp', for example)
-        if (!response.isActive()) {
-            throw new BadOpaqueTokenException("Provided token isn't active");
+        if (response.isActive()) return;
+
+
+        StringBuilder errMsg = new StringBuilder("Provided token isn't active!");
+
+        String responseMsg = response.getStringParameter("msg");
+        if (responseMsg != null) {
+            errMsg.append(" ").append(responseMsg.strip());
         }
+
+        //如果exp!=null, 则表示是个过期令牌，提示下过期时间
+        Date exp = response.getExpirationTime();
+        if (exp != null) {
+            String dateFormat = DateTimeFormatter
+                    .ofPattern("yyyy-MM-dd HH:mm:ss")
+                    .format(exp.toInstant().atZone(ZoneId.systemDefault()));
+
+            String tempMsg = errMsg.toString().strip();
+
+            char c = tempMsg.charAt(tempMsg.length() - 1);
+            //如果不是那几个ASCII的标点符号，就拼个句号
+            if (c < 33 || c > 47) {
+                errMsg.append(".");
+            }
+
+            errMsg.append(" Expires in ").append(dateFormat);
+        }
+
+
+        throw new BadOpaqueTokenException(errMsg.toString());
     }
 
     private OAuth2AuthenticatedPrincipal convertClaimsSet(TokenIntrospectionSuccessResponse response) {

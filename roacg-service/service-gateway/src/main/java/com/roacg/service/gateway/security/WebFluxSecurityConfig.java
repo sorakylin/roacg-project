@@ -1,6 +1,7 @@
 package com.roacg.service.gateway.security;
 
 import com.roacg.service.gateway.security.authorization.RoTokenReactiveIntrospector;
+import com.roacg.service.gateway.security.authorization.RoTokenServerAuthEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,10 @@ public class WebFluxSecurityConfig {
     @Autowired
     private OAuth2ResourceServerProperties properties;
 
+    @Autowired
+    private RoTokenServerAuthEntryPoint authEntryPoint;
+
+
     ///https://www.oauth.com/oauth2-servers/token-introspection-endpoint/
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
@@ -30,8 +35,8 @@ public class WebFluxSecurityConfig {
                 .authorizeExchange(exchangeSpec -> exchangeSpec
                         .pathMatchers(HttpMethod.POST, "/login", "/logout", "/s/oauth/*").permitAll()
                         .anyExchange().authenticated()
-                ).oauth2ResourceServer(oauth -> oauth.opaqueToken(token -> token.introspector(introspector())));
-
+                ).oauth2ResourceServer(oauth -> oauth.opaqueToken(token -> token.introspector(introspector()))
+                .authenticationEntryPoint(authEntryPoint));
         return http.build();
     }
 

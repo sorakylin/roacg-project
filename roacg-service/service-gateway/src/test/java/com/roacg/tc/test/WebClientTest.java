@@ -1,7 +1,7 @@
 package com.roacg.tc.test;
 
 
-import com.roacg.service.gateway.security.authorization.RoTokenReactiveIntrospector;
+import com.roacg.service.gateway.security.authentication.RoTokenReactiveIntrospector;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

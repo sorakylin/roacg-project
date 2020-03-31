@@ -1,4 +1,4 @@
-package com.roacg.service.gateway.security.authorization;
+package com.roacg.service.gateway.security.authentication;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

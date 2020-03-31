@@ -1,4 +1,4 @@
-package com.roacg.service.gateway.security.authorization;
+package com.roacg.service.gateway.security.authentication;
 
 import com.nimbusds.oauth2.sdk.TokenIntrospectionResponse;
 import com.nimbusds.oauth2.sdk.TokenIntrospectionSuccessResponse;
@@ -33,7 +33,7 @@ import static org.springframework.security.oauth2.server.resource.introspection.
 
 /**
  * 自定义的 token 内省
- * 主要作为 OAuth2 Client 向认证服务器请求授权, 在此基础上面封装好对应的权限
+ * 主要作为 OAuth2 Client 向认证服务器请求认证, 在此基础上面封装好对应的权限
  *
  * <p>
  * Create by skypyb on 2020/03/18

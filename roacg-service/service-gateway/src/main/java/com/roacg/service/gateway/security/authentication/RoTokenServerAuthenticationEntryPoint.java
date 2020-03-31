@@ -36,7 +36,7 @@ import java.util.function.Function;
  * Create by skypyb by 2020-03-22
  */
 @Component
-public class RoTokenServerAuthEntryPoint implements ServerAuthenticationEntryPoint {
+public class RoTokenServerAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
 
     private static Logger logger = RoLoggerFactory.getCommonLogger(RoCommonLoggerEnum.SECURITY, "gateway-auth");
 
@@ -50,7 +50,7 @@ public class RoTokenServerAuthEntryPoint implements ServerAuthenticationEntryPoi
         }
     };
 
-    public RoTokenServerAuthEntryPoint(ObjectMapper objectMapper) {
+    public RoTokenServerAuthenticationEntryPoint(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

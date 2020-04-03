@@ -1,6 +1,7 @@
 package com.roacg.service.gateway.security;
 
 import com.roacg.service.gateway.filter.CorsFilter;
+import com.roacg.service.gateway.filter.RoAuthorizationWebFilter;
 import com.roacg.service.gateway.security.authentication.RoAuthenticationManager;
 import com.roacg.service.gateway.security.authentication.RoTokenReactiveIntrospector;
 import com.roacg.service.gateway.security.authentication.RoTokenServerAuthenticationEntryPoint;
@@ -19,6 +20,7 @@ import org.springframework.security.oauth2.server.resource.web.server.ServerBear
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationEntryPointFailureHandler;
+import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
 
 /**
  * https://docs.spring.io/spring-security/site/docs/current/reference/html5
@@ -37,19 +39,20 @@ public class WebFluxSecurityConfig {
     @Autowired
     private ReactiveAuthorizationManager accessManager;
 
+    @Autowired
+    private ServerAccessDeniedHandler accessDeniedHandler;
 
     ///https://www.oauth.com/oauth2-servers/token-introspection-endpoint/
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http.formLogin().disable().csrf().disable();
 
-        http.authorizeExchange(exchangeSpec -> exchangeSpec
-                .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                .anyExchange().access(accessManager)
-        );
+        http.authorizeExchange(exchangeSpec -> exchangeSpec.pathMatchers(HttpMethod.OPTIONS).permitAll());
+
 
         http.addFilterAt(new CorsFilter(), SecurityWebFiltersOrder.CORS)
-                .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION);
+                .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
+                .addFilterAt(authorizationWebFilter(), SecurityWebFiltersOrder.AUTHORIZATION);
 
         return http.build();
     }
@@ -72,5 +75,11 @@ public class WebFluxSecurityConfig {
 
 
         return authenticationWebFilter;
+    }
+
+    @Bean
+    public RoAuthorizationWebFilter authorizationWebFilter() {
+        RoAuthorizationWebFilter filter = new RoAuthorizationWebFilter(accessManager, accessDeniedHandler);
+        return filter;
     }
 }

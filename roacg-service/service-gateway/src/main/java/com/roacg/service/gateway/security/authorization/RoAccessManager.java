@@ -56,7 +56,7 @@ public class RoAccessManager implements ReactiveAuthorizationManager<Authorizati
     }
 
     /**
-     * 校验是否属于静态资源
+     * 校验是否属于可放行的资源
      *
      * @param requestPath 请求路径
      * @return

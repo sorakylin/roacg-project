@@ -44,7 +44,7 @@ public class RoServerAccessDeniedHandler implements ServerAccessDeniedHandler {
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
 
-        String path = exchange.getRequest().getPath().contextPath().value();
+        String path = exchange.getRequest().getURI().getRawPath();
 
         return Mono.defer(() -> {
 

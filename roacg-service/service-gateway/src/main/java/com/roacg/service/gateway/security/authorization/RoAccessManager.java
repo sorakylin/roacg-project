@@ -44,7 +44,7 @@ public class RoAccessManager implements ReactiveAuthorizationManager<Authorizati
         ServerWebExchange exchange = authorizationContext.getExchange();
 
         //当前试图请求的资源
-        String requestPath = exchange.getRequest().getURI().getPath();
+        String requestPath = exchange.getRequest().getURI().getRawPath();
         //直接放行判断
         if (permitAll(requestPath)) {
             return Mono.just(new AuthorizationDecision(true));

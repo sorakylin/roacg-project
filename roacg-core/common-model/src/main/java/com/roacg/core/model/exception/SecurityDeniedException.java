@@ -8,10 +8,10 @@ import com.roacg.core.model.enums.RoApiStatusEnum;
 public class SecurityDeniedException extends RoApiException {
 
     public SecurityDeniedException() {
-        super(RoApiStatusEnum.UNAUTHORIZED, "Forbidden");
+        super(RoApiStatusEnum.FORBIDDEN, "Forbidden");
     }
 
     public SecurityDeniedException(String message) {
-        super(RoApiStatusEnum.UNAUTHORIZED, message);
+        super(RoApiStatusEnum.FORBIDDEN, message);
     }
 }

@@ -1,7 +1,7 @@
 package com.roacg.service.tc.team.service.impl;
 
 import com.roacg.core.model.exception.ParameterValidationException;
-import com.roacg.service.tc.team.dao.TeamDAO;
+import com.roacg.service.tc.team.repository.TeamRepository;
 import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.po.TeamPO;
 import com.roacg.service.tc.team.service.TeamService;
@@ -19,9 +19,9 @@ public class TeamServiceImpl implements TeamService {
 
     //Spring beans -----------------
 
-    private TeamDAO teamDAO;
+    private TeamRepository teamDAO;
 
-    public TeamServiceImpl(TeamDAO teamDAO) {
+    public TeamServiceImpl(TeamRepository teamDAO) {
         this.teamDAO = teamDAO;
     }
 

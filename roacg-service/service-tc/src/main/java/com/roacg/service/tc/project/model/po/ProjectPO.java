@@ -2,6 +2,7 @@ package com.roacg.service.tc.project.model.po;
 
 
 import com.roacg.core.model.db.support.VirtualDeleteSupportEntity;
+import com.roacg.service.tc.project.enums.ProjectPermissionStatusEnum;
 import com.roacg.service.tc.project.enums.ProjectTypeEnum;
 import lombok.Data;
 
@@ -33,6 +34,11 @@ public class ProjectPO extends VirtualDeleteSupportEntity {
     @Column(nullable = false, columnDefinition = "tinyint(1)")
     private ProjectTypeEnum projectType;
 
+    //项目的许可范围, 标识了该项目可以被谁访问
+    @Convert(converter = ProjectTypeEnum.Convert.class)
+    @Column(nullable = false, columnDefinition = "tinyint(1)")
+    private ProjectPermissionStatusEnum projectPermissionStatus;
+
     //团队ID 项目->团队 多对一
     @Column(columnDefinition = "bigint(20)")
     private Long teamId;
@@ -41,7 +47,7 @@ public class ProjectPO extends VirtualDeleteSupportEntity {
     @Column(nullable = false, columnDefinition = "bigint(20)")
     private Long founderId;
 
-    //项目审核人 userId
+    //项目审核人 userId      TODO 审核人用来干啥的来着？忘了
     @Column(nullable = false, columnDefinition = "bigint(20)")
     private Long reviewerId;
 

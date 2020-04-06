@@ -5,10 +5,7 @@ import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.po.TeamPO;
 import com.roacg.service.tc.team.service.TeamService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.roacg.core.model.resource.RoApiResponse.*;
 
@@ -22,18 +19,16 @@ public class TeamResource {
     /**
      * 查询一个项目组的描述
      *
-     *
-     * @see TeamPO#getTeamDescription()
      * @param teamId
      * @return
+     * @see TeamPO#getTeamDescription()
      */
-    @RequestMapping(value = "/description", method = RequestMethod.GET)
+    @GetMapping(value = "/description")
     public RoApiResponse<String> findTeamDescription(@RequestParam("teamId") Long teamId) {
         return teamService.findTeamInfo(teamId)
                 .map(TeamDTO::getTeamDescription)
                 .map(desc -> ok(desc))
                 .orElse(ok());
     }
-
 
 }

@@ -12,6 +12,8 @@ public class TeamDTO implements Serializable {
 
     private String teamName;
 
+    private String avatar;
+
     //团队简介
     private String teamProfile;
 
@@ -24,8 +26,8 @@ public class TeamDTO implements Serializable {
     //团队当前人数
     private Integer teamSize;
 
-    //团队可创建的项目数量上限
-    private Integer projectCap;
+    //团队已创建的项目数量
+    private Integer projectNum;
 
     public static TeamDTO from(TeamPO teamPO) {
         TeamDTO teamDTO = new TeamDTO();
@@ -35,7 +37,7 @@ public class TeamDTO implements Serializable {
         teamDTO.setTeamDescription(teamPO.getTeamDescription());
         teamDTO.setTeamGrade(teamPO.getTeamGrade());
         teamDTO.setTeamSize(teamPO.getTeamSize());
-        teamDTO.setProjectCap(teamPO.getProjectCap());
+        teamDTO.setProjectNum(teamPO.getProjectNum());
         return teamDTO;
     }
 }

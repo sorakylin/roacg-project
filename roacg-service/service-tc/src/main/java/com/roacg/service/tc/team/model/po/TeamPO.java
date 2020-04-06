@@ -22,6 +22,10 @@ public class TeamPO extends BaseEntity {
     @Column(nullable = false)
     private String teamName;
 
+    //头像，先直接写在DB里边。 以后有了附件服务在重构
+    @Column(columnDefinition = "varchar(255)")
+    private String avatar;
+
     //团队简介 varchar最多85汉字
     @Column(columnDefinition = "varchar(255)")
     private String teamProfile;

@@ -1,6 +1,7 @@
 package com.roacg.service.tc.team.enums;
 
 import com.roacg.core.model.enums.BaseCodeEnum;
+import com.roacg.core.model.enums.convert.AbstractBaseCodeEnumConverter;
 import com.roacg.service.tc.team.model.po.TeamUserPO;
 
 /**
@@ -28,5 +29,12 @@ public enum UserTeamRoleEnum implements BaseCodeEnum<UserTeamRoleEnum> {
     @Override
     public UserTeamRoleEnum codeOf(int code) {
         return BaseCodeEnum.forCode(UserTeamRoleEnum.class, code);
+    }
+
+    public static class Convert extends AbstractBaseCodeEnumConverter<UserTeamRoleEnum> {
+
+        public Convert() {
+            super(UserTeamRoleEnum.class);
+        }
     }
 }

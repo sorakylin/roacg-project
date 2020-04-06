@@ -2,10 +2,15 @@ package com.roacg.service.tc.project.model.po;
 
 
 import com.roacg.core.model.db.support.VirtualDeleteSupportEntity;
+import com.roacg.service.tc.project.enums.ProjectTypeEnum;
 import lombok.Data;
 
 import javax.persistence.*;
 
+
+/**
+ * 团队项目/社区项目
+ */
 @Data
 @Table(name = "tb_tc_project")
 @Entity
@@ -23,8 +28,13 @@ public class ProjectPO extends VirtualDeleteSupportEntity {
     @Column(columnDefinition = "varchar(128)")
     private String projectProfile;
 
-    //团队ID  项目->团队 多对一
-    @Column(nullable = false, columnDefinition = "bigint(20)")
+    //项目类型
+    @Convert(converter = ProjectTypeEnum.Convert.class)
+    @Column(nullable = false, columnDefinition = "tinyint(1)")
+    private ProjectTypeEnum projectType;
+
+    //团队ID 项目->团队 多对一
+    @Column(columnDefinition = "bigint(20)")
     private Long teamId;
 
     //项目建立人 userId
@@ -38,9 +48,5 @@ public class ProjectPO extends VirtualDeleteSupportEntity {
     //项目等级,保留字段
     @Column(columnDefinition = "tinyint(1)", nullable = false)
     private Integer projectGrade;
-
-    //当前项目的任务最大数量限制
-    @Column(nullable = false)
-    private Integer taskCap;
 
 }

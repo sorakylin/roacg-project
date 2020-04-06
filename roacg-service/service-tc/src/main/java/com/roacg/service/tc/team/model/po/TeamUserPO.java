@@ -1,7 +1,6 @@
 package com.roacg.service.tc.team.model.po;
 
 import com.roacg.service.tc.team.enums.UserTeamRoleEnum;
-import com.roacg.service.tc.team.enums.UserTeamRoleEnumConvert;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -33,7 +32,7 @@ public class TeamUserPO {
     @Column(nullable = false, columnDefinition = "bigint(20)")
     private Long userId;
 
-    @Convert(converter = UserTeamRoleEnumConvert.class)
+    @Convert(converter = UserTeamRoleEnum.Convert.class)
     @Column(nullable = false, columnDefinition = "tinyint(1)")
     private UserTeamRoleEnum userTeamRole;
 }

@@ -38,8 +38,8 @@ public class TeamPO extends BaseEntity {
     @Column(nullable = false)
     private Integer teamSize;
 
-    //团队可创建的项目数量上限
+    //团队已创建的项目
     @Column(nullable = false)
-    private Integer projectCap;
+    private Integer projectNum;
 
 }

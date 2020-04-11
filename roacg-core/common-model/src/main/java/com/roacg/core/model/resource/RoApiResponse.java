@@ -29,6 +29,10 @@ public class RoApiResponse<T> {
 
     private T data;
 
+    public RoApiResponse() {
+        this(0, null);
+    }
+
     public RoApiResponse(RoApiStatusEnum status) {
         this(status.getCode(), null);
     }

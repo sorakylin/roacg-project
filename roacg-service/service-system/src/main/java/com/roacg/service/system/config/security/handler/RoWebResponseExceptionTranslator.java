@@ -36,9 +36,6 @@ public class RoWebResponseExceptionTranslator implements WebResponseExceptionTra
 
         var httpReq = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        logger.info("OAuth2 exception, URI: {}, Summary: {}.", httpReq.getRequestURI(), ase.getSummary());
-
-
         //客户端异常直接返回? 解析问题
         /*if (ase instanceof ClientAuthenticationException) {
             return responseEntity;
@@ -46,6 +43,10 @@ public class RoWebResponseExceptionTranslator implements WebResponseExceptionTra
 
         HttpHeaders headers = responseEntity.getHeaders();
         HttpStatus status = responseEntity.getStatusCode();
+
+
+        logger.info("OAuth2 exception, URI: {}, Code:{} ,Summary: {}.", httpReq.getRequestURI(), status.value(), ase.getSummary());
+
 
         //如果不是 401|403 则响应200
         if (status != HttpStatus.UNAUTHORIZED && status != HttpStatus.FORBIDDEN) {

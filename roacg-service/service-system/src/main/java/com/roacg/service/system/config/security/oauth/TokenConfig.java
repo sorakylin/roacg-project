@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Map;
 
@@ -62,6 +64,10 @@ public class TokenConfig {
             );
             //加入自定义信息
             ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
+
+            //设置响应头部
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            attributes.getResponse().setHeader("Set-Token", accessToken.getValue());
             return accessToken;
         };
     }

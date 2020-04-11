@@ -28,6 +28,7 @@ public class RoAccessManager implements ReactiveAuthorizationManager<Authorizati
         permitAll.add("/login");
         permitAll.add("/logout");
         permitAll.add("/s/oauth/*");
+        permitAll.add("/tc/tms/**");
     }
 
     /**

@@ -54,7 +54,7 @@ public class RoApiResponse<T> {
         this.msg = msg;
         this.data = data;
 
-        if (RoApiStatusEnum.SUCCESS.equals(code)) {
+        if (RoApiStatusEnum.SUCCESS.valueIs(code)) {
             this.success = true;
         } else {
             this.success = false;

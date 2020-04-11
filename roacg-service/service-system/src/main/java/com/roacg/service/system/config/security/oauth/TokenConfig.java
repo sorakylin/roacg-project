@@ -4,15 +4,14 @@ import com.roacg.core.base.log.RoCommonLoggerEnum;
 import com.roacg.core.base.log.RoLoggerFactory;
 import com.roacg.service.system.security.model.AuthenticationUser;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
-import javax.sql.DataSource;
 import java.util.Map;
 
 @Configuration
@@ -20,9 +19,6 @@ public class TokenConfig {
 
     private static Logger preloadLog = RoLoggerFactory
             .getCommonLogger(RoCommonLoggerEnum.AT_STARTUP_PRELOAD, "security-oauth2");
-
-    @Autowired
-    private DataSource dataSource;
 
 
     /**
@@ -32,16 +28,17 @@ public class TokenConfig {
      * @return JdbcTokenStore
      */
     @Bean
-    public TokenStore tokenStore() {
+    public TokenStore tokenStore(RedisConnectionFactory redisConnectionFactory) {
 
         // Redis管理access_token和refresh_token
-//        RedisTokenStore redisTokenStore = new RedisTokenStore(redisConnectionFactory);
+        RedisTokenStore redisTokenStore = new RedisTokenStore(redisConnectionFactory);
+        return redisTokenStore;
 
         // JBDC管理access_token和refresh_token
 
         // 基于 JDBC 实现，令牌保存到数据库
-        JdbcTokenStore jdbcTokenStore = new JdbcTokenStore(dataSource);
-        return jdbcTokenStore;
+//        JdbcTokenStore jdbcTokenStore = new JdbcTokenStore(dataSource);
+//        return jdbcTokenStore;
     }
 
     /**

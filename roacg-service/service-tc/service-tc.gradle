@@ -24,7 +24,7 @@ dependencies {
     compile project(':roacg-core:common-utils')
     compile libs['mysql-connector-java']
     compile libs['dbpoll-hikari']
-    compile libs['spring-cloud-alibaba-nacos-discovery']
+    compile libs['spring-cloud-zookeeper-discovery']
     compile libs['spring-boot-web']
     compile libs['common-pool']
 //    compile libs['spring-boot-jdbc']

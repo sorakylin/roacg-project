@@ -6,9 +6,13 @@ spring:
   application:
     name: service-gateway
   cloud:
-    nacos:
+    zookeeper:
+      connect-string: 192.168.194.132:2181
       discovery:
-        server-addr: 192.168.194.132:8848
+        register: true
+        enabled: true
+        instance-id: 1
+        root: /ro-service
     gateway:
       # 这里是设置与服务注册发现组件结合，这样可以采用服务名的路由策略
       discovery:

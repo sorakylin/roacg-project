@@ -6,16 +6,20 @@ spring:
   application:
     name: service-system
   cloud:
-    nacos:
+    zookeeper:
+      connect-string: 192.168.194.132:2181
       discovery:
-        server-addr: 192.168.194.132:8848
+        register: true
+        enabled: true
+        instance-id: 1
+        root: /ro-service
   jackson:
     serialization:
       indent_output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://192.168.194.132:3306/roacg-service-system?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+    jdbc-url: jdbc:mysql://192.168.194.132:3306/roacg-service-system?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: 614
     hikari:

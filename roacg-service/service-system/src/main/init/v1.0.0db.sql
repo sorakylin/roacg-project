@@ -1,4 +1,5 @@
 CREATE DATABASE `roacg-service-system` CHARACTER SET UTF8MB4;
+CREATE DATABASE `roacg-service-tc` CHARACTER SET UTF8MB4;
 
 
 -- ==============================================================
@@ -93,7 +94,7 @@ CREATE TABLE `oauth_refresh_token`
 -- 初始化一个客户端 client_id=0001 client_secret=123456
 INSERT INTO `roacg-service-system`.oauth_client_details
 (client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove)
-VALUES ('0001', null, '$2a$10$9ZhDOBp.sRKat4l14ygu/.LscxrMUcDAfeVOEPiYwbcRkoB09gCmi', 'web', 'authorization_code,password,refresh_token', 'https://www.github.com', null, null, null, null, null)
+VALUES ('0001', null, '$2a$10$9ZhDOBp.sRKat4l14ygu/.LscxrMUcDAfeVOEPiYwbcRkoB09gCmi', 'web', 'authorization_code,password,refresh_token', 'https://www.github.com', null, null, null, null, null);
 
 
 -- ==============================================================

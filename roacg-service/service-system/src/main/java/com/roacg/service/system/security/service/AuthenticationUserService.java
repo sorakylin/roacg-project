@@ -34,7 +34,7 @@ public class AuthenticationUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         MinimumUserDTO user = userService.findMinimumUser(username)
-                .orElseThrow(() -> new RoApiException(RoApiStatusEnum.ILLEGAL_PARAM, "User not found!"));
+                .orElseThrow(() -> new RoApiException(RoApiStatusEnum.UNAUTHORIZED, "User not found!"));
 
         List<MinimumRoleDTO> roles = userService.findUserMinimumRole(user.getUserId());
 

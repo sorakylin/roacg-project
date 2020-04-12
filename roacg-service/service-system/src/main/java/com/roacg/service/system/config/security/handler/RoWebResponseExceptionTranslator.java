@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.provider.error.DefaultWebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
@@ -45,8 +46,13 @@ public class RoWebResponseExceptionTranslator implements WebResponseExceptionTra
         HttpStatus status = responseEntity.getStatusCode();
 
 
-        logger.info("OAuth2 exception, URI: {}, Code:{} ,Summary: {}.", httpReq.getRequestURI(), status.value(), ase.getSummary());
+        //这是密码错误报的错, SpringSecurity会给个400错误请求. 这里将其替换为401未认证
+        if (ase instanceof InvalidGrantException) {
+            status = HttpStatus.UNAUTHORIZED;
+        }
 
+
+        logger.info("OAuth2 exception, URI: {}, Code:{} ,Summary: {}.", httpReq.getRequestURI(), status.value(), ase.getSummary());
 
         //如果不是 401|403 则响应200
         if (status != HttpStatus.UNAUTHORIZED && status != HttpStatus.FORBIDDEN) {

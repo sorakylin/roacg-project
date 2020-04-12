@@ -3,6 +3,7 @@ package com.roacg.service.system.security.exception;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.roacg.core.model.enums.RoApiStatusEnum;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 
 import java.util.Optional;
@@ -23,6 +24,9 @@ public class ROAuth2Exception extends OAuth2Exception {
         this.oauth2ErrorCode = e.getOAuth2ErrorCode();
         this.httpErrorCode = e.getHttpErrorCode();
 
+        if ("invalid_grant".equals(oauth2ErrorCode)){
+            this.httpErrorCode = HttpStatus.UNAUTHORIZED.value();
+        }
 
         Optional<RoApiStatusEnum> codeEnum = RoApiStatusEnum.forCode(this.httpErrorCode);
         if (codeEnum.isPresent()) {

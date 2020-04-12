@@ -55,9 +55,6 @@ public class WebFluxSecurityConfig {
                         .anyExchange().access(accessManager)
         );
 
-        ServerHttpSecurity.AuthorizeExchangeSpec spec = http.authorizeExchange();
-
-
         http.addFilterAt(new CorsFilter(), SecurityWebFiltersOrder.CORS)
                 .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
                 .addFilterAt(authorizationWebFilter(http.authorizeExchange()), SecurityWebFiltersOrder.AUTHORIZATION);

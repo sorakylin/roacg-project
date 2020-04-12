@@ -24,6 +24,7 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Map;
 
 /**
  * 登陆服务
@@ -50,7 +51,7 @@ public class LoginHandler implements HandlerFunction<ServerResponse> {
                 .doOnNext(this::validateResponse)
                 .map(res -> ((OAuth2TokenResponse) res.getData()))
                 .doOnNext(this::cacheToken)
-                .flatMap(token -> this.successResponse(token.getAccessToken(), token.getExpiresIn()))
+                .flatMap(token -> this.successResponse(token))
                 .onErrorResume(RoApiException.class, this::onError);
     }
 
@@ -97,19 +98,23 @@ public class LoginHandler implements HandlerFunction<ServerResponse> {
     }
 
     //成功的http响应
-    private Mono<ServerResponse> successResponse(String accessToken, Long expiresIn) {
+    private Mono<ServerResponse> successResponse(OAuth2TokenResponse token) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Cache-Control", "no-store");
         headers.set("Pragma", "no-cache");
-        headers.set("Set-Token", accessToken);
+        headers.set("Set-Token", token.getAccessToken());
 
         //啥时候过期, 毫秒值
-        long expire = Instant.now().plus(Duration.ofSeconds(expiresIn)).toEpochMilli();
+        long expire = Instant.now().plus(Duration.ofSeconds(token.getExpiresIn())).toEpochMilli();
         headers.set("Set-Token-Expire", String.valueOf(expire));
 
+        Map<String, Object> body = Map.of(
+                "uid", token.getRouser().getUid(),
+                "userName", token.getRouser().getUserName()
+        );
 
-        return ServerResponse.ok().headers(h -> h.addAll(headers)).build();
+        return ServerResponse.ok().headers(h -> h.addAll(headers)).bodyValue(RoApiResponse.ok(body));
     }
 
     private void cacheToken(OAuth2TokenResponse oAuth2TokenResponse) {

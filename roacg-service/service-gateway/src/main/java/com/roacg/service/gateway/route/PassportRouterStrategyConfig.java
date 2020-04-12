@@ -1,6 +1,7 @@
 package com.roacg.service.gateway.route;
 
-import com.roacg.service.gateway.route.handler.PassportHandler;
+import com.roacg.service.gateway.route.handler.LoginHandler;
+import com.roacg.service.gateway.route.handler.RegisterHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,19 +15,18 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 @AllArgsConstructor
-public class RouterStrategyConfig {
+public class PassportRouterStrategyConfig {
 
-    private PassportHandler passportHandler;
+    private LoginHandler loginHandler;
+    private RegisterHandler registerHandler;
 
 
     @Bean
     public RouterFunction<?> routerFunction() {
-        return route(POST("/login").and(accept(MediaType.APPLICATION_JSON)), passportHandler::handleLogin)
-                .andRoute(POST("/register")
-                        .and(accept(MediaType.APPLICATION_JSON)), passportHandler::handleRegister)
-                .andRoute(POST("/logout")
-                        .and(accept(MediaType.APPLICATION_FORM_URLENCODED)), passportHandler::handleLogout)
-
+        return route(POST("/login").and(accept(MediaType.APPLICATION_JSON)), loginHandler)
+                .andRoute(POST("/register").and(accept(MediaType.APPLICATION_JSON)), registerHandler)
+//                .andRoute(POST("/logout")
+//                        .and(accept(MediaType.APPLICATION_FORM_URLENCODED)), loginHandler::handleLogout)
                 ;
     }
 }

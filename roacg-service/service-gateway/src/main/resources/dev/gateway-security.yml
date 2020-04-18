@@ -1,0 +1,6 @@
+oauth2:
+  client-id: '0001'
+  client-secret: '123456'
+  endpoint:
+    oauth-token: http://localhost:7080/oauth/token
+    check-token: http://localhost:7080/oauth/introspect

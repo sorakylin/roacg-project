@@ -7,7 +7,7 @@ import com.roacg.core.model.resource.RoApiResponse;
 import com.roacg.core.utils.JsonUtil;
 import com.roacg.service.gateway.route.data.LoginRequest;
 import com.roacg.service.gateway.route.data.OAuth2TokenResponse;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import com.roacg.service.gateway.security.GatewaySecurityProperties;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -33,12 +33,14 @@ import java.util.Map;
 public class LoginHandler implements HandlerFunction<ServerResponse> {
 
     private ReactiveRedisTemplate<String, Object> redisTemplate;
+    private GatewaySecurityProperties properties;
     private WebClient webClient;
 
-    public LoginHandler(ReactiveRedisTemplate<String, Object> redisTemplate, OAuth2ResourceServerProperties properties) {
+    public LoginHandler(ReactiveRedisTemplate<String, Object> redisTemplate, GatewaySecurityProperties properties) {
         this.redisTemplate = redisTemplate;
+        this.properties = properties;
         this.webClient = WebClient.builder()
-                .defaultHeaders(h -> h.setBasicAuth(properties.getOpaquetoken().getClientId(), properties.getOpaquetoken().getClientSecret(), StandardCharsets.UTF_8))
+                .defaultHeaders(h -> h.setBasicAuth(properties.getClientId(), properties.getClientSecret(), StandardCharsets.UTF_8))
                 .build();
     }
 
@@ -59,7 +61,7 @@ public class LoginHandler implements HandlerFunction<ServerResponse> {
     //封装请求体
     private Mono<ClientResponse> makeRequest(LoginRequest req) {
         return this.webClient.post()
-                .uri("http://localhost:7080/oauth/token")
+                .uri(properties.getEndpoint().getOauthToken())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters.fromFormData("grant_type", "password")
                         .with("username", req.getUsername())

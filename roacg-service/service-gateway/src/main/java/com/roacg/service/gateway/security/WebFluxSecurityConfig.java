@@ -9,7 +9,6 @@ import com.roacg.service.gateway.security.authentication.RoTokenReactiveIntrospe
 import com.roacg.service.gateway.security.authentication.RoTokenServerAuthenticationEntryPoint;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,7 +38,7 @@ public class WebFluxSecurityConfig {
 
     private static Logger preloadLog = RoLoggerFactory.getCommonLogger(RoCommonLoggerEnum.AT_STARTUP_PRELOAD, "security-web");
 
-    private OAuth2ResourceServerProperties properties;
+    private GatewaySecurityProperties properties;
     private RoTokenServerAuthenticationEntryPoint authEntryPoint;
     private ReactiveAuthorizationManager accessManager;
     private ServerAccessDeniedHandler accessDeniedHandler;
@@ -66,8 +65,7 @@ public class WebFluxSecurityConfig {
 
     @Bean
     public ReactiveOpaqueTokenIntrospector introspector() {
-        OAuth2ResourceServerProperties.Opaquetoken opaquetoken = properties.getOpaquetoken();
-        RoTokenReactiveIntrospector result = new RoTokenReactiveIntrospector(opaquetoken.getIntrospectionUri(), opaquetoken.getClientId(), opaquetoken.getClientSecret());
+        RoTokenReactiveIntrospector result = new RoTokenReactiveIntrospector(properties.getEndpoint().getCheckToken(), properties.getClientId(), properties.getClientSecret());
         preloadLog.info("Ro customize token introspector initialized.");
 
         return result;

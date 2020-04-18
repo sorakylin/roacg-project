@@ -42,10 +42,3 @@ spring:
         max-idle: 8
         max-active: 8
         max-wait: -1ms
-  security:
-    oauth2:
-      resourceserver:
-        opaque-token:
-          introspection-uri: http://localhost:7080/oauth/introspect
-          client-id: '0001'
-          client-secret: '123456'

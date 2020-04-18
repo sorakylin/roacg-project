@@ -1,8 +1,6 @@
 package com.roacg.core.web.config;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +23,8 @@ public class RedisConfig {
         objectMapper = objectMapper.copy();
 
         //启用反序列化所需的类型信息,在属性中添加@class
-        objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+//        objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+
         //配置null值的序列化器
         GenericJackson2JsonRedisSerializer.registerNullValueSerializer(objectMapper, null);
         return new GenericJackson2JsonRedisSerializer(objectMapper);

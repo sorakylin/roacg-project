@@ -12,7 +12,8 @@ public final class RoCacheConst {
     /**
      * 默认的缓存key前缀
      */
-    public static final String DEFAULT_KEY_PREFIX = "RO:DEF-KEY@";
+    public static final String DEFAULT_KEY_PREFIX = "RO@DEF-KEY:";
+
 
     /**
      * 默认的缓存TTL时间, 三十分钟
@@ -28,7 +29,7 @@ public final class RoCacheConst {
      * @param params 参数信息
      * @return
      */
-    public static final Object defaultKeyGenerate(Object target, Method method, Object... params) {
+    public static final String defaultKeyGenerate(Object target, Method method, Object... params) {
         StringBuilder key = new StringBuilder();
         key.append(target.getClass().getName())
                 .append(':')

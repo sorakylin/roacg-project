@@ -1,6 +1,7 @@
 package com.roacg.service.tc.team.resource;
 
 import com.roacg.core.model.resource.RoApiResponse;
+import com.roacg.core.web.security.annotation.ExposeResource;
 import com.roacg.service.tc.team.model.vo.ActiveTeamVO;
 import com.roacg.service.tc.team.service.TeamService;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/tms")
 @AllArgsConstructor
+@ExposeResource
 public class TeamsResource {
 
     private TeamService teamService;

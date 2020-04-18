@@ -21,14 +21,12 @@ apply plugin: libs["spring-dependency-management"]
 
 
 dependencies {
-    compile project(':roacg-core:common-utils')
+    compile project(':roacg-core:common-web')
     compile libs['mysql-connector-java']
     compile libs['dbpoll-hikari']
     compile libs['spring-cloud-zookeeper-discovery']
-    compile libs['spring-boot-web']
     compile libs['common-pool']
 //    compile libs['spring-boot-jdbc']
-    compile libs['spring-boot-redis']
     compile libs['spring-boot-data-jpa']
 //    compile libs['spring-boot-dubbo']
 //    compile libs['spring-cloud-openfeign']

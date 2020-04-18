@@ -7,6 +7,7 @@ if (!JavaVersion.current().java11Compatible) {
 include ':roacg-core:common-base'
 include ':roacg-core:common-utils'
 include ':roacg-core:common-model'
+include ':roacg-core:common-web'
 include ':roacg-service:service-system'
 include ':roacg-service:service-gateway'
 include ':roacg-service:service-tc'

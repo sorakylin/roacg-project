@@ -1,0 +1,5 @@
+dependencies {
+    compile project(':roacg-core:common-utils')
+    compile libs['spring-boot-web']
+    compile libs['spring-boot-redis']
+}

@@ -1,4 +1,3 @@
-
 allprojects {
     group = 'com.roacg'
     version = '0.0.1-SNAPSHOT'
@@ -15,7 +14,7 @@ allprojects {
 }
 
 //容器模块名字
-def holderProjects = Arrays.asList('roacg-core', 'roacg-security', 'roacg-service')
+def holderProjects = Arrays.asList('roacg-core', 'roacg-service')
 
 configure(subprojects) { subp ->
     //此处主要为了过滤容器模块中的插件配置，容器模块的主要用来管理下属部分的模块，无需添加依赖和插件
@@ -38,7 +37,6 @@ configure(subprojects) { subp ->
         [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
         apply from: "${rootDir}/dependency.gradle"
-
 
 
         dependencies {
@@ -79,9 +77,9 @@ configure(subprojects) { subp ->
                     srcDir "src/main/resources/${env}"
                     println "Current environment [${env}] by ${project.name}. "
 
-                    sourceSets.main.resources.srcDirs.each   {
+                    sourceSets.main.resources.srcDirs.each {
                         it.listFiles().each {
-                            if(it.isDirectory() && envDirs.contains(it.name)) {
+                            if (it.isDirectory() && envDirs.contains(it.name)) {
                                 exclude "${it.name}"
                             }
                         }

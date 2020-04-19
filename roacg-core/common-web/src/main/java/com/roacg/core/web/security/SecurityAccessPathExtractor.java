@@ -1,7 +1,6 @@
 package com.roacg.core.web.security;
 
 import com.roacg.core.model.auth.ResourcePermission;
-import com.roacg.core.model.auth.enmus.PermissionType;
 import com.roacg.core.model.consts.RoAuthConst;
 import com.roacg.core.web.security.annotation.ExposeResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,10 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 
-
+/**
+ * 抽取 SpringMVC 中所有的暴露出的资源
+ * 封装为具体的资源许可
+ */
 public class SecurityAccessPathExtractor implements CommandLineRunner {
 
     @Autowired
@@ -58,7 +60,7 @@ public class SecurityAccessPathExtractor implements CommandLineRunner {
             return Optional.empty();
         }
 
-        //方法上的注解覆盖类上的注解
+        //方法上的注解比类上的注解优先级更高
         if (Objects.nonNull(methodResource)) {
             exposeResource = methodResource;
         }
@@ -69,25 +71,24 @@ public class SecurityAccessPathExtractor implements CommandLineRunner {
         Set<RequestMethod> methods = requestMappingInfo.getMethodsCondition().getMethods();
 
         //权限实体
-        ResourcePermission value = new ResourcePermission();
+        ResourcePermission permission = new ResourcePermission();
+        permission.setType(exposeResource.type().name());
+        permission.setRoles(exposeResource.roles());
 
+        //url设置, 只拿第一个。
+        patterns.stream().findFirst().ifPresent(permission::setUrl);
+
+        //http method 设置
         if (methods.isEmpty()) {
-            value.setMethod("*");
+            permission.setMethod("*");
         } else {
             String methodValue = methods.stream()
                     .map(Objects::toString)
                     .collect(joining(","));
-            value.setMethod(methodValue);
+            permission.setMethod(methodValue);
         }
 
-        patterns.stream().findFirst().ifPresent(value::setUrl);
-
-        PermissionType type = exposeResource.type();
-        value.setType(type.name());
-
-        value.setRoles(exposeResource.roles());
-
-        return Optional.of(value);
+        return Optional.of(permission);
     }
 
 

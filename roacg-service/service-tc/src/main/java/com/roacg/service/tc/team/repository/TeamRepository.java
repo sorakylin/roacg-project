@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TeamRepository extends JpaRepository<TeamPO, Long> {
-    
+
+    int countByTeamName(String teamName);
+
 }

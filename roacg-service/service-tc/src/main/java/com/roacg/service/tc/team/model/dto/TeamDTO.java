@@ -40,4 +40,24 @@ public class TeamDTO implements Serializable {
         teamDTO.setProjectNum(teamPO.getProjectNum());
         return teamDTO;
     }
+
+    public TeamPO transferToEntity() {
+        TeamPO team = new TeamPO();
+        team.setTeamId(teamId);
+        team.setTeamName(teamName);
+        team.setAvatar(avatar);
+        team.setTeamProfile(teamProfile);
+        team.setTeamDescription(teamDescription);
+        team.setTeamGrade(teamGrade);
+        team.setTeamSize(teamSize);
+        team.setProjectNum(projectNum);
+
+        /*team.setCreateTime();
+        team.setUpdateTime();
+        team.setCreateAt();
+        team.setUpdateAt();
+        team.setUpdateId();*/
+
+        return team;
+    }
 }

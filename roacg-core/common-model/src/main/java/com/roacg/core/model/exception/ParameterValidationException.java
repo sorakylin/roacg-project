@@ -9,10 +9,10 @@ import com.roacg.core.model.enums.RoApiStatusEnum;
 public class ParameterValidationException extends RoApiException {
 
     public ParameterValidationException() {
-        super(RoApiStatusEnum.ILLEGAL_PARAM,"参数效验失败! 请检查入参有效性");
+        super(RoApiStatusEnum.ILLEGAL_PARAM, "参数效验失败! 请检查入参有效性");
     }
 
     public ParameterValidationException(String message) {
-        super(RoApiStatusEnum.ILLEGAL_PARAM,message);
+        super(RoApiStatusEnum.ILLEGAL_PARAM, message);
     }
 }

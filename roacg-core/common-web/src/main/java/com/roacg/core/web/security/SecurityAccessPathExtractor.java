@@ -3,6 +3,7 @@ package com.roacg.core.web.security;
 import com.roacg.core.model.auth.ResourcePermission;
 import com.roacg.core.model.consts.RoAuthConst;
 import com.roacg.core.web.security.annotation.ExposeResource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -22,6 +23,7 @@ import static java.util.stream.Collectors.joining;
  * 抽取 SpringMVC 中所有的暴露出的资源
  * 封装为具体的资源许可
  */
+@Slf4j
 public class SecurityAccessPathExtractor implements CommandLineRunner {
 
     @Autowired
@@ -48,6 +50,9 @@ public class SecurityAccessPathExtractor implements CommandLineRunner {
         String resourceKey = RoAuthConst.getExposeResourceKey(applicationName);
         redisTemplate.delete(resourceKey);
         redisTemplate.opsForList().leftPushAll(resourceKey, resourcePermissions);
+
+        log.info("[{}] SpringMVC 路径抽取完毕, 暴露接口数: ", applicationName, resourcePermissions.size());
+        resourcePermissions.forEach(p -> log.debug(p.toString()));
     }
 
 

@@ -21,7 +21,7 @@ public class RoContext {
         userContextHolder.setContext(user);
     }
 
-    public static void clearRequestUser(RequestUser user) {
+    public static void clearRequestUser() {
         userContextHolder.clearContext();
     }
 

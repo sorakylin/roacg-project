@@ -2,6 +2,9 @@ package com.roacg.core.model.consts;
 
 public final class RoAuthConst {
 
+    public static final String TOKEN_HEADER = "Authorization";
+
+    public static final String TOKEN_PREFIX = "Bearer ";
 
     /**
      * 服务暴露的资源路径前缀

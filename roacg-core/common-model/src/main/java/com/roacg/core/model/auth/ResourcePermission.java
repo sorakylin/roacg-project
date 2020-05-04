@@ -4,6 +4,7 @@ import com.roacg.core.model.auth.enmus.PermissionType;
 import lombok.Data;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 @Data
@@ -29,6 +30,18 @@ public class ResourcePermission {
         ResourcePermission permission = ResourcePermission.create(url, method, type);
         permission.setRoles(roles);
         return permission;
+    }
+
+    public ResourcePermission copy() {
+        ResourcePermission result = new ResourcePermission();
+        result.url = this.url;
+        result.method = this.method;
+        result.type = this.type;
+
+        if (Objects.nonNull(this.roles))
+            result.roles = Arrays.copyOf(this.roles, this.roles.length);
+
+        return result;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.roacg.service.system.config.security.oauth;
 
 import com.roacg.core.base.log.RoCommonLoggerEnum;
 import com.roacg.core.base.log.RoLoggerFactory;
+import com.roacg.core.model.consts.RoAuthConst;
 import com.roacg.service.system.security.model.AuthenticationUser;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
@@ -54,7 +55,7 @@ public class TokenConfig {
             AuthenticationUser user = (AuthenticationUser) authentication.getUserAuthentication().getPrincipal();
 
             final Map<String, Object> additionalInfo = Map.of(
-                    "rouser", Map.of(
+                    RoAuthConst.TOKEN_USER_KEY, Map.of(
                             "uid", user.getUserId(),
                             "userName", user.getUsername(),
                             "userAuthorities", user.getAuthorities()

@@ -4,6 +4,12 @@ import com.nimbusds.oauth2.sdk.TokenIntrospectionResponse;
 import com.nimbusds.oauth2.sdk.TokenIntrospectionSuccessResponse;
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 import com.nimbusds.oauth2.sdk.id.Audience;
+import com.roacg.core.model.auth.CredentialsType;
+import com.roacg.core.model.auth.RequestUser;
+import com.roacg.core.model.consts.RoAuthConst;
+import com.roacg.core.utils.JsonUtil;
+import com.roacg.core.utils.context.RoContext;
+import com.roacg.service.gateway.route.data.OAuth2TokenResponse;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
@@ -130,7 +136,21 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
 
     private void validate(String token, TokenIntrospectionSuccessResponse response) {
         // relying solely on the authorization server to validate this token (not checking 'exp', for example)
-        if (response.isActive()) return;
+        if (response.isActive()) {
+
+            //将响应的用户信息设置进请求上下文
+            JsonUtil.fromJsonToObject(response.getStringParameter(RoAuthConst.TOKEN_USER_KEY), OAuth2TokenResponse.TokenUserInfo.class)
+                    .map(user -> RequestUser.builder()
+                            .id(user.getUid())
+                            .name(user.getUserName())
+                            .authorities(user.getUserAuthorities())
+                            .credentialsType(CredentialsType.TOKEN)
+                            .credentials(token)
+                            .build()
+                    )
+                    .ifPresent(RoContext::setRequestUser);
+            return;
+        }
 
 
         StringBuilder errMsg = new StringBuilder("Provided token isn't active!");

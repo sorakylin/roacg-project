@@ -45,7 +45,7 @@ public class RequestContextInterceptor extends HandlerInterceptorAdapter {
         //只处理颁发者为网关的token
         String iss = tokenInstance.getAttributeValue(JwtAttribute.Payload.ISS).orElse("");
         if (Objects.equals(iss, ServiceCode.GATEWAY.getApplicationName())) {
-            tokenInstance.getAttributeValue(RoAuthConst.JWT_USER_KEY)
+            tokenInstance.getAttributeValue(RoAuthConst.TOKEN_USER_KEY)
                     .flatMap(userJson -> JsonUtil.fromJsonToObject(userJson, RequestUser.class))
                     .ifPresent(RoContext::setRequestUser); //设置进上下文
         }

@@ -6,8 +6,8 @@ public final class RoAuthConst {
 
     public static final String TOKEN_PREFIX = "Bearer ";
 
-    //jwt payload 中用户信息的key
-    public static final String JWT_USER_KEY = "user";
+    //payload 中用户信息的key
+    public static final String TOKEN_USER_KEY = "rouser";
 
     /**
      * 服务暴露的资源路径前缀

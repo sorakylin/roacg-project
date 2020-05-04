@@ -17,6 +17,11 @@ public class RequestUser implements Serializable {
 
     private String credentials;
 
+    /**
+     * 凭据类型
+     *
+     * @see CredentialsType
+     */
     private String credentialsType;
 
     private List<String> authorities;

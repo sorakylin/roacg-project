@@ -17,6 +17,7 @@ public class TeamCreateREQ {
 
     private String avatar;
 
+    //团队简介
     private String teamProfile;
 
 

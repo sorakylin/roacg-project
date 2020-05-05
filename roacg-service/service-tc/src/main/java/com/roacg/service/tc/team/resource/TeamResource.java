@@ -1,15 +1,14 @@
 package com.roacg.service.tc.team.resource;
 
+import com.roacg.core.model.auth.enmus.PermissionType;
 import com.roacg.core.model.resource.RoApiResponse;
 import com.roacg.core.web.security.annotation.ExposeResource;
 import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.po.TeamPO;
+import com.roacg.service.tc.team.model.req.TeamCreateREQ;
 import com.roacg.service.tc.team.service.TeamService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.roacg.core.model.resource.RoApiResponse.ok;
 
@@ -36,4 +35,16 @@ public class TeamResource {
                 .orElse(ok());
     }
 
+    /**
+     * 用户试图创建一个小组
+     *
+     * @param req 小组的内容
+     * @return 200 == 成功
+     */
+    @PostMapping
+    @ExposeResource(type = PermissionType.LOGIN)
+    public RoApiResponse createTeam(@RequestBody TeamCreateREQ req) {
+        teamService.createTeam(req);
+        return RoApiResponse.ok();
+    }
 }

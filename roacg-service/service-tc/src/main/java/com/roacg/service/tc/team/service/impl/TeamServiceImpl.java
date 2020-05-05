@@ -26,6 +26,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -46,6 +49,24 @@ public class TeamServiceImpl implements TeamService {
         Optional<TeamPO> teamPO = teamRepository.findById(teamId);
 
         return teamPO.map(TeamDTO::from);
+    }
+
+    @Override
+    public List<TeamDTO> findMyTeams() {
+        RequestUser currentUser = RoContext.getRequestUser();
+
+        Sort sort = Sort.by("userTeamRole");
+
+        //当前用户拥有的团队, 只查询前六个, 或者查询剩余所有
+        Page<TeamUserPO> userTeam = teamUserRepository.findByUserId(currentUser.getId(), PageRequest.of(1, 6, sort));
+
+        if (userTeam.isEmpty()) return List.of();
+
+        //查询出详细信息
+        List<TeamPO> teams = userTeam.stream().map(TeamUserPO::getTeamId).distinct()
+                .collect(collectingAndThen(toList(), teamRepository::findAllById));
+
+        return teams.stream().map(TeamDTO::from).collect(toList());
     }
 
     @Override

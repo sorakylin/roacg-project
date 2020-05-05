@@ -14,6 +14,9 @@ public interface TeamService {
     //通过主键查询单个小组的信息
     Optional<TeamDTO> findTeamInfo(Long teamId);
 
+    //分页批量查询和当前用户关联的小组
+    List<TeamDTO> findMyTeams();
+
     //根据创建时间倒序, 分页查询小组
     List<TeamDTO> findTeamPageByCreateTime(int pageNum, int pageSize);
 

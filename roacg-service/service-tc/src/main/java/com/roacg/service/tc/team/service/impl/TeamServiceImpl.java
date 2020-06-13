@@ -57,7 +57,7 @@ public class TeamServiceImpl implements TeamService {
 
         Sort sort = Sort.by("userTeamRole");
 
-        //当前用户拥有的团队, 只查询前六个, 或者查询剩余所有
+        //当前用户拥有的团队, 只查询前六个
         Page<TeamUserPO> userTeam = teamUserRepository.findByUserId(currentUser.getId(), PageRequest.of(1, 6, sort));
 
         if (userTeam.isEmpty()) return List.of();
@@ -93,6 +93,11 @@ public class TeamServiceImpl implements TeamService {
             throw new ParameterValidationException("团队名已存在!");
         }
 
+        int userTeamNum = teamUserRepository.countByUserId(currentUser.getId());
+        if (userTeamNum > 6) {
+            throw new ParameterValidationException("加入的团队已达到上限!");
+        }
+
         //先保存小组
         TeamPO entity = req.transferToDTO().transferToEntity();
         teamRepository.saveAndFlush(entity);
@@ -101,7 +106,7 @@ public class TeamServiceImpl implements TeamService {
             throw new RoApiException(RoApiStatusEnum.OTHER, "保存失败,请重试!");
         }
 
-        //在保存关联关系
+        //再保存关联关系
         TeamUserPO teamUser = new TeamUserPO();
         teamUser.setTeamId(entity.getTeamId());
         teamUser.setUserId(currentUser.getId());

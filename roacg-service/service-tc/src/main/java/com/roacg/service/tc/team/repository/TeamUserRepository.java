@@ -7,6 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface TeamUserRepository extends CrudRepository<TeamUserPO, Long> {
 
+    int countByUserId(Long userId);
+
     Page<TeamUserPO> findByUserId(Long userId, Pageable page);
 
 }

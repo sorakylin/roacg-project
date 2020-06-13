@@ -1,3 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.roacg.core.web.config.RedisConfig,\
-  com.roacg.core.web.config.RedisCacheConfig
+  com.roacg.core.web.config.RedisCacheConfig,\
+  com.roacg.core.web.config.WebAppConfigurer
+

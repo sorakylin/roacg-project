@@ -27,7 +27,7 @@ public class RequestContextInterceptor extends HandlerInterceptorAdapter {
 
         //没有token 或者token格式不对，直接跳过
         if (Objects.isNull(token)) return true;
-        if (token.length() <= RoAuthConst.TOKEN_PREFIX.length()) return true;
+        if (!token.startsWith(RoAuthConst.TOKEN_PREFIX)) return true;
 
         token = token.replaceFirst(RoAuthConst.TOKEN_PREFIX, "");
 

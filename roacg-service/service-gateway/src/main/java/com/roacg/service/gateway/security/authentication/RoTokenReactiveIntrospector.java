@@ -138,8 +138,10 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
         // relying solely on the authorization server to validate this token (not checking 'exp', for example)
         if (response.isActive()) {
 
+            Object tokenUser = response.getParameters().get(RoAuthConst.TOKEN_USER_KEY);
+
             //将响应的用户信息设置进请求上下文
-            JsonUtil.fromJsonToObject(response.getStringParameter(RoAuthConst.TOKEN_USER_KEY), OAuth2TokenResponse.TokenUserInfo.class)
+            JsonUtil.fromJsonToObject(tokenUser.toString(), OAuth2TokenResponse.TokenUserInfo.class)
                     .map(user -> RequestUser.builder()
                             .id(user.getUid())
                             .name(user.getUserName())

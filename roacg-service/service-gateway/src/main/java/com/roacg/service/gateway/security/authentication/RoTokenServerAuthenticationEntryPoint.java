@@ -135,7 +135,7 @@ public class RoTokenServerAuthenticationEntryPoint implements ServerAuthenticati
         }
 
         //除了401和403，都返回200
-        if (status != HttpStatus.UNAUTHORIZED || status != HttpStatus.FORBIDDEN) {
+        if (status != HttpStatus.UNAUTHORIZED && status != HttpStatus.FORBIDDEN) {
             status = HttpStatus.OK;
         }
 

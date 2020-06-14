@@ -1,11 +1,14 @@
 package com.roacg.service.gateway.security.authorization;
 
+import com.roacg.core.model.auth.RequestUser;
+import com.roacg.core.model.consts.RoAuthConst;
 import com.roacg.service.gateway.security.PermissionVerifier;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -36,7 +39,13 @@ public class RoAccessManager implements ReactiveAuthorizationManager<Authorizati
         String requestPath = exchange.getRequest().getURI().getRawPath();
         HttpMethod method = exchange.getRequest().getMethod();
 
-        return Mono.just(new AuthorizationDecision(PermissionVerifier.checkResource(requestPath, method)));
+        return authenticationMono
+                .map(auth -> auth.getPrincipal())
+                .cast(OAuth2AuthenticatedPrincipal.class)
+                .map(auth -> auth.getAttribute(RoAuthConst.TOKEN_USER_KEY))
+                .cast(RequestUser.class)
+                .defaultIfEmpty(RequestUser.guest())
+                .map(user -> new AuthorizationDecision(PermissionVerifier.checkResource(user, requestPath, method)));
     }
 
 }

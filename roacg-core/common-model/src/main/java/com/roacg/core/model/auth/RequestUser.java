@@ -2,6 +2,7 @@ package com.roacg.core.model.auth;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Objects;
 
 @Builder
 @Getter
+@ToString
 public class RequestUser implements Serializable {
 
     private Long id;

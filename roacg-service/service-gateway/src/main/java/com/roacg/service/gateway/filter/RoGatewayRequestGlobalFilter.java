@@ -4,6 +4,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
@@ -48,6 +49,6 @@ public class RoGatewayRequestGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return -1000;
+        return SecurityWebFiltersOrder.FIRST.getOrder();
     }
 }

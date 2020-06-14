@@ -8,7 +8,6 @@ import com.roacg.core.model.auth.CredentialsType;
 import com.roacg.core.model.auth.RequestUser;
 import com.roacg.core.model.consts.RoAuthConst;
 import com.roacg.core.utils.JsonUtil;
-import com.roacg.core.utils.context.RoContext;
 import com.roacg.service.gateway.route.data.OAuth2TokenResponse;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -92,8 +91,8 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
                 .flatMap(this::adaptToNimbusResponse)//检查Http响应正确性 (看是不是200)
                 .map(this::parseNimbusResponse)//封装Http响应为Token内省响应
                 .map(this::castToNimbusSuccess)//检查Token内省响应正确性
-                .doOnNext(response -> validate(token, response))//效验返回值 (active == true?)
-                .map(this::convertClaimsSet)//解析返回值中携带的信息，封装成认证对象
+                .doOnNext(this::validate)//效验返回值 (active == true?)
+                .map(response -> this.convertClaimsSet(token, response))//解析返回值中携带的信息，封装成认证对象
                 .onErrorMap(e -> !(e instanceof OAuth2IntrospectionException), this::onError);
     }
 
@@ -134,23 +133,9 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
         return (TokenIntrospectionSuccessResponse) introspectionResponse;
     }
 
-    private void validate(String token, TokenIntrospectionSuccessResponse response) {
+    private void validate(TokenIntrospectionSuccessResponse response) {
         // relying solely on the authorization server to validate this token (not checking 'exp', for example)
         if (response.isActive()) {
-
-            Object tokenUser = response.getParameters().get(RoAuthConst.TOKEN_USER_KEY);
-
-            //将响应的用户信息设置进请求上下文
-            JsonUtil.fromJsonToObject(tokenUser.toString(), OAuth2TokenResponse.TokenUserInfo.class)
-                    .map(user -> RequestUser.builder()
-                            .id(user.getUid())
-                            .name(user.getUserName())
-                            .authorities(user.getUserAuthorities())
-                            .credentialsType(CredentialsType.TOKEN)
-                            .credentials(token)
-                            .build()
-                    )
-                    .ifPresent(RoContext::setRequestUser);
             return;
         }
 
@@ -184,7 +169,7 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
         throw new BadOpaqueTokenException(errMsg.toString());
     }
 
-    private OAuth2AuthenticatedPrincipal convertClaimsSet(TokenIntrospectionSuccessResponse response) {
+    private OAuth2AuthenticatedPrincipal convertClaimsSet(String token, TokenIntrospectionSuccessResponse response) {
         Map<String, Object> claims = response.toJSONObject();
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         if (response.getAudience() != null) {
@@ -219,6 +204,21 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
                 authorities.add(new SimpleGrantedAuthority(this.authorityPrefix + scope));
             }
         }
+
+        Object tokenUser = response.getParameters().get(RoAuthConst.TOKEN_USER_KEY);
+
+        //将响应的用户信息设置进认证主题内
+        JsonUtil.fromJsonToObject(tokenUser.toString(), OAuth2TokenResponse.TokenUserInfo.class)
+                .map(user -> RequestUser.builder()
+                        .authorities(user.getUserAuthorities())
+                        .id(user.getUid())
+                        .name(user.getUserName())
+                        .credentialsType(CredentialsType.TOKEN)
+                        .credentials(token)
+                        .build()
+                )
+                .ifPresent(user -> claims.put(RoAuthConst.TOKEN_USER_KEY, user));
+
 
         return new DefaultOAuth2AuthenticatedPrincipal(claims, authorities);
     }

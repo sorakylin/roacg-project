@@ -1,6 +1,7 @@
 package com.roacg.service.gateway.security;
 
 import com.roacg.core.base.enmus.ServiceCode;
+import com.roacg.core.model.auth.RequestUser;
 import com.roacg.core.model.auth.ResourcePermission;
 import com.roacg.core.model.auth.enmus.PermissionType;
 import com.roacg.core.model.consts.RoAuthConst;
@@ -52,7 +53,7 @@ public class PermissionVerifier {
      * @param requestPath 请求路径
      * @return true 可放行， false反之
      */
-    public static boolean checkResource(String requestPath, HttpMethod method) {
+    public static boolean checkResource(RequestUser user, String requestPath, HttpMethod method) {
         if (!StringUtils.hasText(requestPath)) return false;
 
         //试图请求的服务
@@ -80,10 +81,10 @@ public class PermissionVerifier {
                 .filter(r -> Objects.nonNull(r.getMethod()))
                 .filter(r -> "*".equals(r.getMethod()) ||  //留下方法匹配的
                         ArrayUtils.contains(r.getMethod().toUpperCase().split(","), method.name()))
-                .anyMatch(PermissionVerifier::checkResource);
+                .anyMatch(r -> PermissionVerifier.checkResource(user, r));
     }
 
-    public static boolean checkResource(ResourcePermission resource) {
+    public static boolean checkResource(RequestUser user, ResourcePermission resource) {
         PermissionType type = PermissionType.valueOf(resource.getType());
         if (Objects.isNull(type)) return false;
         return type.hasResourcePermission(RoContext.getRequestUser(), resource);

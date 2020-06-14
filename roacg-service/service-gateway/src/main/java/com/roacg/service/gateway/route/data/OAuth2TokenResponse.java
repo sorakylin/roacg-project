@@ -28,7 +28,7 @@ public class OAuth2TokenResponse {
     private TokenUserInfo rouser;
 
     @Data
-    public class TokenUserInfo {
+    public static class TokenUserInfo {
 
         private Long uid;
         private String userName;

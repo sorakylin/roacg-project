@@ -1,33 +1,39 @@
 allprojects {
     group = 'com.roacg'
     version = '0.0.1-SNAPSHOT'
-
     apply from: "${rootDir}/dependency.gradle"
-
     apply plugin: 'maven'
-
     ext.gradleScriptDir = "${rootProject.projectDir}/tasks"
-
     apply from: "${gradleScriptDir}/task.gradle"
-
-
 }
 
 //容器模块名字
 def holderProjects = Arrays.asList('roacg-core', 'roacg-service')
 
+//依赖仓库
+def repository = {
+    mavenLocal()
+    maven { url = 'https://maven.aliyun.com/repository/jcenter' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url = "https://plugins.gradle.org/m2/" }
+    jcenter()
+    mavenCentral()
+}
+
 configure(subprojects) { subp ->
     //此处主要为了过滤容器模块中的插件配置，容器模块的主要用来管理下属部分的模块，无需添加依赖和插件
     if (!holderProjects.contains(subp.name)) {
 
-        repositories {
-            mavenLocal()
-            maven { url = 'https://maven.aliyun.com/repository/jcenter' }
-            maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
-            maven { url = "https://plugins.gradle.org/m2/" }
-            jcenter()
-            mavenCentral()
+
+        buildscript {
+            repositories repository
+            dependencies {
+                classpath libs["spring-boot-gradle-plugin"]
+            }
         }
+
+        repositories repository
+
 
         apply plugin: 'java'
 

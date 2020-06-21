@@ -22,17 +22,19 @@ include ':roacg-service:service-tc'
  * @return
  */
 def assertProjectBuildFile(Set<ProjectDescriptor> dirs) {
-    if (dirs.size() > 0) {
-        dirs.each { project ->
-            project.buildFileName = "${project.name}.gradle"
-            assert project.projectDir.isDirectory()
-            assert project.buildFile.exists()
-            assert project.buildFile.isFile()
-        }
-        if (dirs.children.size() > 0) {
-            dirs.children.each { project ->
-                assertProjectBuildFile(project)
-            }
+    if (dirs.size() == 0) {
+        return
+    }
+
+    dirs.each { project ->
+        project.buildFileName = "${project.name}.gradle"
+        assert project.projectDir.isDirectory()
+        assert project.buildFile.exists()
+        assert project.buildFile.isFile()
+    }
+    if (dirs.children.size() > 0) {
+        dirs.children.each { project ->
+            assertProjectBuildFile(project)
         }
     }
 }

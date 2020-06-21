@@ -21,77 +21,77 @@ def repository = {
 }
 
 configure(subprojects) { subp ->
+
     //此处主要为了过滤容器模块中的插件配置，容器模块的主要用来管理下属部分的模块，无需添加依赖和插件
-    if (!holderProjects.contains(subp.name)) {
+    if (holderProjects.contains(subp.name)) return
 
-
-        buildscript {
-            repositories repository
-            dependencies {
-                classpath libs["spring-boot-gradle-plugin"]
-            }
-        }
-
+    buildscript {
         repositories repository
-
-
-        apply plugin: 'java'
-
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-
-        [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
-
-        apply from: "${rootDir}/dependency.gradle"
-
-
         dependencies {
+            classpath libs["spring-boot-gradle-plugin"]
+        }
+    }
+
+    repositories repository
+
+
+    apply plugin: 'java'
+
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    apply from: "${rootDir}/dependency.gradle"
+
+
+    dependencies {
 //            implementation libs['commons-lang3']
-            //lombok
-            annotationProcessor libs['lombok']
-            compileOnly libs['lombok']
-            testAnnotationProcessor libs['lombok']
-            testCompileOnly libs['lombok']
+        //lombok
+        annotationProcessor libs['lombok']
+        compileOnly libs['lombok']
+        testAnnotationProcessor libs['lombok']
+        testCompileOnly libs['lombok']
 
 //            testImplementation libs['junit']
-            testImplementation libs["spring-boot-test"]
-        }
+        testImplementation libs["spring-boot-test"]
+    }
 
 
-        //指定编译的目录
-        sourceSets {
-            main {
-                //https://www.jianshu.com/p/3d5ca604f0a0
-                //保留环境包目录的方式
-                /*resources {
-                    sourceSets.main.resources.srcDirs.each {
-                        it.listFiles().each {
-                            if (it.isDirectory() && it.name != "${env}") {
-                                println "Exclude environment [${it.name}]"
-                                exclude "${it.name}"
-                            }
+    //指定编译的目录
+    sourceSets {
+        main {
+            //https://www.jianshu.com/p/3d5ca604f0a0
+            //保留环境包目录的方式
+            /*resources {
+                sourceSets.main.resources.srcDirs.each {
+                    it.listFiles().each {
+                        if (it.isDirectory() && it.name != "${env}") {
+                            println "Exclude environment [${it.name}]"
+                            exclude "${it.name}"
                         }
                     }
-                }*/
+                }
+            }*/
 
-                //直接将环境包目录下的文件打包到resources根目录下
-                resources {
+            //直接将环境包目录下的文件打包到resources根目录下
+            resources {
 
-                    //所有的环境文件夹
-                    String[] envDirs = envdirs.split(",")
+                //所有的环境文件夹
+                String[] envDirs = envdirs.split(",")
 
-                    srcDir "src/main/resources/${env}"
-                    println "Current environment [${env}] by ${project.name}. "
+                srcDir "src/main/resources/${env}"
+                println "Current environment [${env}] by ${project.name}. "
 
-                    sourceSets.main.resources.srcDirs.each {
-                        it.listFiles().each {
-                            if (it.isDirectory() && envDirs.contains(it.name)) {
-                                exclude "${it.name}"
-                            }
+                sourceSets.main.resources.srcDirs.each {
+                    it.listFiles().each {
+                        if (it.isDirectory() && envDirs.contains(it.name)) {
+                            exclude "${it.name}"
                         }
                     }
                 }
             }
+
         }
     }
 }

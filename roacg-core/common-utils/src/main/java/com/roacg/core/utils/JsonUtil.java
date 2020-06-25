@@ -8,9 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -30,9 +30,10 @@ public final class JsonUtil {
         //如果是空对象的时候,不抛异常
         OBJECT_MAPPER.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
-        //取消时间的转化格式,默认是时间戳,可以取消,同时需要设置要表现的时间格式
-        OBJECT_MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        OBJECT_MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        //不使用默认的dateTime进行序列化,
+        OBJECT_MAPPER.configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, false);
+        //使用JSR310提供的序列化类,里面包含了大量的JDK8时间序列化类
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
 
         //语言环境
         OBJECT_MAPPER.setLocale(Locale.CHINA);

@@ -36,7 +36,7 @@ final public class RoLoggerFactory {
 
         //设置日志输出模板
         PatternLayoutEncoder encoder = new PatternLayoutEncoder();
-        encoder.setPattern("%d{yyyy-MM-dd HH:mm:ss} | common-log | [%thread] %-5level %logger{36} >> %msg%n");
+        encoder.setPattern("%d{yyyy-MM-dd HH:mm:ss}|common-log|[%thread] %-5level %logger{36} >> %msg%n");
         encoder.setCharset(Charsets.UTF_8);
         encoder.setContext(loggerContext);
         encoder.start();

@@ -33,4 +33,18 @@ public class OAuth2TokenResponse extends RoOAuthToken {
     public void setExpiresIn(Long expiresIn) {
         super.setExpiresIn(expiresIn);
     }
+
+
+    public RoOAuthToken generateSaveToken() {
+        RoOAuthToken token = new RoOAuthToken();
+        token.setAccessToken(this.getAccessToken());
+        token.setTokenType(this.getTokenType());
+        token.setRefreshToken(this.getRefreshToken());
+        token.setExpiresIn(this.getExpiresIn());
+        token.setScope(this.getScope());
+        token.setRouser(this.getRouser());
+        token.setFirstRequestTime(this.getFirstRequestTime());
+        token.setLastRequestTime(this.getLastRequestTime());
+        return token;
+    }
 }

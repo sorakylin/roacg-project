@@ -21,9 +21,9 @@ public class ReactiveRedisTokenRepository implements TokenCacheRepository<Mono<R
     @Override
     public void cacheToken(RoOAuthToken token) {
 
-        LocalDateTime lastTime = token.getLastRequestTime();
+        LocalDateTime firstTime = token.getFirstRequestTime();
 
-        Duration expTime = Duration.between(lastTime, lastTime.plusSeconds(token.getExpiresIn()));
+        Duration expTime = Duration.between(firstTime, firstTime.plusSeconds(token.getExpiresIn()));
 
         String tokenCacheKey = RoCacheConst.getTokenCacheKey(token.getAccessToken());
         String userToTokenKey = RoCacheConst.getUserToTokenKey(token.getRouser().getUid(), token.getRouser().getClientId());

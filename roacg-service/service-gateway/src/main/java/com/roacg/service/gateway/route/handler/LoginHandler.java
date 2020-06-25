@@ -135,14 +135,14 @@ public class LoginHandler implements HandlerFunction<ServerResponse>, Initializi
     }
 
     //登陆成功后, 将Token缓存到Redis
-    private void cacheToken(RoOAuthToken token) {
+    private void cacheToken(OAuth2TokenResponse token) {
         if (Objects.isNull(tokenRepository)) return;
 
         LocalDateTime now = LocalDateTime.now();
 
         //如果Redis里已经有了的话, 其实这次获取的也是一模一样的
         tokenRepository.readTokenCacheByAccessToken(token.getAccessToken())
-                .defaultIfEmpty(token)
+                .defaultIfEmpty(token.generateSaveToken())
                 .doOnNext(tk -> {
                     if (Objects.isNull(tk.getLastRequestTime())) {
                         tk.setFirstRequestTime(now);

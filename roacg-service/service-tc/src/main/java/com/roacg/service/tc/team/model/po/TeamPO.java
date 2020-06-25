@@ -19,8 +19,12 @@ public class TeamPO extends BaseEntity {
     @Column(nullable = false, columnDefinition = "bigint(20)")
     private Long teamId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String teamName;
+
+    //组长的ID
+    @Column(nullable = false, columnDefinition = "bigint(20)")
+    private Long leaderId;
 
     //头像，先直接写在DB里边。 以后有了附件服务在重构
     @Column(columnDefinition = "varchar(255)")
@@ -34,9 +38,9 @@ public class TeamPO extends BaseEntity {
     @Column(columnDefinition = "text")
     private String teamDescription;
 
-    //团队等级,根据等级 相应的权限也有所不同
+    //团队等级,根据等级 相应的权限也有所不同 TODO 暂时没这功能, 先写个1
     @Column(columnDefinition = "tinyint(1)", nullable = false)
-    private Integer teamGrade;
+    private Integer teamGrade = 1;
 
     //团队当前人数
     @Column(nullable = false)

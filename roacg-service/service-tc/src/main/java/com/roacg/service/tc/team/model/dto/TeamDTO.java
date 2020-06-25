@@ -12,6 +12,8 @@ public class TeamDTO implements Serializable {
 
     private String teamName;
 
+    private Long leaderId;
+
     private String avatar;
 
     //团队简介
@@ -33,6 +35,7 @@ public class TeamDTO implements Serializable {
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setTeamId(teamPO.getTeamId());
         teamDTO.setTeamName(teamPO.getTeamName());
+        teamDTO.setLeaderId(teamDTO.getLeaderId());
         teamDTO.setTeamProfile(teamPO.getTeamProfile());
         teamDTO.setTeamDescription(teamPO.getTeamDescription());
         teamDTO.setTeamGrade(teamPO.getTeamGrade());
@@ -45,6 +48,7 @@ public class TeamDTO implements Serializable {
         TeamPO team = new TeamPO();
         team.setTeamId(teamId);
         team.setTeamName(teamName);
+        team.setLeaderId(leaderId);
         team.setAvatar(avatar);
         team.setTeamProfile(teamProfile);
         team.setTeamDescription(teamDescription);

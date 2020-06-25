@@ -2,6 +2,7 @@ package com.roacg.service.tc.team.service;
 
 import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.req.TeamCreateREQ;
+import com.roacg.service.tc.team.model.req.TeamUpdateREQ;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,5 +22,8 @@ public interface TeamService {
     List<TeamDTO> findTeamPageByCreateTime(int pageNum, int pageSize);
 
     //用户试图创建一个小组
-    void createTeam(TeamCreateREQ req);
+    void createTeam(TeamCreateREQ r);
+
+    //更新指定的小组
+    void updateTeam(TeamUpdateREQ req);
 }

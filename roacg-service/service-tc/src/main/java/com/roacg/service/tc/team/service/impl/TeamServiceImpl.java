@@ -10,11 +10,13 @@ import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.po.TeamPO;
 import com.roacg.service.tc.team.model.po.TeamUserPO;
 import com.roacg.service.tc.team.model.req.TeamCreateREQ;
+import com.roacg.service.tc.team.model.req.TeamUpdateREQ;
 import com.roacg.service.tc.team.repository.TeamRepository;
 import com.roacg.service.tc.team.repository.TeamUserRepository;
 import com.roacg.service.tc.team.service.TeamService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -57,7 +59,7 @@ public class TeamServiceImpl implements TeamService {
 
         Sort sort = Sort.by("userTeamRole");
 
-        //当前用户拥有的团队, 只查询前六个
+        //当前用户加入的团队, 只查询前六个
         Page<TeamUserPO> userTeam = teamUserRepository.findByUserId(currentUser.getId(), PageRequest.of(1, 6, sort));
 
         if (userTeam.isEmpty()) return List.of();
@@ -98,8 +100,12 @@ public class TeamServiceImpl implements TeamService {
             throw new ParameterValidationException("加入的团队已达到上限!");
         }
 
+        TeamDTO saveDto = req.transferToDTO();
+        saveDto.setTeamSize(1);
+        saveDto.setLeaderId(currentUser.getId());
+
         //先保存小组
-        TeamPO entity = req.transferToDTO().transferToEntity();
+        TeamPO entity = saveDto.transferToEntity();
         teamRepository.saveAndFlush(entity);
 
         if (Objects.isNull(entity.getTeamId())) {
@@ -113,5 +119,28 @@ public class TeamServiceImpl implements TeamService {
         teamUser.setUserTeamRole(UserTeamRoleEnum.TEAM_LEADER);
         teamUserRepository.save(teamUser);
 
+    }
+
+    @Override
+    @Transactional
+    public void updateTeam(TeamUpdateREQ req) {
+        RequestUser currentUser = RoContext.getRequestUser();
+
+        TeamPO existedTeam = teamRepository.findById(req.getTeamId()).orElseThrow(() -> new ParameterValidationException("无对应小组!"));
+
+        if (!Objects.equals(existedTeam.getLeaderId(), currentUser.getId())) {
+            throw new ParameterValidationException("无法修改");
+        }
+
+        existedTeam.setTeamName(req.getTeamName());
+        existedTeam.setAvatar(req.getAvatar());
+        existedTeam.setTeamProfile(req.getTeamProfile());
+        existedTeam.setTeamDescription(req.getTeamDescription());
+
+        try {
+            teamRepository.saveAndFlush(existedTeam);
+        } catch (DuplicateKeyException e) {
+            throw new ParameterValidationException("团队名重复!");
+        }
     }
 }

@@ -5,7 +5,7 @@ import com.roacg.core.model.enums.convert.AbstractBaseCodeEnumConverter;
 import com.roacg.service.tc.team.model.po.TeamUserPO;
 
 /**
- * 表示一个角色在某个小组中的角色
+ * 表示一个用户在某个小组中的角色
  *
  * @see TeamUserPO#getUserTeamRole
  */

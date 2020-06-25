@@ -6,6 +6,7 @@ import com.roacg.core.web.security.annotation.ExposeResource;
 import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.po.TeamPO;
 import com.roacg.service.tc.team.model.req.TeamCreateREQ;
+import com.roacg.service.tc.team.model.req.TeamUpdateREQ;
 import com.roacg.service.tc.team.service.TeamService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,19 @@ public class TeamResource {
     @ExposeResource(type = PermissionType.LOGIN)
     public RoApiResponse createTeam(@RequestBody TeamCreateREQ req) {
         teamService.createTeam(req);
+        return RoApiResponse.ok();
+    }
+
+    /**
+     * 用户试图更新一个小组
+     *
+     * @param req 小组的内容
+     * @return 200 == 成功
+     */
+    @PutMapping
+    @ExposeResource(type = PermissionType.LOGIN)
+    public RoApiResponse createTeam(@RequestBody TeamUpdateREQ req) {
+        teamService.updateTeam(req);
         return RoApiResponse.ok();
     }
 }

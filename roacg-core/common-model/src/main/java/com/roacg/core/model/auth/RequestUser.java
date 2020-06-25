@@ -17,6 +17,8 @@ public class RequestUser implements Serializable {
 
     private String name;
 
+    private String clientId;
+
     private String credentials;
 
     /**

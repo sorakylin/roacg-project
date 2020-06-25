@@ -1,8 +1,13 @@
 package com.roacg.service.gateway.security.authentication;
 
+import com.roacg.core.base.log.RoCommonLoggerEnum;
+import com.roacg.core.base.log.RoLoggerFactory;
+import com.roacg.core.model.auth.CredentialsType;
+import com.roacg.core.model.auth.RequestUser;
 import com.roacg.core.model.auth.token.RoOAuthToken;
 import com.roacg.core.model.auth.token.TokenCacheRepository;
 import com.roacg.core.model.consts.RoAuthConst;
+import org.slf4j.Logger;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -38,16 +43,18 @@ import static org.springframework.security.oauth2.server.resource.introspection.
  */
 public class RoAuthenticationManager implements ReactiveAuthenticationManager {
 
+    private Logger logger = RoLoggerFactory.getCommonLogger(RoCommonLoggerEnum.SECURITY, "Authentication");
+
     private ReactiveOpaqueTokenIntrospector introspector;
 
-    private TokenCacheRepository tokenCacheRepository;
+    private TokenCacheRepository<Mono<RoOAuthToken>> tokenCacheRepository;
 
     public RoAuthenticationManager(ReactiveOpaqueTokenIntrospector introspector) {
         Assert.notNull(introspector, "introspector cannot be null");
         this.introspector = introspector;
     }
 
-    public RoAuthenticationManager(ReactiveOpaqueTokenIntrospector introspector, TokenCacheRepository tokenCacheRepository) {
+    public RoAuthenticationManager(ReactiveOpaqueTokenIntrospector introspector, TokenCacheRepository<Mono<RoOAuthToken>> tokenCacheRepository) {
         Assert.notNull(introspector, "introspector cannot be null");
         this.introspector = introspector;
         this.tokenCacheRepository = tokenCacheRepository;
@@ -87,12 +94,10 @@ public class RoAuthenticationManager implements ReactiveAuthenticationManager {
         if (tokenCacheRepository == null) return Mono.empty();
 
 
-        return Mono.just(tokenCacheRepository.readTokenCacheByAccessToken(token))
-                .map(tk -> {
-                    if (tk.isEmpty()) return null;
-
+        return tokenCacheRepository.readTokenCacheByAccessToken(token)
+                .map(tokenInfo -> {
+//                    logger.info("Read cache success, token:{}", tokenInfo);
                     //用户的权限
-                    RoOAuthToken tokenInfo = tk.get();
                     List<GrantedAuthority> authorities = tokenInfo.getRouser().getUserAuthorities()
                             .stream()
                             .map("SCOPE_"::concat)
@@ -100,15 +105,23 @@ public class RoAuthenticationManager implements ReactiveAuthenticationManager {
                             .collect(Collectors.toList());
 
                     Map<String, Object> claims = new HashMap<>();
-                    claims.put(RoAuthConst.TOKEN_USER_KEY, tokenInfo.getRouser());
                     claims.put(SCOPE, tokenInfo.getScope());
-
 
                     Instant exp = tokenInfo.getFirstRequestTime()
                             .plusSeconds(tokenInfo.getExpiresIn())
                             .toInstant(OffsetDateTime.now().getOffset());
                     claims.put(EXPIRES_AT, exp);
 
+                    RoOAuthToken.TokenUserInfo user = tokenInfo.getRouser();
+                    RequestUser requestUser = RequestUser.builder()
+                            .credentials(token)
+                            .credentialsType(CredentialsType.TOKEN)
+                            .id(user.getUid())
+                            .clientId(user.getClientId())
+                            .name(user.getUserName())
+                            .authorities(user.getUserAuthorities())
+                            .build();
+                    claims.put(RoAuthConst.TOKEN_USER_KEY, requestUser);
 
                     OAuth2AuthenticatedPrincipal principal = new DefaultOAuth2AuthenticatedPrincipal(claims, authorities);
                     return principal;

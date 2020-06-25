@@ -31,7 +31,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * 登陆服务
@@ -41,12 +40,12 @@ public class LoginHandler implements HandlerFunction<ServerResponse>, Initializi
 
     private ReactiveRedisTemplate<String, Object> redisTemplate;
     private GatewaySecurityProperties properties;
-    private TokenCacheRepository tokenRepository;
+    private TokenCacheRepository<Mono<RoOAuthToken>> tokenRepository;
     private WebClient webClient;
 
     public LoginHandler(ReactiveRedisTemplate<String, Object> redisTemplate,
                         GatewaySecurityProperties properties,
-                        @Nullable TokenCacheRepository tokenRepository) {
+                        @Nullable TokenCacheRepository<Mono<RoOAuthToken>> tokenRepository) {
         this.redisTemplate = redisTemplate;
         this.properties = properties;
         this.tokenRepository = tokenRepository;
@@ -142,16 +141,14 @@ public class LoginHandler implements HandlerFunction<ServerResponse>, Initializi
         LocalDateTime now = LocalDateTime.now();
 
         //如果Redis里已经有了的话, 其实这次获取的也是一模一样的
-        Optional<RoOAuthToken> cacheToken = tokenRepository.readTokenCacheByAccessToken(token.getAccessToken());
-        cacheToken.ifPresent(t -> t.setLastRequestTime(now));
-
-        RoOAuthToken saveToken = cacheToken.orElseGet(() -> {
-            token.setFirstRequestTime(now);
-            token.setLastRequestTime(now);
-            return token;
-        });
-
-        tokenRepository.cacheToken(saveToken);
+        tokenRepository.readTokenCacheByAccessToken(token.getAccessToken())
+                .defaultIfEmpty(token)
+                .doOnNext(tk -> {
+                    if (Objects.isNull(tk.getLastRequestTime())) {
+                        tk.setFirstRequestTime(now);
+                    }
+                    tk.setLastRequestTime(now);
+                }).subscribe(tokenRepository::cacheToken);
     }
 
     //对于失败响应的处理 (只处理RoApiException)  响应合适的状态

@@ -20,7 +20,7 @@ public class RoOAuthToken {
     private Long expiresIn;
     private String scope;
     private TokenUserInfo rouser;
-    
+
     /**
      * 自定义的信息
      */
@@ -35,5 +35,6 @@ public class RoOAuthToken {
         private Long uid;
         private String userName;
         private List<String> userAuthorities;
+        private String clientId;
     }
 }

@@ -2,6 +2,8 @@ package com.roacg.service.gateway.security;
 
 import com.roacg.core.base.log.RoCommonLoggerEnum;
 import com.roacg.core.base.log.RoLoggerFactory;
+import com.roacg.core.model.auth.token.RoOAuthToken;
+import com.roacg.core.model.auth.token.TokenCacheRepository;
 import com.roacg.service.gateway.filter.CorsFilter;
 import com.roacg.service.gateway.filter.RoAuthorizationWebFilterProxy;
 import com.roacg.service.gateway.security.authentication.RoAuthenticationManager;
@@ -26,6 +28,7 @@ import org.springframework.security.web.server.authentication.AuthenticationWebF
 import org.springframework.security.web.server.authentication.ServerAuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.server.authorization.DelegatingReactiveAuthorizationManager;
 import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
+import reactor.core.publisher.Mono;
 
 /**
  * https://docs.spring.io/spring-security/site/docs/current/reference/html5
@@ -42,6 +45,7 @@ public class WebFluxSecurityConfig {
     private RoTokenServerAuthenticationEntryPoint authEntryPoint;
     private ReactiveAuthorizationManager accessManager;
     private ServerAccessDeniedHandler accessDeniedHandler;
+    private TokenCacheRepository<Mono<RoOAuthToken>> tokenRepository;
 
 
     ///https://www.oauth.com/oauth2-servers/token-introspection-endpoint/
@@ -78,7 +82,7 @@ public class WebFluxSecurityConfig {
      */
     @Bean
     public AuthenticationWebFilter authenticationWebFilter() {
-        ReactiveAuthenticationManager authenticationManager = new RoAuthenticationManager(introspector());
+        ReactiveAuthenticationManager authenticationManager = new RoAuthenticationManager(introspector(), tokenRepository);
 
         //认证过滤器
         AuthenticationWebFilter authenticationWebFilter = new AuthenticationWebFilter(authenticationManager);

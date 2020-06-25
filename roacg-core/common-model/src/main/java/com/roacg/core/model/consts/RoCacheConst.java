@@ -22,13 +22,24 @@ public final class RoCacheConst {
 
 
     /**
-     * Token 缓存信息
+     * 系统的 Token 缓存信息
+     * String
      */
-    public static final String TOKEN_CACHE_KEY = "RO@TOKEN:";
+    public static final String TOKEN_CACHE_KEY = "RO@ACCESS_TOKEN_CACHE:";
+
+    /**
+     * 用户对应的令牌
+     * SET
+     */
+    public static final String USER_TO_TOKEN = "RO@USER_TO_TOKEN:";
 
 
     public static String getTokenCacheKey(String accessToken) {
         return TOKEN_CACHE_KEY.concat(accessToken);
+    }
+
+    public static String getUserToTokenKey(Long uid, String clientId) {
+        return new StringBuilder(USER_TO_TOKEN).append(clientId).append(':').append(uid).toString();
     }
 
     /**

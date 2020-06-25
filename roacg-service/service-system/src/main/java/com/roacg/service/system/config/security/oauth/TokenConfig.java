@@ -52,13 +52,16 @@ public class TokenConfig {
     public TokenEnhancer tokenEnhancer() {
         return (accessToken, authentication) -> {
 
+            String clientId = authentication.getOAuth2Request().getClientId();
+
             AuthenticationUser user = (AuthenticationUser) authentication.getUserAuthentication().getPrincipal();
 
             final Map<String, Object> additionalInfo = Map.of(
                     RoAuthConst.TOKEN_USER_KEY, Map.of(
                             "uid", user.getUserId(),
                             "userName", user.getUsername(),
-                            "userAuthorities", user.getAuthorities()
+                            "userAuthorities", user.getAuthorities(),
+                            "clientId", clientId
                     )
             );
             //加入自定义信息

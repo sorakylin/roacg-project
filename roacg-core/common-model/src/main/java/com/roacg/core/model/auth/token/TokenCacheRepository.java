@@ -1,10 +1,8 @@
 package com.roacg.core.model.auth.token;
 
-import java.util.Optional;
-
-public interface TokenCacheRepository {
+public interface TokenCacheRepository<T> {
 
     void cacheToken(RoOAuthToken token);
 
-    Optional<RoOAuthToken> readTokenCacheByAccessToken(String token);
+    T readTokenCacheByAccessToken(String token);
 }

@@ -22,6 +22,16 @@ public final class RoCacheConst {
 
 
     /**
+     * Token 缓存信息
+     */
+    public static final String TOKEN_CACHE_KEY = "RO@TOKEN:";
+
+
+    public static String getTokenCacheKey(String accessToken) {
+        return TOKEN_CACHE_KEY.concat(accessToken);
+    }
+
+    /**
      * 默认生成key的策略
      *
      * @param target 类信息

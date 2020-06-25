@@ -1,37 +1,36 @@
 package com.roacg.service.gateway.route.data;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.roacg.core.model.auth.token.RoOAuthToken;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * 作为OAuth2 Client去请求token得到的正确响应
  */
 @Data
-public class OAuth2TokenResponse {
+public class OAuth2TokenResponse extends RoOAuthToken {
 
+    @Override
     @JsonAlias("access_token")
-    private String accessToken;
+    public void setAccessToken(String accessToken) {
+        super.setAccessToken(accessToken);
+    }
 
+    @Override
     @JsonAlias("token_type")
-    private String tokenType;
+    public void setTokenType(String tokenType) {
+        super.setTokenType(tokenType);
+    }
 
+    @Override
     @JsonAlias("refresh_token")
-    private String refreshToken;
+    public void setRefreshToken(String refreshToken) {
+        super.setRefreshToken(refreshToken);
+    }
 
+    @Override
     @JsonAlias("expires_in")
-    private Long expiresIn;
-
-    private String scope;
-
-    private TokenUserInfo rouser;
-
-    @Data
-    public static class TokenUserInfo {
-
-        private Long uid;
-        private String userName;
-        private List<String> userAuthorities;
+    public void setExpiresIn(Long expiresIn) {
+        super.setExpiresIn(expiresIn);
     }
 }

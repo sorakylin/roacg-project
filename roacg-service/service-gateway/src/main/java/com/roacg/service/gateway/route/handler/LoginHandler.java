@@ -1,6 +1,8 @@
 package com.roacg.service.gateway.route.handler;
 
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
+import com.roacg.core.model.auth.token.RoOAuthToken;
+import com.roacg.core.model.auth.token.TokenCacheRepository;
 import com.roacg.core.model.enums.RoApiStatusEnum;
 import com.roacg.core.model.exception.RoApiException;
 import com.roacg.core.model.resource.RoApiResponse;
@@ -8,6 +10,7 @@ import com.roacg.core.utils.JsonUtil;
 import com.roacg.service.gateway.route.data.LoginRequest;
 import com.roacg.service.gateway.route.data.OAuth2TokenResponse;
 import com.roacg.service.gateway.security.GatewaySecurityProperties;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,28 +24,41 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 登陆服务
  */
 @Component
-public class LoginHandler implements HandlerFunction<ServerResponse> {
+public class LoginHandler implements HandlerFunction<ServerResponse>, InitializingBean {
 
     private ReactiveRedisTemplate<String, Object> redisTemplate;
     private GatewaySecurityProperties properties;
+    private TokenCacheRepository tokenRepository;
     private WebClient webClient;
 
-    public LoginHandler(ReactiveRedisTemplate<String, Object> redisTemplate, GatewaySecurityProperties properties) {
+    public LoginHandler(ReactiveRedisTemplate<String, Object> redisTemplate,
+                        GatewaySecurityProperties properties,
+                        @Nullable TokenCacheRepository tokenRepository) {
         this.redisTemplate = redisTemplate;
         this.properties = properties;
+        this.tokenRepository = tokenRepository;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
         this.webClient = WebClient.builder()
                 .defaultHeaders(h -> h.setBasicAuth(properties.getClientId(), properties.getClientSecret(), StandardCharsets.UTF_8))
                 .build();
     }
+
 
     @Override
     public Mono<ServerResponse> handle(ServerRequest request) {
@@ -119,8 +135,23 @@ public class LoginHandler implements HandlerFunction<ServerResponse> {
         return ServerResponse.ok().headers(h -> h.addAll(headers)).bodyValue(RoApiResponse.ok(body));
     }
 
-    private void cacheToken(OAuth2TokenResponse oAuth2TokenResponse) {
+    //登陆成功后, 将Token缓存到Redis
+    private void cacheToken(RoOAuthToken token) {
+        if (Objects.isNull(tokenRepository)) return;
 
+        LocalDateTime now = LocalDateTime.now();
+
+        //如果Redis里已经有了的话, 其实这次获取的也是一模一样的
+        Optional<RoOAuthToken> cacheToken = tokenRepository.readTokenCacheByAccessToken(token.getAccessToken());
+        cacheToken.ifPresent(t -> t.setLastRequestTime(now));
+
+        RoOAuthToken saveToken = cacheToken.orElseGet(() -> {
+            token.setFirstRequestTime(now);
+            token.setLastRequestTime(now);
+            return token;
+        });
+
+        tokenRepository.cacheToken(saveToken);
     }
 
     //对于失败响应的处理 (只处理RoApiException)  响应合适的状态

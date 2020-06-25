@@ -6,9 +6,10 @@ import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 import com.nimbusds.oauth2.sdk.id.Audience;
 import com.roacg.core.model.auth.CredentialsType;
 import com.roacg.core.model.auth.RequestUser;
+import com.roacg.core.model.auth.token.RoOAuthToken;
 import com.roacg.core.model.consts.RoAuthConst;
 import com.roacg.core.utils.JsonUtil;
-import com.roacg.service.gateway.route.data.OAuth2TokenResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
@@ -43,8 +44,8 @@ import static org.springframework.security.oauth2.server.resource.introspection.
  * <p>
  * Create by skypyb on 2020/03/18
  */
+@Slf4j
 public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospector {
-
 
     private URI introspectionUri;
     private WebClient webClient;
@@ -114,6 +115,7 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
                             "Introspection endpoint responded with " + response.getStatusCode())));
         }
         return responseEntity.bodyToMono(String.class)
+                .doOnNext(body -> log.info("Introspect request success, Response body:{}", body))
                 .doOnNext(response::setContent)
                 .map(body -> response);
     }
@@ -208,7 +210,7 @@ public class RoTokenReactiveIntrospector implements ReactiveOpaqueTokenIntrospec
         Object tokenUser = response.getParameters().get(RoAuthConst.TOKEN_USER_KEY);
 
         //将响应的用户信息设置进认证主题内
-        JsonUtil.fromJsonToObject(tokenUser.toString(), OAuth2TokenResponse.TokenUserInfo.class)
+        JsonUtil.fromJsonToObject(tokenUser.toString(), RoOAuthToken.TokenUserInfo.class)
                 .map(user -> RequestUser.builder()
                         .authorities(user.getUserAuthorities())
                         .id(user.getUid())

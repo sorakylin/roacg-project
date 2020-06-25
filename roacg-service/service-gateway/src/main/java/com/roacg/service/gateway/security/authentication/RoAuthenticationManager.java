@@ -1,10 +1,17 @@
 package com.roacg.service.gateway.security.authentication;
 
+import com.roacg.core.model.auth.token.RoOAuthToken;
+import com.roacg.core.model.auth.token.TokenCacheRepository;
+import com.roacg.core.model.consts.RoAuthConst;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
@@ -16,9 +23,13 @@ import org.springframework.util.Assert;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import static org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionClaimNames.EXPIRES_AT;
-import static org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionClaimNames.ISSUED_AT;
+import static org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionClaimNames.*;
 
 /**
  * 实现 ReactiveAuthenticationManager 接口来自定义认证接口管理
@@ -29,9 +40,17 @@ public class RoAuthenticationManager implements ReactiveAuthenticationManager {
 
     private ReactiveOpaqueTokenIntrospector introspector;
 
+    private TokenCacheRepository tokenCacheRepository;
+
     public RoAuthenticationManager(ReactiveOpaqueTokenIntrospector introspector) {
         Assert.notNull(introspector, "introspector cannot be null");
         this.introspector = introspector;
+    }
+
+    public RoAuthenticationManager(ReactiveOpaqueTokenIntrospector introspector, TokenCacheRepository tokenCacheRepository) {
+        Assert.notNull(introspector, "introspector cannot be null");
+        this.introspector = introspector;
+        this.tokenCacheRepository = tokenCacheRepository;
     }
 
     @Override
@@ -51,7 +70,8 @@ public class RoAuthenticationManager implements ReactiveAuthenticationManager {
 
         //this.tokenStore.readAccessToken(accessToken);
 
-        return this.introspector.introspect(token)
+        return this.readCache(token)
+                .switchIfEmpty(introspector.introspect(token))
                 .map(principal -> {
                     Instant iat = principal.getAttribute(ISSUED_AT);
                     Instant exp = principal.getAttribute(EXPIRES_AT);
@@ -63,6 +83,37 @@ public class RoAuthenticationManager implements ReactiveAuthenticationManager {
                 .onErrorMap(OAuth2IntrospectionException.class, this::onError);
     }
 
+    private Mono<OAuth2AuthenticatedPrincipal> readCache(String token) {
+        if (tokenCacheRepository == null) return Mono.empty();
+
+
+        return Mono.just(tokenCacheRepository.readTokenCacheByAccessToken(token))
+                .map(tk -> {
+                    if (tk.isEmpty()) return null;
+
+                    //用户的权限
+                    RoOAuthToken tokenInfo = tk.get();
+                    List<GrantedAuthority> authorities = tokenInfo.getRouser().getUserAuthorities()
+                            .stream()
+                            .map("SCOPE_"::concat)
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList());
+
+                    Map<String, Object> claims = new HashMap<>();
+                    claims.put(RoAuthConst.TOKEN_USER_KEY, tokenInfo.getRouser());
+                    claims.put(SCOPE, tokenInfo.getScope());
+
+
+                    Instant exp = tokenInfo.getFirstRequestTime()
+                            .plusSeconds(tokenInfo.getExpiresIn())
+                            .toInstant(OffsetDateTime.now().getOffset());
+                    claims.put(EXPIRES_AT, exp);
+
+
+                    OAuth2AuthenticatedPrincipal principal = new DefaultOAuth2AuthenticatedPrincipal(claims, authorities);
+                    return principal;
+                });
+    }
 
     private AuthenticationException onError(OAuth2IntrospectionException e) {
         if (e instanceof BadOpaqueTokenException) {

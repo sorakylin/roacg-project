@@ -4,8 +4,10 @@ import com.roacg.core.model.auth.RequestUser;
 import com.roacg.core.model.enums.RoApiStatusEnum;
 import com.roacg.core.model.exception.ParameterValidationException;
 import com.roacg.core.model.exception.RoApiException;
+import com.roacg.core.utils.bean.BeanMapper;
 import com.roacg.core.utils.context.RoContext;
 import com.roacg.core.web.model.PageResponse;
+import com.roacg.service.tc.project.model.dto.SimpleProjectDTO;
 import com.roacg.service.tc.project.service.ProjectService;
 import com.roacg.service.tc.team.enums.UserTeamRoleEnum;
 import com.roacg.service.tc.team.model.dto.TeamDTO;
@@ -14,6 +16,7 @@ import com.roacg.service.tc.team.model.po.TeamUserPO;
 import com.roacg.service.tc.team.model.req.TeamCreateREQ;
 import com.roacg.service.tc.team.model.req.TeamUpdateREQ;
 import com.roacg.service.tc.team.model.vo.MyTeamsVO;
+import com.roacg.service.tc.team.model.vo.TeamDetailVO;
 import com.roacg.service.tc.team.repository.TeamRepository;
 import com.roacg.service.tc.team.repository.TeamUserRepository;
 import com.roacg.service.tc.team.service.TeamService;
@@ -167,5 +170,20 @@ public class TeamServiceImpl implements TeamService {
         } catch (DuplicateKeyException e) {
             throw new ParameterValidationException("团队名重复!");
         }
+    }
+
+    @Override
+    public TeamDetailVO findTeamDetail(Long teamId) {
+        TeamDetailVO detail = new TeamDetailVO();
+        TeamDTO team = this.findTeamInfo(teamId).orElseThrow(ParameterValidationException::new);
+        BeanMapper.map(team, detail);
+
+        List<SimpleProjectDTO> projects = projectService.findTeamSimpleProject(teamId);
+        detail.setProjects(projects);
+
+        List<Long> userIds = teamUserRepository.findUserIdsByTeamId(teamId);
+
+
+        return detail;
     }
 }

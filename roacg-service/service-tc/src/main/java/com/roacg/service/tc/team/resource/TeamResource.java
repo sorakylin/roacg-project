@@ -1,9 +1,7 @@
 package com.roacg.service.tc.team.resource;
 
 import com.roacg.core.model.auth.enmus.PermissionType;
-import com.roacg.core.model.exception.ParameterValidationException;
 import com.roacg.core.model.resource.RoApiResponse;
-import com.roacg.core.utils.bean.BeanMapper;
 import com.roacg.core.web.security.annotation.ExposeResource;
 import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.po.TeamPO;
@@ -71,11 +69,7 @@ public class TeamResource {
     @GetMapping("/{teamId}")
     @ExposeResource
     public RoApiResponse findTeamDetail(@PathVariable Long teamId) {
-        TeamDetailVO detail = new TeamDetailVO();
-        TeamDTO team = teamService.findTeamInfo(teamId).orElseThrow(ParameterValidationException::new);
-        BeanMapper.map(team, detail);
-
-
+        TeamDetailVO detail = teamService.findTeamDetail(teamId);
         return RoApiResponse.ok(detail);
     }
 

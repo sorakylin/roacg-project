@@ -5,6 +5,7 @@ import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.req.TeamCreateREQ;
 import com.roacg.service.tc.team.model.req.TeamUpdateREQ;
 import com.roacg.service.tc.team.model.vo.MyTeamsVO;
+import com.roacg.service.tc.team.model.vo.TeamDetailVO;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,4 +29,13 @@ public interface TeamService {
 
     //更新指定的小组
     void updateTeam(TeamUpdateREQ req);
+
+    /**
+     * 查询小组详情
+     * 包括此项目的人员、项目
+     *
+     * @param teamId 小组
+     * @return 小组详情
+     */
+    TeamDetailVO findTeamDetail(Long teamId);
 }

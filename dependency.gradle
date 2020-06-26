@@ -22,7 +22,7 @@ ext {
             ],
             boot  : [
                     mybatis: "2.1.1",
-                    dubbo  : "2.7.5"
+                    dubbo  : "2.7.6"
             ],
             cloud : [
             ],

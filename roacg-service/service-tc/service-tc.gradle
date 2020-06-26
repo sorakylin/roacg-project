@@ -13,7 +13,7 @@ dependencies {
     compile libs['common-pool']
 //    compile libs['spring-boot-jdbc']
     compile libs['spring-boot-data-jpa']
-//    compile libs['spring-boot-dubbo']
+    compile libs['spring-boot-dubbo']
 //    compile libs['spring-cloud-openfeign']
 }
 

@@ -8,7 +8,7 @@ allprojects {
 }
 
 //容器模块名字
-def holderProjects = Arrays.asList('roacg-core', 'roacg-service')
+def holderProjects = Arrays.asList('roacg-core', 'roacg-service','roacg-api')
 
 //依赖仓库
 def repository = {

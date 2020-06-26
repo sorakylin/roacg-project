@@ -4,6 +4,7 @@ if (!JavaVersion.current().java11Compatible) {
     throw new GradleException("Gradle must be run with Java 11")
 }
 
+include ':roacg-api:api-system'
 include ':roacg-core:common-base'
 include ':roacg-core:common-utils'
 include ':roacg-core:common-model'

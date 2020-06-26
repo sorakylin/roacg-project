@@ -4,7 +4,7 @@ import com.roacg.core.model.enums.BaseCodeEnum;
 import com.roacg.core.model.enums.convert.AbstractBaseCodeEnumConverter;
 
 /**
- * 项目的隐私状态
+ * 项目内容的隐私状态 //项目基本信息还是能够查到的
  * 针对于 <b>项目</b> 本体
  */
 public enum ProjectPermissionStatusEnum implements BaseCodeEnum<ProjectPermissionStatusEnum> {

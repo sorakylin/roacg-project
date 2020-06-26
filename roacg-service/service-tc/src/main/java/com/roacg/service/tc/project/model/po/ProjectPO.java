@@ -48,11 +48,11 @@ public class ProjectPO extends VirtualDeleteSupportEntity {
     private Long founderId;
 
     //项目审核人 userId      TODO 审核人用来干啥的来着？忘了
-    @Column(nullable = false, columnDefinition = "bigint(20)")
+    @Column(columnDefinition = "bigint(20)")
     private Long reviewerId;
 
     //项目等级,保留字段
-    @Column(columnDefinition = "tinyint(1)", nullable = false)
+    @Column(columnDefinition = "tinyint(1)")
     private Integer projectGrade;
 
 }

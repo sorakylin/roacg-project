@@ -1,12 +1,15 @@
 package com.roacg.service.tc.team.resource;
 
 import com.roacg.core.model.auth.enmus.PermissionType;
+import com.roacg.core.model.exception.ParameterValidationException;
 import com.roacg.core.model.resource.RoApiResponse;
+import com.roacg.core.utils.bean.BeanMapper;
 import com.roacg.core.web.security.annotation.ExposeResource;
 import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.po.TeamPO;
 import com.roacg.service.tc.team.model.req.TeamCreateREQ;
 import com.roacg.service.tc.team.model.req.TeamUpdateREQ;
+import com.roacg.service.tc.team.model.vo.TeamDetailVO;
 import com.roacg.service.tc.team.service.TeamService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -65,11 +68,15 @@ public class TeamResource {
     /**
      * 查询小组详情
      */
-    @GetMapping("/detail/{}")
-    @ExposeResource(type = PermissionType.LOGIN)
-    public RoApiResponse findTeamDetail(Long teamId) {
+    @GetMapping("/{teamId}")
+    @ExposeResource
+    public RoApiResponse findTeamDetail(@PathVariable Long teamId) {
+        TeamDetailVO detail = new TeamDetailVO();
+        TeamDTO team = teamService.findTeamInfo(teamId).orElseThrow(ParameterValidationException::new);
+        BeanMapper.map(team, detail);
 
-        return RoApiResponse.ok();
+
+        return RoApiResponse.ok(detail);
     }
 
 

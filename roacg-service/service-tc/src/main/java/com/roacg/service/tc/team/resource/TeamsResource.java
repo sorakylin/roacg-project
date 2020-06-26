@@ -2,9 +2,10 @@ package com.roacg.service.tc.team.resource;
 
 import com.roacg.core.model.auth.enmus.PermissionType;
 import com.roacg.core.model.resource.RoApiResponse;
+import com.roacg.core.web.model.PageResponse;
 import com.roacg.core.web.security.annotation.ExposeResource;
-import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.vo.ActiveTeamVO;
+import com.roacg.service.tc.team.model.vo.MyTeamsVO;
 import com.roacg.service.tc.team.service.TeamService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,7 +52,7 @@ public class TeamsResource {
     }
 
     /**
-     * 查找当前登录用户的团队
+     * 查找当前登录用户的团队, 限制六个
      * 包括当前用户建立的和加入的
      * 排序为用户处于团队中的角色等级高低来排
      *
@@ -60,7 +61,7 @@ public class TeamsResource {
     @GetMapping("/my")
     @ExposeResource(type = PermissionType.LOGIN)
     public RoApiResponse findMyTeams() {
-        List<TeamDTO> result = teamService.findMyTeams();
+        PageResponse<MyTeamsVO> result = teamService.findMyTeams();
         return RoApiResponse.ok(result);
     }
 }

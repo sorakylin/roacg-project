@@ -61,4 +61,16 @@ public class TeamResource {
         teamService.updateTeam(req);
         return RoApiResponse.ok();
     }
+
+    /**
+     * 查询小组详情
+     */
+    @GetMapping("/detail/{}")
+    @ExposeResource(type = PermissionType.LOGIN)
+    public RoApiResponse findTeamDetail(Long teamId) {
+
+        return RoApiResponse.ok();
+    }
+
+
 }

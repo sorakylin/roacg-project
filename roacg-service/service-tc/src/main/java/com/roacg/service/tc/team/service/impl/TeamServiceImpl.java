@@ -5,12 +5,14 @@ import com.roacg.core.model.enums.RoApiStatusEnum;
 import com.roacg.core.model.exception.ParameterValidationException;
 import com.roacg.core.model.exception.RoApiException;
 import com.roacg.core.utils.context.RoContext;
+import com.roacg.core.web.model.PageResponse;
 import com.roacg.service.tc.team.enums.UserTeamRoleEnum;
 import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.po.TeamPO;
 import com.roacg.service.tc.team.model.po.TeamUserPO;
 import com.roacg.service.tc.team.model.req.TeamCreateREQ;
 import com.roacg.service.tc.team.model.req.TeamUpdateREQ;
+import com.roacg.service.tc.team.model.vo.MyTeamsVO;
 import com.roacg.service.tc.team.repository.TeamRepository;
 import com.roacg.service.tc.team.repository.TeamUserRepository;
 import com.roacg.service.tc.team.service.TeamService;
@@ -24,12 +26,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 @Service
 @Slf4j
@@ -54,21 +56,39 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<TeamDTO> findMyTeams() {
+    public PageResponse<MyTeamsVO> findMyTeams() {
         RequestUser currentUser = RoContext.getRequestUser();
 
         Sort sort = Sort.by("userTeamRole");
 
         //当前用户加入的团队, 只查询前六个
-        Page<TeamUserPO> userTeam = teamUserRepository.findByUserId(currentUser.getId(), PageRequest.of(1, 6, sort));
+        Page<TeamUserPO> userTeamPage = teamUserRepository.findByUserId(currentUser.getId(), PageRequest.of(1, 6, sort));
 
-        if (userTeam.isEmpty()) return List.of();
+        if (userTeamPage.isEmpty()) return PageResponse.empty();
+
+        //key teamId, value my role
+        Map<Long, UserTeamRoleEnum> teamRoleMapping = userTeamPage.stream()
+                .collect(toMap(TeamUserPO::getTeamId, TeamUserPO::getUserTeamRole));
 
         //查询出详细信息
-        List<TeamPO> teams = userTeam.stream().map(TeamUserPO::getTeamId).distinct()
-                .collect(collectingAndThen(toList(), teamRepository::findAllById));
+        List<TeamPO> teams = teamRepository.findAllById(teamRoleMapping.keySet());
 
-        return teams.stream().map(TeamDTO::from).collect(toList());
+        List<MyTeamsVO> myTeams = teams.stream().map(team -> {
+            MyTeamsVO vo = new MyTeamsVO();
+            vo.setTeamId(team.getTeamId());
+            vo.setTeamName(team.getTeamName());
+            vo.setAvatar(team.getAvatar());
+            vo.setTeamProfile(team.getTeamProfile());
+            vo.setTeamSize(team.getTeamSize());
+            vo.setProjectNum(team.getProjectNum());
+
+            //设置角色
+            vo.setMyRole(teamRoleMapping.get(team.getTeamId()).getCode());
+
+            return vo;
+        }).collect(toList());
+
+        return PageResponse.of(myTeams).page(userTeamPage);
     }
 
     @Override

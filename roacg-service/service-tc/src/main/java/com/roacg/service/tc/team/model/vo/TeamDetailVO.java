@@ -1,5 +1,6 @@
 package com.roacg.service.tc.team.model.vo;
 
+import com.roacg.service.tc.common.model.UserNameDTO;
 import com.roacg.service.tc.project.model.dto.SimpleProjectDTO;
 import lombok.Data;
 
@@ -39,6 +40,8 @@ public class TeamDetailVO {
      */
     private List<SimpleProjectDTO> projects;
 
-    //TODO
-    private List<Object> users;
+    /**
+     * 小组下的用户
+     */
+    private List<UserNameDTO> users;
 }

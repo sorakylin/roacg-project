@@ -6,20 +6,19 @@ import com.roacg.core.model.exception.RoApiException;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static com.roacg.core.model.enums.RoApiStatusEnum.SYSTEM_ERROR;
 
+/**
+ * Bean copu utils
+ * Create by skypyb on 2020.06.26
+ */
 public final class BeanMapper {
 
     private static Cache<String, BeanCopier> cache = CacheBuilder.newBuilder()
             .expireAfterAccess(Duration.ofDays(1))//缓存项在给定时间内没有被读/写访问，则回收
             .build();
-
-
-    private Map<String, BeanCopier> copierCache = new HashMap<>();
 
     public static <S, T> T map(final S source, final Class<T> targetClass) {
 

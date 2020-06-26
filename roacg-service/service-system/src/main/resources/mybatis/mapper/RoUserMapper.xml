@@ -51,5 +51,16 @@
         where user_id=#{userId} AND deleted=0
     </select>
 
+    <select id="findSimpleUserByIds" resultType="com.roacg.service.system.rouser.model.dto.SimpleUserDTO">
+        select
+        u.user_id AS userId,
+        u.user_name AS userName
+        from tb_ro_user u
+        where u.user_id IN
+        <foreach collection="userIds" item="uid" open="(" close=")" separator=",">
+            #{uid}
+        </foreach> AND deleted=0
+    </select>
+
 
 </mapper>

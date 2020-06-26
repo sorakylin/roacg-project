@@ -6,6 +6,7 @@ apply plugin: libs["spring-dependency-management"]
 
 
 dependencies {
+    compile project(':roacg-api:api-system')
     compile project(':roacg-core:common-web')
     compile libs['mysql-connector-java']
     compile libs['dbpoll-hikari']
@@ -13,7 +14,6 @@ dependencies {
     compile libs['common-pool']
 //    compile libs['spring-boot-jdbc']
     compile libs['spring-boot-data-jpa']
-    compile libs['spring-boot-dubbo']
 //    compile libs['spring-cloud-openfeign']
 }
 

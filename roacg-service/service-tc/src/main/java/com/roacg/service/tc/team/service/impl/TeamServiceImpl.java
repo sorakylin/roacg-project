@@ -1,5 +1,6 @@
 package com.roacg.service.tc.team.service.impl;
 
+import com.roacg.api.system.service.UserRService;
 import com.roacg.core.model.auth.RequestUser;
 import com.roacg.core.model.enums.RoApiStatusEnum;
 import com.roacg.core.model.exception.ParameterValidationException;
@@ -20,8 +21,9 @@ import com.roacg.service.tc.team.model.vo.TeamDetailVO;
 import com.roacg.service.tc.team.repository.TeamRepository;
 import com.roacg.service.tc.team.repository.TeamUserRepository;
 import com.roacg.service.tc.team.service.TeamService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,16 +42,17 @@ import static java.util.stream.Collectors.toMap;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class TeamServiceImpl implements TeamService {
 
-    //Spring beans -----------------
+    @Autowired
     private TeamRepository teamRepository;
+    @Autowired
     private TeamUserRepository teamUserRepository;
-
-
+    @Autowired
     private ProjectService projectService;
 
+    @Reference
+    private UserRService userRService;
 
     @Override
     public Optional<TeamDTO> findTeamInfo(Long teamId) {

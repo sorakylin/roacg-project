@@ -17,7 +17,6 @@ dependencies {
     compile libs['common-pool']
     compile libs['spring-boot-jdbc']
     compile libs['spring-boot-mybatis']
-    compile libs['spring-boot-dubbo']
 //    compile libs['spring-boot-dubbo']
 //    compile libs['spring-cloud-openfeign']
 }

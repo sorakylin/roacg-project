@@ -10,7 +10,7 @@ ext {
                     javax_jpa          : "2.2",
                     jaxb_api           : "2.3.1",
                     commons_pool       : "2.8.0",
-
+                    kryo               : "5.0.0-RC6"
             ],
             spring: [
                     boot         : "2.2.5.RELEASE",
@@ -46,6 +46,7 @@ ext {
             "javax.persistence-api"                 : "javax.persistence:javax.persistence-api:$ver.utils.javax_jpa",
             "jaxb-api"                              : "javax.xml.bind:jaxb-api:$ver.utils.jaxb_api",
             "common-pool"                           : "org.apache.commons:commons-pool2:$ver.utils.commons_pool",
+            "kryo"                                  : "com.esotericsoftware:kryo:$ver.utils.kryo",
 
             //TEST
             "junit"                                 : "junit:junit:$ver.utils.junit",

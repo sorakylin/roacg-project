@@ -6,6 +6,7 @@ import com.roacg.core.model.exception.ParameterValidationException;
 import com.roacg.core.model.exception.RoApiException;
 import com.roacg.core.utils.context.RoContext;
 import com.roacg.core.web.model.PageResponse;
+import com.roacg.service.tc.project.service.ProjectService;
 import com.roacg.service.tc.team.enums.UserTeamRoleEnum;
 import com.roacg.service.tc.team.model.dto.TeamDTO;
 import com.roacg.service.tc.team.model.po.TeamPO;
@@ -31,7 +32,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 @Slf4j
@@ -41,6 +43,9 @@ public class TeamServiceImpl implements TeamService {
     //Spring beans -----------------
     private TeamRepository teamRepository;
     private TeamUserRepository teamUserRepository;
+
+
+    private ProjectService projectService;
 
 
     @Override

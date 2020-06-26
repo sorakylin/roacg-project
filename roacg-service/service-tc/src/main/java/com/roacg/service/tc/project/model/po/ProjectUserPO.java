@@ -18,6 +18,8 @@ public class ProjectUserPO {
     @Column(nullable = false, columnDefinition = "bigint(20)")
     private Long id;
 
+    @Column(nullable = false, columnDefinition = "bigint(20)")
+    private Long projectId;
 
     @Column(nullable = false, columnDefinition = "bigint(20)")
     private Long userId;

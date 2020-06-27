@@ -1,5 +1,5 @@
 oauth2:
   refreshTokenSupport: true
-  accessTokenValiditySeconds: 3600
+#  accessTokenValiditySeconds: 3600
   endpoint:
     checkToken: /oauth/introspect

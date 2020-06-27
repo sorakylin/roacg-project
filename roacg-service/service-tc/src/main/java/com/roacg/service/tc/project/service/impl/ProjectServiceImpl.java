@@ -59,6 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
         if (Objects.isNull(teamId)) return Collections.emptyList();
 
         return projectRepository.findAllByTeamId(teamId)
+                .stream()
                 .map(p -> BeanMapper.map(p, SimpleProjectDTO.class))
                 .collect(Collectors.toList());
     }

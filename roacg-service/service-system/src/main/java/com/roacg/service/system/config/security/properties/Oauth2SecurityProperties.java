@@ -7,6 +7,8 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+
 @Component
 @ConfigurationProperties(prefix = "oauth2")
 @PropertySource(
@@ -29,9 +31,9 @@ public class Oauth2SecurityProperties {
     //是否开启 refreshToken 重用机制(一个refreshToken可以反复刷新 accessToken)
     private Boolean reuseRefreshToken = false;
 
-    private int refreshTokenValiditySeconds = 60 * 60 * 24 * 30; // default 30 days.
+    private int refreshTokenValiditySeconds = (int) Duration.ofDays(30).toSeconds(); // default 30 days.
 
-    private int accessTokenValiditySeconds = 60 * 60 * 12; // default 12 hours.
+    private int accessTokenValiditySeconds =(int) Duration.ofDays(7).toSeconds(); // default 7 days.
 
     @Data
     public class Oauth2Endpoint {

@@ -10,7 +10,8 @@ ext {
                     javax_jpa          : "2.2",
                     jaxb_api           : "2.3.1",
                     commons_pool       : "2.8.0",
-                    kryo               : "5.0.0-RC6"
+                    kryo               : "4.0.2",
+                    kryo_serializers   : "0.42"
             ],
             spring: [
                     boot         : "2.2.5.RELEASE",
@@ -47,6 +48,7 @@ ext {
             "jaxb-api"                              : "javax.xml.bind:jaxb-api:$ver.utils.jaxb_api",
             "common-pool"                           : "org.apache.commons:commons-pool2:$ver.utils.commons_pool",
             "kryo"                                  : "com.esotericsoftware:kryo:$ver.utils.kryo",
+            "kryo-serializers"                      : "de.javakaffee:kryo-serializers:$ver.utils.kryo_serializers",
 
             //TEST
             "junit"                                 : "junit:junit:$ver.utils.junit",

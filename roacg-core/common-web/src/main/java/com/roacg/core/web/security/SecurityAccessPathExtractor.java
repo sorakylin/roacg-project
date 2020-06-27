@@ -51,7 +51,7 @@ public class SecurityAccessPathExtractor implements CommandLineRunner {
         redisTemplate.delete(resourceKey);
         redisTemplate.opsForList().leftPushAll(resourceKey, resourcePermissions);
 
-        log.info("[{}] SpringMVC 路径抽取完毕, 暴露接口数: ", applicationName, resourcePermissions.size());
+        log.info("[{}] SpringMVC 路径抽取完毕, 暴露接口数: {}", applicationName, resourcePermissions.size());
         resourcePermissions.forEach(p -> log.debug(p.toString()));
 
         //设置进资源容器中

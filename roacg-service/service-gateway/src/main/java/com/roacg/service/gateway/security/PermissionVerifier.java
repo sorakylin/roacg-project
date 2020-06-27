@@ -5,7 +5,6 @@ import com.roacg.core.model.auth.RequestUser;
 import com.roacg.core.model.auth.ResourcePermission;
 import com.roacg.core.model.auth.enmus.PermissionType;
 import com.roacg.core.model.consts.RoAuthConst;
-import com.roacg.core.utils.context.RoContext;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +86,7 @@ public class PermissionVerifier {
     public static boolean checkResource(RequestUser user, ResourcePermission resource) {
         PermissionType type = PermissionType.valueOf(resource.getType());
         if (Objects.isNull(type)) return false;
-        return type.hasResourcePermission(RoContext.getRequestUser(), resource);
+        return type.hasResourcePermission(user, resource);
     }
 
 

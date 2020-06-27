@@ -40,7 +40,7 @@ public class TeamPO extends BaseEntity {
 
     //团队等级,根据等级 相应的权限也有所不同 TODO 暂时没这功能, 先写个1
     @Column(columnDefinition = "tinyint(1)", nullable = false)
-    private Integer teamGrade = 1;
+    private Integer teamGrade;
 
     //团队当前人数
     @Column(nullable = false)

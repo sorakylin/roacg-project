@@ -2,6 +2,7 @@ dependencies {
     compile project(':roacg-core:common-utils')
     compile libs['spring-boot-web']
     compile libs['spring-boot-redis']
-    compile libs['kryo']
+    compile libs['kryo-serializers']
+//    compile libs['kryo']
     compile libs['spring-boot-dubbo']
 }

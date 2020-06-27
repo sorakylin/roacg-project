@@ -74,7 +74,7 @@ public class TeamServiceImpl implements TeamService {
         Sort sort = Sort.by("userTeamRole");
 
         //当前用户加入的团队, 只查询前六个
-        Page<TeamUserPO> userTeamPage = teamUserRepository.findByUserId(currentUser.getId(), PageRequest.of(1, 6, sort));
+        Page<TeamUserPO> userTeamPage = teamUserRepository.findAllByUserId(currentUser.getId(), PageRequest.of(0, 6, sort));
 
         if (userTeamPage.isEmpty()) return PageResponse.empty();
 
@@ -128,12 +128,14 @@ public class TeamServiceImpl implements TeamService {
         }
 
         int userTeamNum = teamUserRepository.countByUserId(currentUser.getId());
-        if (userTeamNum > 6) {
+        if (userTeamNum >= 6) {
             throw new ParameterValidationException("加入的团队已达到上限!");
         }
 
         TeamDTO saveDto = req.transferToDTO();
         saveDto.setTeamSize(1);
+        saveDto.setProjectNum(0);
+        saveDto.setTeamGrade(1);//团队等级,根据等级 相应的权限也有所不同 TODO 没这功能，先写个1
         saveDto.setLeaderId(currentUser.getId());
 
         //先保存小组
@@ -189,7 +191,7 @@ public class TeamServiceImpl implements TeamService {
         List<Long> userIds = teamUserRepository.findUserIdsByTeamId(teamId);
         List<UserNameDTO> users = userRService.findUserName(userIds).stream().map(u -> BeanMapper.map(u, UserNameDTO.class)).collect(toList());
         detail.setUsers(users);
-        
+
         return detail;
     }
 }

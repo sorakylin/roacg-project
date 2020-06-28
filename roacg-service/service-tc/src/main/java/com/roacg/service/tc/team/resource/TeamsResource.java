@@ -45,7 +45,7 @@ public class TeamsResource {
     @GetMapping("/newly-created")
     @ExposeResource
     public RoApiResponse<List<ActiveTeamVO>> findNewlyCreatedTeams() {
-        return teamService.findTeamPageByCreateTime(1, 5)
+        return teamService.findTeamPageByCreateTime(0, 5)
                 .stream()
                 .map(ActiveTeamVO::from)
                 .collect(Collectors.collectingAndThen(Collectors.toList(), RoApiResponse::ok));

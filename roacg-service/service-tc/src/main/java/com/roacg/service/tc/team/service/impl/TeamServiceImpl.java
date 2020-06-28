@@ -8,7 +8,6 @@ import com.roacg.core.model.exception.RoApiException;
 import com.roacg.core.utils.bean.BeanMapper;
 import com.roacg.core.utils.context.RoContext;
 import com.roacg.core.web.model.PageResponse;
-import com.roacg.service.tc.common.model.UserNameDTO;
 import com.roacg.service.tc.project.model.dto.SimpleProjectDTO;
 import com.roacg.service.tc.project.service.ProjectService;
 import com.roacg.service.tc.team.enums.UserTeamRoleEnum;
@@ -19,6 +18,7 @@ import com.roacg.service.tc.team.model.req.TeamCreateREQ;
 import com.roacg.service.tc.team.model.req.TeamUpdateREQ;
 import com.roacg.service.tc.team.model.vo.MyTeamsVO;
 import com.roacg.service.tc.team.model.vo.TeamDetailVO;
+import com.roacg.service.tc.team.model.vo.TeamSimpleUserVO;
 import com.roacg.service.tc.team.repository.TeamRepository;
 import com.roacg.service.tc.team.repository.TeamUserRepository;
 import com.roacg.service.tc.team.service.TeamService;
@@ -32,10 +32,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -187,9 +184,17 @@ public class TeamServiceImpl implements TeamService {
         List<SimpleProjectDTO> projects = projectService.findTeamSimpleProject(teamId);
         detail.setProjects(projects);
 
-        //该小组内的用户
-        List<Long> userIds = teamUserRepository.findUserIdsByTeamId(teamId);
-        List<UserNameDTO> users = userRService.findUserName(userIds).stream().map(u -> BeanMapper.map(u, UserNameDTO.class)).collect(toList());
+        //当前团队的用户  key: userId ; value: userTeamRole
+        Map<Long, Integer> teamUserRoleMapping = teamUserRepository.findAllByTeamId(teamId)
+                .stream()
+                .collect(toMap(t -> t.getUserId(), t -> t.getUserTeamRole().getCode()));
+
+        List<TeamSimpleUserVO> users = userRService.findUserName(new ArrayList<>(teamUserRoleMapping.keySet()))
+                .stream()
+                .map(u -> BeanMapper.map(u, TeamSimpleUserVO.class))
+                .peek(u -> u.setUserRole(teamUserRoleMapping.get(u.getUserId())))
+                .collect(toList());
+
         detail.setUsers(users);
 
         return detail;

@@ -1,9 +1,11 @@
 package com.roacg.service.tc.team.model.vo;
 
-import com.roacg.service.tc.common.model.UserNameDTO;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.roacg.core.utils.serialize.LocalDateSerializer;
 import com.roacg.service.tc.project.model.dto.SimpleProjectDTO;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -35,6 +37,10 @@ public class TeamDetailVO {
     //团队已创建的项目数量
     private Integer projectNum;
 
+    //创建时间
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate createTime;
+
     /**
      * 该小组下的项目
      */
@@ -43,5 +49,5 @@ public class TeamDetailVO {
     /**
      * 小组下的用户
      */
-    private List<UserNameDTO> users;
+    private List<TeamSimpleUserVO> users;
 }

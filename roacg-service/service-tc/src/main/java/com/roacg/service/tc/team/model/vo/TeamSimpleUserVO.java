@@ -1,14 +1,15 @@
-package com.roacg.service.tc.common.model;
+package com.roacg.service.tc.team.model.vo;
 
 import lombok.Data;
 
-
 @Data
-public class UserNameDTO {
+public class TeamSimpleUserVO {
 
     private Long userId;
 
     private String userName;
 
     private String avatar;
+
+    private Integer userRole;
 }

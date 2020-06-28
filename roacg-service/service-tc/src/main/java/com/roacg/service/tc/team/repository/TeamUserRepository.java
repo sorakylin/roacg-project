@@ -15,6 +15,8 @@ public interface TeamUserRepository extends CrudRepository<TeamUserPO, Long> {
 
     int countByUserId(Long userId);
 
+    List<TeamUserPO> findAllByTeamId(Long teamId);
+
     Page<TeamUserPO> findAllByUserId(Long userId, Pageable page);
 
     @Query("SELECT tu.userId FROM TeamUserPO tu WHERE tu.teamId=:teamId")

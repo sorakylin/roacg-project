@@ -4,6 +4,8 @@ import com.roacg.service.tc.team.model.po.TeamPO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Objects;
 
 @Data
 public class TeamDTO implements Serializable {
@@ -31,6 +33,9 @@ public class TeamDTO implements Serializable {
     //团队已创建的项目数量
     private Integer projectNum;
 
+    //创建时间
+    private LocalDate createTime;
+
     public static TeamDTO from(TeamPO teamPO) {
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setTeamId(teamPO.getTeamId());
@@ -41,6 +46,7 @@ public class TeamDTO implements Serializable {
         teamDTO.setTeamGrade(teamPO.getTeamGrade());
         teamDTO.setTeamSize(teamPO.getTeamSize());
         teamDTO.setProjectNum(teamPO.getProjectNum());
+        teamDTO.setCreateTime(Objects.isNull(teamPO.getCreateTime()) ? LocalDate.now() : teamPO.getCreateTime().toLocalDate());
         return teamDTO;
     }
 

@@ -38,4 +38,8 @@ public interface ProjectService {
      * @param req 请求体
      */
     void createProject(ProjectCreateREQ req);
+
+
+    //给项目拉人,传个项目ID 和一堆用户ID
+    void bindUsers(Long projectId, Long... userIds);
 }

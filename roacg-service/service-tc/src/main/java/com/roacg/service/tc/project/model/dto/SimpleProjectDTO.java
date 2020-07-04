@@ -16,9 +16,15 @@ public class SimpleProjectDTO {
     //项目简介
     private String projectProfile;
 
+    //源语言
+    private String fromLanguage;
+
+    //新语言
+    private String toLanguage;
+
     //项目状态
     private ProjectStatusEnum projectStatus;
-    
+
     //项目类型
     private ProjectTypeEnum projectType;
 

@@ -13,14 +13,17 @@ import com.roacg.service.tc.project.model.req.ProjectCreateREQ;
 import com.roacg.service.tc.project.repository.ProjectRepository;
 import com.roacg.service.tc.project.repository.ProjectUserRepository;
 import com.roacg.service.tc.project.service.ProjectService;
+import com.roacg.service.tc.team.repository.TeamUserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 
 @Service
@@ -33,6 +36,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private TeamUserRepository teamUserRepository;
 
     @Override
     public Optional<SimpleProjectDTO> findSimpleProject(Long projectId) {
@@ -58,7 +63,7 @@ public class ProjectServiceImpl implements ProjectService {
         List<SimpleProjectDTO> result = projects
                 .stream()
                 .map(p -> BeanMapper.map(p, SimpleProjectDTO.class))
-                .collect(Collectors.toList());
+                .collect(toList());
         return result;
     }
 
@@ -69,7 +74,7 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.findAllByTeamId(teamId)
                 .stream()
                 .map(p -> BeanMapper.map(p, SimpleProjectDTO.class))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Override
@@ -100,5 +105,44 @@ public class ProjectServiceImpl implements ProjectService {
 
         projectUserRepository.save(ProjectUserPO.newInstance(entity.getProjectId(), requestUser.getId()));
 
+    }
+
+    @Override
+    @Transactional
+    public void bindUsers(Long projectId, Long... userIds) {
+
+        if (Objects.isNull(projectId) || ArrayUtils.isEmpty(userIds)) return;
+
+        // 检查是否存在项目
+        Optional<ProjectPO> project = projectRepository.findById(projectId);
+        if (project.isEmpty()) return;
+
+        //项目创建者才能拉人, 其他的只能申请
+        project.map(ProjectPO::getFounderId)
+                .filter(RoContext.getRequestUser().getId()::equals)
+                .orElseThrow(() -> new ParameterValidationException("只有项目创建者才能拉人"));
+
+        //检查人员是否为小组中人/项目中人
+        List<Long> projectUsers = projectUserRepository.findUserIdByProjectId(projectId);
+        List<Long> teamUsers = project.map(ProjectPO::getTeamId)
+                .map(teamUserRepository::findUserIdsByTeamId)
+                .orElse(List.of());
+
+        List<Long> bindIds = Arrays.stream(userIds)
+                .filter(uid -> !projectUsers.contains(uid))
+                .filter(uid -> !teamUsers.contains(uid))
+                .collect(toList());
+
+        if (bindIds.isEmpty()) return;
+
+        //开始设置绑定关系
+        List<ProjectUserPO> bindEntity = bindIds.stream().map(uid -> {
+            ProjectUserPO saveEntity = new ProjectUserPO();
+            saveEntity.setProjectId(projectId);
+            saveEntity.setUserId(uid);
+            return saveEntity;
+        }).collect(toList());
+
+        projectUserRepository.saveAll(bindEntity);
     }
 }

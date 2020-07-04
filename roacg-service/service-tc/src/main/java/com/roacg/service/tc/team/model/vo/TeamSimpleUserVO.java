@@ -11,5 +11,10 @@ public class TeamSimpleUserVO {
 
     private String avatar;
 
+    /**
+     * 用户在小组内的角色
+     *
+     * @see com.roacg.service.tc.team.enums.UserTeamRoleEnum
+     */
     private Integer userRole;
 }

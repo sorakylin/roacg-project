@@ -19,6 +19,12 @@ public class ProjectCreateREQ {
     //项目简介
     private String projectProfile;
 
+    //源语言
+    private String fromLanguage;
+
+    //新语言
+    private String toLanguage;
+
     //项目类型
     @NotNull
     private ProjectTypeEnum projectType;

@@ -30,6 +30,14 @@ public class ProjectPO extends VirtualDeleteSupportEntity {
     @Column(columnDefinition = "varchar(128)")
     private String projectProfile;
 
+    //从哪里来
+    @Column(columnDefinition = "varchar(20)")
+    private String fromLanguage;
+
+    //到哪里去
+    @Column(columnDefinition = "varchar(20)")
+    private String toLanguage;
+
     //项目的状态
     @Convert(converter = ProjectStatusEnum.Convert.class)
     @Column(nullable = false, columnDefinition = "tinyint(1)")

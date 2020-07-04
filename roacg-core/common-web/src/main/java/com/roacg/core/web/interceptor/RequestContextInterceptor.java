@@ -1,4 +1,4 @@
-package com.roacg.core.web.security.interceptor;
+package com.roacg.core.web.interceptor;
 
 import com.roacg.core.base.enmus.ServiceCode;
 import com.roacg.core.base.log.RoCommonLoggerEnum;

@@ -23,4 +23,13 @@ public class ProjectUserPO {
 
     @Column(nullable = false, columnDefinition = "bigint(20)")
     private Long userId;
+
+
+    public static ProjectUserPO newInstance(Long projectId, Long userId) {
+
+        ProjectUserPO fragment = new ProjectUserPO();
+        fragment.setProjectId(projectId);
+        fragment.setUserId(userId);
+        return fragment;
+    }
 }

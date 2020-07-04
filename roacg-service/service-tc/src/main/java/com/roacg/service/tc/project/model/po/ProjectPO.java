@@ -3,6 +3,7 @@ package com.roacg.service.tc.project.model.po;
 
 import com.roacg.core.model.db.support.VirtualDeleteSupportEntity;
 import com.roacg.service.tc.project.enums.ProjectPermissionStatusEnum;
+import com.roacg.service.tc.project.enums.ProjectStatusEnum;
 import com.roacg.service.tc.project.enums.ProjectTypeEnum;
 import lombok.Data;
 
@@ -29,6 +30,11 @@ public class ProjectPO extends VirtualDeleteSupportEntity {
     @Column(columnDefinition = "varchar(128)")
     private String projectProfile;
 
+    //项目的状态
+    @Convert(converter = ProjectStatusEnum.Convert.class)
+    @Column(nullable = false, columnDefinition = "tinyint(1)")
+    private ProjectStatusEnum projectStatus;
+
     //项目类型
     @Convert(converter = ProjectTypeEnum.Convert.class)
     @Column(nullable = false, columnDefinition = "tinyint(1)")
@@ -39,7 +45,7 @@ public class ProjectPO extends VirtualDeleteSupportEntity {
     @Column(nullable = false, columnDefinition = "tinyint(1)")
     private ProjectPermissionStatusEnum projectPermissionStatus;
 
-    //团队ID 项目->团队 多对一
+    //团队ID 项目->团队 多对一 TODO 不一定要有
     @Column(columnDefinition = "bigint(20)")
     private Long teamId;
 

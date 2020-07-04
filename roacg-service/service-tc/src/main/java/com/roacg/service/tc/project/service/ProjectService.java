@@ -1,6 +1,7 @@
 package com.roacg.service.tc.project.service;
 
 import com.roacg.service.tc.project.model.dto.SimpleProjectDTO;
+import com.roacg.service.tc.project.model.req.ProjectCreateREQ;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,4 +30,12 @@ public interface ProjectService {
      * @return 和项目有关联的用户ID
      */
     List<Long> findProjectUserIds(Long projectId);
+
+
+    /**
+     * 创建一个项目
+     *
+     * @param req 请求体
+     */
+    void createProject(ProjectCreateREQ req);
 }

@@ -8,7 +8,7 @@ import lombok.Getter;
  * 标识一个项目的状态
  */
 @Getter
-public enum ProjectStatusEnum implements BaseCodeEnum<ProjectStatusEnum> {
+public enum ProjectStatusEnum implements BaseCodeEnum {
 
     NOT_STARTED(1, "未开始"),
     PROCESSING(2, "进行中"),
@@ -22,11 +22,6 @@ public enum ProjectStatusEnum implements BaseCodeEnum<ProjectStatusEnum> {
     ProjectStatusEnum(int code, String desc) {
         this.code = code;
         this.desc = desc;
-    }
-
-    @Override
-    public ProjectStatusEnum codeOf(int code) {
-        return BaseCodeEnum.forCode(ProjectStatusEnum.class, code);
     }
 
     public static class Convert extends AbstractBaseCodeEnumConverter<ProjectStatusEnum> {

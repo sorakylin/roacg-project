@@ -9,7 +9,7 @@ import com.roacg.service.tc.team.model.po.TeamUserPO;
  *
  * @see TeamUserPO#getUserTeamRole
  */
-public enum UserTeamRoleEnum implements BaseCodeEnum<UserTeamRoleEnum> {
+public enum UserTeamRoleEnum implements BaseCodeEnum {
 
     TEAM_LEADER(1),//组长
     OLD_HEAD(2),//元老
@@ -24,11 +24,6 @@ public enum UserTeamRoleEnum implements BaseCodeEnum<UserTeamRoleEnum> {
     @Override
     public int getCode() {
         return code;
-    }
-
-    @Override
-    public UserTeamRoleEnum codeOf(int code) {
-        return BaseCodeEnum.forCode(UserTeamRoleEnum.class, code);
     }
 
     public static class Convert extends AbstractBaseCodeEnumConverter<UserTeamRoleEnum> {

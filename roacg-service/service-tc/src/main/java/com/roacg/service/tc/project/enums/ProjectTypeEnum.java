@@ -8,7 +8,7 @@ import com.roacg.core.model.enums.convert.AbstractBaseCodeEnumConverter;
  * 分为社区项目和团队私有项目
  * 这决定了一个项目是否可以被除团队之外的人访问
  */
-public enum ProjectTypeEnum implements BaseCodeEnum<ProjectTypeEnum> {
+public enum ProjectTypeEnum implements BaseCodeEnum {
 
     COMMUNITY(1),//社区项目
     TEAM(2);//团队项目
@@ -22,11 +22,6 @@ public enum ProjectTypeEnum implements BaseCodeEnum<ProjectTypeEnum> {
     @Override
     public int getCode() {
         return code;
-    }
-
-    @Override
-    public ProjectTypeEnum codeOf(int code) {
-        return BaseCodeEnum.forCode(ProjectTypeEnum.class, code);
     }
 
     public static class Convert extends AbstractBaseCodeEnumConverter<ProjectTypeEnum> {

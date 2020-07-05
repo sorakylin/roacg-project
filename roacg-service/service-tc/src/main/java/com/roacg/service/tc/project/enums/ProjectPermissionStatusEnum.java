@@ -7,7 +7,7 @@ import com.roacg.core.model.enums.convert.AbstractBaseCodeEnumConverter;
  * 项目内容的隐私状态
  * 针对于 <b>项目</b> 本体
  */
-public enum ProjectPermissionStatusEnum implements BaseCodeEnum<ProjectPermissionStatusEnum> {
+public enum ProjectPermissionStatusEnum implements BaseCodeEnum {
 
     ALL_PUBLIC(1),//全公开的 (项目信息和具体文档)
     INFO_PUBLIC(2),//信息是公开的 (只能查看项目信息, 不能看到文档)
@@ -24,11 +24,6 @@ public enum ProjectPermissionStatusEnum implements BaseCodeEnum<ProjectPermissio
     @Override
     public int getCode() {
         return code;
-    }
-
-    @Override
-    public ProjectPermissionStatusEnum codeOf(int code) {
-        return BaseCodeEnum.forCode(ProjectPermissionStatusEnum.class, code);
     }
 
     public static class Convert extends AbstractBaseCodeEnumConverter<ProjectPermissionStatusEnum> {

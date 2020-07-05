@@ -1,7 +1,7 @@
 package com.roacg.service.tc.project.model.po;
 
 
-import com.roacg.core.model.db.support.VirtualDeleteSupportEntity;
+import com.roacg.core.model.db.BasicCompleteEntity;
 import com.roacg.service.tc.project.enums.ProjectPermissionStatusEnum;
 import com.roacg.service.tc.project.enums.ProjectStatusEnum;
 import com.roacg.service.tc.project.enums.ProjectTypeEnum;
@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Data
 @Table(name = "tb_tc_project")
 @Entity
-public class ProjectPO extends VirtualDeleteSupportEntity {
+public class ProjectPO extends BasicCompleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

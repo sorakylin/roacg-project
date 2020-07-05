@@ -1,10 +1,12 @@
 package com.roacg.core.web.config;
 
-import com.roacg.core.web.config.convert.CodeEnumConverterFactory;
+import com.roacg.core.web.config.convert.IntegerCodeToEnumConverterFactory;
+import com.roacg.core.web.config.convert.StringCodeToEnumConverterFactory;
 import com.roacg.core.web.interceptor.GlobalExceptionHandler;
 import com.roacg.core.web.interceptor.RequestContextInterceptor;
 import com.roacg.core.web.security.repository.RedisTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
+@ConditionalOnWebApplication
 public class WebAppConfigurer implements WebMvcConfigurer {
 
     @Autowired
@@ -28,7 +31,8 @@ public class WebAppConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverterFactory(new CodeEnumConverterFactory());
+        registry.addConverterFactory(new IntegerCodeToEnumConverterFactory());
+        registry.addConverterFactory(new StringCodeToEnumConverterFactory());
     }
 
     @Override

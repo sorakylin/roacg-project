@@ -2,10 +2,9 @@ package com.roacg.core.model.enums;
 
 import java.util.stream.Stream;
 
-public interface BaseCodeEnum<E extends BaseCodeEnum<E>> {
-    int getCode();
+public interface BaseCodeEnum {
 
-    E codeOf(int code);
+    int getCode();
 
     static <E extends Enum<E> & BaseCodeEnum> E forCode(Class<E> cls, int code) {
         return Stream.of(cls.getEnumConstants())

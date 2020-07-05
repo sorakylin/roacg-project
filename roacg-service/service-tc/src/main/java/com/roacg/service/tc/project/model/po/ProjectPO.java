@@ -49,7 +49,7 @@ public class ProjectPO extends BasicCompleteEntity {
     private ProjectTypeEnum projectType;
 
     //项目的许可范围, 标识了该项目可以被谁访问
-    @Convert(converter = ProjectTypeEnum.Convert.class)
+    @Convert(converter = ProjectPermissionStatusEnum.Convert.class)
     @Column(nullable = false, columnDefinition = "tinyint(1)")
     private ProjectPermissionStatusEnum projectPermissionStatus;
 

@@ -1,14 +1,14 @@
 package com.roacg.service.tc.project.enums;
 
-import com.roacg.core.model.enums.BaseCodeEnum;
 import com.roacg.core.model.enums.convert.AbstractBaseCodeEnumConverter;
+import com.roacg.core.web.model.enums.JacksonSupportCodeEnum;
 import lombok.Getter;
 
 /**
  * 标识一个项目的状态
  */
 @Getter
-public enum ProjectStatusEnum implements BaseCodeEnum {
+public enum ProjectStatusEnum implements JacksonSupportCodeEnum {
 
     NOT_STARTED(1, "未开始"),
     PROCESSING(2, "进行中"),

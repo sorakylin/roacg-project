@@ -89,7 +89,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         //检查重名项目
         if (req.getTeamId() != null) {
-            int count = projectRepository.countByProjectNameAndTeamIdAndDeleted(req.getProjectName(), req.getTeamId(), DeletedStatusEnum.UN_DELETE.getCode());
+            int count = projectRepository.countByProjectNameAndTeamIdAndDeleted(req.getProjectName(), req.getTeamId(), DeletedStatusEnum.UN_DELETE);
             if (count > 0) throw new ParameterValidationException("团队内已有相同名字的项目! 项目名:" + req.getProjectName());
         } else {
             int count = projectRepository.countByProjectNameAndProjectType(req.getProjectName(), ProjectTypeEnum.COMMUNITY);
@@ -100,6 +100,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         RequestUser requestUser = RoContext.getRequestUser();
 
+        entity.setDeleted(DeletedStatusEnum.UN_DELETE);
         entity.setFounderId(requestUser.getId());
         projectRepository.saveAndFlush(entity);
 

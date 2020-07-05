@@ -1,5 +1,6 @@
 package com.roacg.service.tc.project.repository;
 
+import com.roacg.core.model.enums.DeletedStatusEnum;
 import com.roacg.service.tc.project.enums.ProjectTypeEnum;
 import com.roacg.service.tc.project.model.po.ProjectPO;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +13,7 @@ public interface ProjectRepository extends JpaRepository<ProjectPO, Long> {
 
     List<ProjectPO> findAllByTeamId(Long teamId);
 
-    int countByProjectNameAndTeamIdAndDeleted(String projectName,Long teamId,int deleted);
+    int countByProjectNameAndTeamIdAndDeleted(String projectName, Long teamId, DeletedStatusEnum deleted);
 
     int countByProjectNameAndProjectType(String projectName, ProjectTypeEnum projectTypeEnum);
 }

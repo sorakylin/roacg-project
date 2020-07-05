@@ -1,13 +1,13 @@
 package com.roacg.service.tc.project.enums;
 
-import com.roacg.core.model.enums.BaseCodeEnum;
 import com.roacg.core.model.enums.convert.AbstractBaseCodeEnumConverter;
+import com.roacg.core.web.model.enums.JacksonSupportCodeEnum;
 
 /**
  * 项目内容的隐私状态
  * 针对于 <b>项目</b> 本体
  */
-public enum ProjectPermissionStatusEnum implements BaseCodeEnum {
+public enum ProjectPermissionStatusEnum implements JacksonSupportCodeEnum {
 
     ALL_PUBLIC(1),//全公开的 (项目信息和具体文档)
     INFO_PUBLIC(2),//信息是公开的 (只能查看项目信息, 不能看到文档)

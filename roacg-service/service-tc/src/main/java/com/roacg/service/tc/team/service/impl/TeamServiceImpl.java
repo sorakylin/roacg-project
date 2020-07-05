@@ -8,7 +8,6 @@ import com.roacg.core.model.exception.RoApiException;
 import com.roacg.core.utils.bean.BeanMapper;
 import com.roacg.core.utils.context.RoContext;
 import com.roacg.core.web.model.PageResponse;
-import com.roacg.service.tc.project.model.dto.SimpleProjectDTO;
 import com.roacg.service.tc.project.service.ProjectService;
 import com.roacg.service.tc.team.enums.UserTeamRoleEnum;
 import com.roacg.service.tc.team.model.dto.TeamDTO;
@@ -180,9 +179,6 @@ public class TeamServiceImpl implements TeamService {
         TeamDetailVO detail = new TeamDetailVO();
         TeamDTO team = this.findTeamInfo(teamId).orElseThrow(ParameterValidationException::new);
         BeanMapper.map(team, detail);
-
-        List<SimpleProjectDTO> projects = projectService.findTeamSimpleProject(teamId);
-        detail.setProjects(projects);
 
         //当前团队的用户  key: userId ; value: userTeamRole
         Map<Long, Integer> teamUserRoleMapping = teamUserRepository.findAllByTeamId(teamId)

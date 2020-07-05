@@ -5,6 +5,7 @@ import com.roacg.core.model.enums.DeletedStatusEnum;
 import com.roacg.core.model.exception.ParameterValidationException;
 import com.roacg.core.utils.bean.BeanMapper;
 import com.roacg.core.utils.context.RoContext;
+import com.roacg.service.tc.project.enums.ProjectPermissionStatusEnum;
 import com.roacg.service.tc.project.enums.ProjectTypeEnum;
 import com.roacg.service.tc.project.model.dto.SimpleProjectDTO;
 import com.roacg.service.tc.project.model.po.ProjectPO;
@@ -13,6 +14,8 @@ import com.roacg.service.tc.project.model.req.ProjectCreateREQ;
 import com.roacg.service.tc.project.repository.ProjectRepository;
 import com.roacg.service.tc.project.repository.ProjectUserRepository;
 import com.roacg.service.tc.project.service.ProjectService;
+import com.roacg.service.tc.team.enums.UserTeamRoleEnum;
+import com.roacg.service.tc.team.model.po.TeamUserPO;
 import com.roacg.service.tc.team.repository.TeamUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ArrayUtils;
@@ -22,8 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.function.Predicate;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 
 @Service
@@ -71,10 +75,65 @@ public class ProjectServiceImpl implements ProjectService {
     public List<SimpleProjectDTO> findTeamSimpleProject(Long teamId) {
         if (Objects.isNull(teamId)) return Collections.emptyList();
 
-        return projectRepository.findAllByTeamId(teamId)
+        //查出该团队的所有项目
+        List<SimpleProjectDTO> projects = projectRepository.findAllByTeamId(teamId)
                 .stream()
                 .map(p -> BeanMapper.map(p, SimpleProjectDTO.class))
                 .collect(toList());
+
+        if (projects.isEmpty()) return projects;
+
+        //根据当前用户过滤, 只显示当前用户可以访问的
+        RequestUser user = RoContext.getRequestUser();
+
+        //基础判断设置
+        Predicate<SimpleProjectDTO> allPublic = (project) -> project.getProjectPermissionStatus() == ProjectPermissionStatusEnum.ALL_PUBLIC;
+        Predicate<SimpleProjectDTO> infoPublic = (project) -> project.getProjectPermissionStatus() == ProjectPermissionStatusEnum.INFO_PUBLIC;
+//        Predicate<SimpleProjectDTO> teamPublic = (project) -> project.getProjectPermissionStatus() == ProjectPermissionStatusEnum.TEAM_PUBLIC;
+//        Predicate<SimpleProjectDTO> infoTeamPublic = (project) -> project.getProjectPermissionStatus() == ProjectPermissionStatusEnum.INFO_TEAM_PUBLIC;
+        Predicate<SimpleProjectDTO> onlyParticipant = (project) -> project.getProjectPermissionStatus() == ProjectPermissionStatusEnum.ONLY_PARTICIPANT;
+
+        if (!user.hasLogin()) {
+            return projects.stream().filter(allPublic.or(infoPublic)).collect(toList());
+        }
+
+        List<TeamUserPO> teamUsers = teamUserRepository.findAllByTeamId(teamId);
+        Optional<TeamUserPO> teamUser = teamUsers.stream().filter(tu -> Objects.equals(tu.getUserId(), user.getId())).findFirst();
+
+        //不是组内成员
+        if (teamUser.isEmpty()) {
+            return projects.stream().filter(allPublic.or(infoPublic)).collect(toList());
+        }
+
+        UserTeamRoleEnum userTeamRole = teamUser.map(TeamUserPO::getUserTeamRole).get();
+        //组长和元老可以直接查看所有
+        if (UserTeamRoleEnum.TEAM_LEADER == userTeamRole || UserTeamRoleEnum.OLD_HEAD == userTeamRole) {
+            return projects;
+        }
+
+        //分个组, true是仅参加者能查看的项目, false是其他的
+        Map<Boolean, List<SimpleProjectDTO>> group = projects.stream().collect(partitioningBy(onlyParticipant));
+        List<SimpleProjectDTO> onlyParticipantProject = group.get(Boolean.TRUE);
+        projects = group.getOrDefault(Boolean.FALSE, new ArrayList<>());
+
+        if (CollectionUtils.isEmpty(onlyParticipantProject)) {
+            return projects;
+        }
+
+        //查出限制为【仅参加者】权限的项目后分个组, key: projectId,value: userIds
+        Map<Long, List<Long>> projectUserMapping = onlyParticipantProject.stream().map(SimpleProjectDTO::getProjectId)
+                .collect(collectingAndThen(toList(), projectUserRepository::findByProjectIdIn))
+                .stream()
+                .collect(groupingBy(ProjectUserPO::getProjectId, mapping(ProjectUserPO::getUserId, toList())));
+
+        //找出当前登陆用户可以访问的项目然后设置到返回值中
+        onlyParticipantProject.stream()
+                .filter(p -> {
+                    List<Long> userIds = projectUserMapping.get(p.getProjectId());
+                    return !CollectionUtils.isEmpty(userIds) && userIds.contains(user.getId());
+                }).collect(collectingAndThen(toList(), projects::addAll));
+
+        return projects;
     }
 
     @Override

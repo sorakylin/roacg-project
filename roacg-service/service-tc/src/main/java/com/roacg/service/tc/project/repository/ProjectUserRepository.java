@@ -13,4 +13,6 @@ public interface ProjectUserRepository extends CrudRepository<ProjectUserPO, Lon
 
     @Query("SELECT p.userId FROM ProjectUserPO p WHERE p.projectId=:projectId")
     List<Long> findUserIdByProjectId(@Param("projectId") Long projectId);
+
+    List<ProjectUserPO> findByProjectIdIn(List<Long> projectIds);
 }

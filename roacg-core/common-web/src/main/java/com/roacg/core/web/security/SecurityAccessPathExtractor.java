@@ -84,7 +84,7 @@ public class SecurityAccessPathExtractor implements CommandLineRunner {
         permission.setRoles(exposeResource.roles());
 
         //url设置, 只拿第一个。
-        patterns.stream().findFirst().ifPresent(permission::setUrl);
+        patterns.stream().findFirst().map(url -> url.replaceAll("\\{.+\\}", "*")).ifPresent(permission::setUrl);
 
         //http method 设置
         if (methods.isEmpty()) {

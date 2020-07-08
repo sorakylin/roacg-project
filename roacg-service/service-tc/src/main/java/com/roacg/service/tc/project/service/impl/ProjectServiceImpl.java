@@ -16,6 +16,7 @@ import com.roacg.service.tc.project.repository.ProjectUserRepository;
 import com.roacg.service.tc.project.service.ProjectService;
 import com.roacg.service.tc.team.enums.UserTeamRoleEnum;
 import com.roacg.service.tc.team.model.po.TeamUserPO;
+import com.roacg.service.tc.team.repository.TeamRepository;
 import com.roacg.service.tc.team.repository.TeamUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ArrayUtils;
@@ -42,6 +43,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private TeamUserRepository teamUserRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
 
     @Override
     public Optional<SimpleProjectDTO> findSimpleProject(Long projectId) {
@@ -165,6 +169,8 @@ public class ProjectServiceImpl implements ProjectService {
 
         projectUserRepository.save(ProjectUserPO.newInstance(entity.getProjectId(), requestUser.getId()));
 
+        //给团队的项目数量+1
+        Optional.ofNullable(req.getTeamId()).ifPresent(teamRepository::incrementProjectNum);
     }
 
     @Override

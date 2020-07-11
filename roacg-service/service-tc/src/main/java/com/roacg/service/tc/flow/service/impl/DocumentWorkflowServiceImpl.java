@@ -38,16 +38,16 @@ public class DocumentWorkflowServiceImpl implements DocumentWorkflowService {
 
         workflowRepository.saveAll(workflow);
 
-        //双指针设置前后节点
-        for (int length = workflow.size(), i = 0, j = length - 1; i < length; i++, j--) {
+        //设置前后节点
+        for (int length = workflow.size(), i = 0; i < length; i++) {
 
-            DocumentWorkflowPO inode = workflow.get(i), jnode = workflow.get(j);
+            DocumentWorkflowPO inode = workflow.get(i);
             if (i > 0) {
                 inode.setPrevNode(workflow.get(i - 1).getId());
             }
 
-            if (j < (length - 1)) {
-                jnode.setNextNode(workflow.get(j + 1).getId());
+            if (i < (length - 1)) {
+                inode.setNextNode(workflow.get(i + 1).getId());
             }
         }
 

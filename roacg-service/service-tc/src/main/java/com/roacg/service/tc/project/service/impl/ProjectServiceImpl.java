@@ -4,7 +4,7 @@ import com.roacg.core.model.auth.RequestUser;
 import com.roacg.core.model.enums.DeletedStatusEnum;
 import com.roacg.core.model.exception.ParameterValidationException;
 import com.roacg.core.utils.bean.BeanMapper;
-import com.roacg.core.utils.context.RoContext;
+import com.roacg.core.model.context.RoContext;
 import com.roacg.service.tc.project.enums.ProjectPermissionStatusEnum;
 import com.roacg.service.tc.project.enums.ProjectTypeEnum;
 import com.roacg.service.tc.project.model.dto.SimpleProjectDTO;

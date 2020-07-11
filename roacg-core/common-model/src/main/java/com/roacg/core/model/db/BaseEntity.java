@@ -1,13 +1,16 @@
 package com.roacg.core.model.db;
 
+import com.roacg.core.model.db.auditing.RoAuditingListener;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @Data
 @MappedSuperclass
+@EntityListeners(value = RoAuditingListener.class)
 public class BaseEntity implements DBMapEntity {
 
     private static final long serialVersionUID = -1;

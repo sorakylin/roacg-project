@@ -24,13 +24,16 @@ import java.util.Properties;
 public class SnowflakeIdGenerator implements IdentifierGenerator, Configurable {
 
     public static final String NAME = "snowflake-id";
-    public static final String CLASS_NAME = "com.roacg.service.tc.common.SnowflakeId";
+    public static final String CLASS_NAME = "com.roacg.service.tc.common.SnowflakeIdGenerator";
 
     private String typeName;
 
     //业务线ID 和 机器ID 应该通过配置注入
     private static long bizId;
     private static long workerId;
+
+    public SnowflakeIdGenerator() {
+    }
 
     //缓存不同的表的不同序列
     private static final Cache<String, SnowflakeIdWorker> ID_CACHE = CacheBuilder.newBuilder().build();

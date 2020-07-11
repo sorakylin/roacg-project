@@ -8,7 +8,7 @@ import com.roacg.core.model.auth.RequestUser;
 import com.roacg.core.model.auth.token.RoOAuthToken;
 import com.roacg.core.model.consts.RoAuthConst;
 import com.roacg.core.utils.JsonUtil;
-import com.roacg.core.utils.context.RoContext;
+import com.roacg.core.model.context.RoContext;
 import com.roacg.core.utils.sejwt.cryptography.Codec;
 import com.roacg.core.utils.sejwt.jwt.SeJwt;
 import com.roacg.core.utils.sejwt.jwt.en.JwtAttribute;

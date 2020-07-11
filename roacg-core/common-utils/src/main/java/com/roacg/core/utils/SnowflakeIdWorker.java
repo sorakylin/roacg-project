@@ -179,14 +179,13 @@ public class SnowflakeIdWorker {
      */
     public static void main(String[] args) throws InterruptedException {
         SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
+
+        long start = System.currentTimeMillis();
         for (int i = 0; i < 1000; i++) {
             long id = idWorker.nextId();
-            System.out.println(Long.toBinaryString(id));
             System.out.println(id);
-            System.out.println(Long.toHexString(id));
-            System.out.println(Long.toString(id, 36));
-            Thread.sleep(1);
         }
 
+        System.out.println(System.currentTimeMillis() - start);
     }
 }

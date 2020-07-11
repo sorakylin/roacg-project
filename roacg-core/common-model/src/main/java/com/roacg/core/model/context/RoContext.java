@@ -1,4 +1,4 @@
-package com.roacg.core.utils.context;
+package com.roacg.core.model.context;
 
 import com.roacg.core.model.auth.RequestUser;
 

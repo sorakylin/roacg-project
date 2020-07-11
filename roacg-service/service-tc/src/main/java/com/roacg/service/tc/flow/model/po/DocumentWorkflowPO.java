@@ -1,11 +1,12 @@
 package com.roacg.service.tc.flow.model.po;
 
 import com.roacg.core.model.db.BaseEntity;
-import com.roacg.service.tc.flow.model.enums.DocumentTypeEnum;
 import com.roacg.service.tc.flow.model.enums.TranslateResponsibilitiesEnum;
+import com.roacg.service.tc.flow.model.enums.WorkflowDeliveryTagEnum;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * 文档工作流
@@ -27,7 +28,7 @@ public class DocumentWorkflowPO extends BaseEntity {
 
     //职责
     @Column(columnDefinition = "tinyint", nullable = false)
-    @Convert(converter = DocumentTypeEnum.Convert.class)
+    @Convert(converter = TranslateResponsibilitiesEnum.Convert.class)
     private TranslateResponsibilitiesEnum responsibilities;
 
     //文档ID
@@ -44,7 +45,12 @@ public class DocumentWorkflowPO extends BaseEntity {
 
     //交付标签 未开始/未交付/已交付
     @Column(columnDefinition = "tinyint", nullable = false)
-    private Integer deliveryTag;
+    @Convert(converter = WorkflowDeliveryTagEnum.Convert.class)
+    private WorkflowDeliveryTagEnum deliveryTag;
+
+    //开始时间
+    @Column(columnDefinition = "datetime")
+    private LocalDateTime startTime;
 
     //上一个节点, 为头节点时为空
     @Column(columnDefinition = "bigint")

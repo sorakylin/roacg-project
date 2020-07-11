@@ -3,16 +3,19 @@ package com.roacg.service.tc.flow.model.enums;
 import com.roacg.core.model.enums.convert.AbstractBaseCodeEnumConverter;
 import com.roacg.core.web.model.enums.JacksonSupportCodeEnum;
 
-public enum DocumentTypeEnum implements JacksonSupportCodeEnum {
+public enum WorkflowDeliveryTagEnum implements JacksonSupportCodeEnum {
 
-    DIR(1, "文件夹"),//Directory
-    FILE(2, "文件");
+    NOT_STARTED(1, "未开始"),
+
+    UNDELIVERED(2, "未交付"),
+
+    DELIVERED(3, "已交付");
 
     private int code;
 
     private String desc;
 
-    DocumentTypeEnum(int code, String desc) {
+    WorkflowDeliveryTagEnum(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
@@ -23,9 +26,9 @@ public enum DocumentTypeEnum implements JacksonSupportCodeEnum {
     }
 
 
-    public static class Convert extends AbstractBaseCodeEnumConverter<DocumentTypeEnum> {
+    public static class Convert extends AbstractBaseCodeEnumConverter<WorkflowDeliveryTagEnum> {
         public Convert() {
-            super(DocumentTypeEnum.class);
+            super(WorkflowDeliveryTagEnum.class);
         }
     }
 }

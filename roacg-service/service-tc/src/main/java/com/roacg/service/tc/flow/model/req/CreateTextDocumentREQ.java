@@ -24,8 +24,8 @@ public class CreateTextDocumentREQ {
     @Length(message = "文件名不能超过20字", max = 20)
     private String documentName;
 
-    //指定审核人
-    private Long reviewerId;
+    //指定验收人
+    private Long acceptorId;
 
     //贡献者
     @NotEmpty(message = "工作流中必须拥有至少一人")

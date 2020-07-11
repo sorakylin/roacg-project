@@ -49,7 +49,7 @@ public class DocumentObjectPO extends BasicCompleteEntity {
 
     //工作流指针, 指示当前文档处于哪个节点。 每交付一次指针移动一步
     @Column(columnDefinition = "bigint", nullable = false)
-    private Integer workflowNodePointer;
+    private Long workflowNodePointer;
 
     //工作流头节点
     @Column(columnDefinition = "bigint", nullable = false)

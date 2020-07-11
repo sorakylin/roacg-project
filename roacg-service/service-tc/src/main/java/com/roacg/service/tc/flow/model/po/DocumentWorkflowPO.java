@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class DocumentWorkflowPO extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "bigint", nullable = false)
     private Long id;
 

@@ -9,12 +9,12 @@ import javax.persistence.*;
  * 版本控制记录表
  */
 @Data
-@Table(name = "tc_document_version_list")
+@Table(name = "tc_document_version")
 @Entity
-public class DocumentVersionListPO extends BaseEntity {
+public class DocumentVersionPO extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "bigint", nullable = false)
     private Long id;
 
@@ -27,7 +27,7 @@ public class DocumentVersionListPO extends BaseEntity {
     private Integer documentVersion;
 
     //文档内容
-    @Column(columnDefinition = "varchar(20000)", length = 20000)
+    @Column(columnDefinition = "varchar(20000)")
     private String content;
 
     //可能指向一个附件表 or 其他的内容表等

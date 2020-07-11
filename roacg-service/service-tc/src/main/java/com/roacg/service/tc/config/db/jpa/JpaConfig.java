@@ -58,7 +58,7 @@ public class JpaConfig {
         jpaPropertyMap.put(AvailableSettings.PHYSICAL_NAMING_STRATEGY, SpringPhysicalNamingStrategy.class);
         jpaPropertyMap.put(AvailableSettings.IMPLICIT_NAMING_STRATEGY, SpringImplicitNamingStrategy.class);
         //数据库方言
-        jpaPropertyMap.put(AvailableSettings.DIALECT, org.hibernate.dialect.MySQL57Dialect.class);
+        jpaPropertyMap.put(AvailableSettings.DIALECT, org.hibernate.dialect.MySQL8Dialect.class);
         //建表时的引擎
         jpaPropertyMap.put(AvailableSettings.STORAGE_ENGINE, "innodb");
 

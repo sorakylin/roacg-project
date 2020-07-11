@@ -7,14 +7,17 @@ import javax.persistence.*;
 
 /**
  * 闭包表
+ * 文档的关系
  */
 @Data
-@Table(name = "tc_document_tree")
+@Table(name = "tc_document_tree", uniqueConstraints = {
+        @UniqueConstraint(name = "document_tree_relation_index", columnNames = {"ancestor", "descendant"})
+})
 @Entity
 public class DocumentTreePO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "bigint", nullable = false)
     private Long id;
 

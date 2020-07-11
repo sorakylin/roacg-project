@@ -1,6 +1,8 @@
 package com.roacg.service.tc.flow.model.po;
 
 import com.roacg.core.model.db.BaseEntity;
+import com.roacg.service.tc.flow.model.enums.DocumentTypeEnum;
+import com.roacg.service.tc.flow.model.enums.TranslateResponsibilitiesEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,9 +21,14 @@ public class DocumentWorkflowPO extends BaseEntity {
     @Column(columnDefinition = "bigint", nullable = false)
     private Long id;
 
-    //工作者(用户ID)
+    //贡献者(用户ID)
     @Column(columnDefinition = "bigint", nullable = false)
-    private Long workerId;
+    private Long contributorId;
+
+    //职责
+    @Column(columnDefinition = "tinyint", nullable = false)
+    @Convert(converter = DocumentTypeEnum.Convert.class)
+    private TranslateResponsibilitiesEnum responsibilities;
 
     //文档ID
     @Column(columnDefinition = "bigint", nullable = false)

@@ -24,6 +24,10 @@ public class DocumentObjectPO extends BasicCompleteEntity {
     @Column(columnDefinition = "bigint", nullable = false)
     private Long documentId;
 
+    //文档名, 同一层下不能重名
+    @Column(columnDefinition = "varchar(20)", nullable = false)
+    private String documentName;
+
     //文档类型, 文件夹 or 文件
     @Column(columnDefinition = "tinyint", nullable = false)
     @Convert(converter = DocumentTypeEnum.Convert.class)
@@ -34,7 +38,7 @@ public class DocumentObjectPO extends BasicCompleteEntity {
     @Convert(converter = ContentTypeEnum.Convert.class)
     private ContentTypeEnum contentType;
 
-    //文档状态 未开始/进行中/待审校/已完成
+    //文档状态 未开始/进行中/待验收/已完成
     @Column(columnDefinition = "tinyint", nullable = false)
     @Convert(converter = DocumentStateEnum.Convert.class)
     private DocumentStateEnum documentState;
@@ -55,7 +59,7 @@ public class DocumentObjectPO extends BasicCompleteEntity {
     @Column(columnDefinition = "bigint", nullable = false)
     private Long workflowTailNode;
 
-    //最终审核人(用户ID) TODO 不需要审核人, 统一待审页面
+    //最终审核人(用户ID) 如果没有指定, 就是公共审校
     @Column(columnDefinition = "bigint")
-    private Long reviewerId;
+    private Long acceptorId;
 }

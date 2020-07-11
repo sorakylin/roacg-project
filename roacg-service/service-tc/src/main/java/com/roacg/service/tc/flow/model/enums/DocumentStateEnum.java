@@ -13,7 +13,7 @@ public enum DocumentStateEnum implements JacksonSupportCodeEnum {
 
     NOT_STARTED(1, "未开始"),
     IN_TRANSLATION(2, "翻译中"),
-    PENDING_REVIEW(3, "待审校"),
+    PENDING_ACCEPTANCE(3, "待验收"),
     COMPLETED(4, "已完成");
 
     private int code;

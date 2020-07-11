@@ -11,9 +11,10 @@ import com.roacg.service.tc.flow.model.po.DocumentObjectPO;
  */
 public enum ContentTypeEnum implements JacksonSupportCodeEnum {
 
-    TEXT(1, "文本"),
-    LINK(2, "链接"),
-    ANNEX(3, "附件");
+    OTHER(1, "其他"),
+    TEXT(2, "文本"),
+    LINK(3, "链接"),
+    ANNEX(4, "附件");
 
     private int code;
 

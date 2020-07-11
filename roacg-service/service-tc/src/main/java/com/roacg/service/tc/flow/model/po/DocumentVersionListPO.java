@@ -1,17 +1,17 @@
 package com.roacg.service.tc.flow.model.po;
 
+import com.roacg.core.model.db.BaseEntity;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * 版本控制记录表
  */
 @Data
-public class DocumentVersionListPO {
+@Table(name = "tc_document_version_list")
+@Entity
+public class DocumentVersionListPO extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -2,15 +2,14 @@ package com.roacg.service.tc.flow.model.po;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * 闭包表
  */
 @Data
+@Table(name = "tc_document_tree")
+@Entity
 public class DocumentTreePO {
 
     @Id

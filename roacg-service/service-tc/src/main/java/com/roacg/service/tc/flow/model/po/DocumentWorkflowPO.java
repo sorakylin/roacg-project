@@ -1,18 +1,21 @@
 package com.roacg.service.tc.flow.model.po;
 
+import com.roacg.core.model.db.BaseEntity;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * 文档工作流
  * 一行数据为一个节点, 一个工作流即一个双向链表
  */
 @Data
-public class DocumentWorkflowPO {
+@Table(name = "tc_document_workflow")
+@Entity
+public class DocumentWorkflowPO extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "bigint", nullable = false)
     private Long id;
 

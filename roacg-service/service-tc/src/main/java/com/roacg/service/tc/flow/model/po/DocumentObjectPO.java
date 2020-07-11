@@ -1,20 +1,23 @@
 package com.roacg.service.tc.flow.model.po;
 
+import com.roacg.core.model.db.BasicCompleteEntity;
+import com.roacg.service.tc.common.SnowflakeIdGenerator;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * 文档逻辑对象表
  */
 @Data
-public class DocumentObjectPO {
+@Table(name = "tc_document_object")
+@Entity
+public class DocumentObjectPO extends BasicCompleteEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name = SnowflakeIdGenerator.NAME, strategy = SnowflakeIdGenerator.CLASS_NAME)
+    @GeneratedValue(generator = SnowflakeIdGenerator.NAME)
     @Column(columnDefinition = "bigint", nullable = false)
     private Long documentId;
 
@@ -47,7 +50,7 @@ public class DocumentObjectPO {
     @Column(columnDefinition = "bigint", nullable = false)
     private Long workflowTailNode;
 
-    //最终审核人(用户ID)
-    @Column(columnDefinition = "bigint", nullable = false)
+    //最终审核人(用户ID) TODO 不需要审核人, 同一待审页面
+    @Column(columnDefinition = "bigint")
     private Long reviewerId;
 }

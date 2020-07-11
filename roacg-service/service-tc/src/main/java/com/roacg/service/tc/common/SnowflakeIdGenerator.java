@@ -52,6 +52,6 @@ public class SnowflakeIdGenerator implements IdentifierGenerator, Configurable {
     @Override
     public void configure(Type type, Properties params, ServiceRegistry serviceRegistry) throws MappingException {
         this.typeName = type.getName();
-//        System.out.println("---------------------->>>>>>> " + typeName);
+        System.out.println("---------------------->>>>>>> " + typeName);
     }
 }

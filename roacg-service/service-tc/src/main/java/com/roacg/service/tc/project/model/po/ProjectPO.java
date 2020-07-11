@@ -14,12 +14,12 @@ import javax.persistence.*;
  * 团队项目/社区项目
  */
 @Data
-@Table(name = "tb_tc_project")
+@Table(name = "tb_project")
 @Entity
 public class ProjectPO extends BasicCompleteEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, columnDefinition = "bigint(20)")
     private Long projectId;
 

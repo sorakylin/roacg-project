@@ -9,13 +9,13 @@ import javax.persistence.*;
  * 团队表
  * 表示一个翻译协同组的团队基本信息
  */
-@Table(name = "tb_tc_team")
+@Table(name = "tb_team")
 @Entity
 @Data
 public class TeamPO extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, columnDefinition = "bigint(20)")
     private Long teamId;
 

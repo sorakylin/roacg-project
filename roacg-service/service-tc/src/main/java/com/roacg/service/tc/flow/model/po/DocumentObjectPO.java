@@ -2,6 +2,9 @@ package com.roacg.service.tc.flow.model.po;
 
 import com.roacg.core.model.db.BasicCompleteEntity;
 import com.roacg.service.tc.common.SnowflakeIdGenerator;
+import com.roacg.service.tc.flow.model.enums.ContentTypeEnum;
+import com.roacg.service.tc.flow.model.enums.DocumentStateEnum;
+import com.roacg.service.tc.flow.model.enums.DocumentTypeEnum;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -23,20 +26,22 @@ public class DocumentObjectPO extends BasicCompleteEntity {
 
     //文档类型, 文件夹 or 文件
     @Column(columnDefinition = "tinyint", nullable = false)
-    private Integer documentType;
+    @Convert(converter = DocumentTypeEnum.Convert.class)
+    private DocumentTypeEnum documentType;
 
     //内容类型, 文本? 链接? 附件?
     @Column(columnDefinition = "tinyint", nullable = false)
-    private Integer contentType;
+    @Convert(converter = ContentTypeEnum.Convert.class)
+    private ContentTypeEnum contentType;
 
-    //文档状态 未开始/进行中/已完成
+    //文档状态 未开始/进行中/待审校/已完成
     @Column(columnDefinition = "tinyint", nullable = false)
-    private Integer documentState;
+    @Convert(converter = DocumentStateEnum.Convert.class)
+    private DocumentStateEnum documentState;
 
     //文件数 / 字符数?
     @Column(columnDefinition = "int", nullable = false)
     private Integer size;
-
 
     //工作流指针, 指示当前文档处于哪个节点。 每交付一次指针移动一步
     @Column(columnDefinition = "bigint", nullable = false)
@@ -50,7 +55,7 @@ public class DocumentObjectPO extends BasicCompleteEntity {
     @Column(columnDefinition = "bigint", nullable = false)
     private Long workflowTailNode;
 
-    //最终审核人(用户ID) TODO 不需要审核人, 同一待审页面
+    //最终审核人(用户ID) TODO 不需要审核人, 统一待审页面
     @Column(columnDefinition = "bigint")
     private Long reviewerId;
 }

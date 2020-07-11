@@ -10,11 +10,11 @@ import javax.persistence.*;
  */
 @Data
 @Entity
-@Table(name = "tb_tc_project_user")
+@Table(name = "tb_project_user")
 public class ProjectUserPO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, columnDefinition = "bigint(20)")
     private Long id;
 

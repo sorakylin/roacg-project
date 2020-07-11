@@ -1,5 +1,7 @@
 package com.roacg.core.utils;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Random;
 
 /**
@@ -19,9 +21,12 @@ public class SnowflakeIdWorker {
 
     // ==============================Fields===========================================
     /**
-     * 开始时间截 (2015-01-01)
+     * 开始时间截 (2020-01-01)
      */
-    private final long twepoch = 1420041600000L;
+    private final long twepoch = LocalDate.ofYearDay(2020, 01)
+            .atStartOfDay(ZoneId.systemDefault())
+            .toInstant()
+            .getEpochSecond();
 
     /**
      * 机器id所占的位数

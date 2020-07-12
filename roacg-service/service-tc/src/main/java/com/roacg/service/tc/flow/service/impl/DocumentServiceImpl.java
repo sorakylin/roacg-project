@@ -1,5 +1,6 @@
 package com.roacg.service.tc.flow.service.impl;
 
+import com.roacg.core.model.enums.DeletedStatusEnum;
 import com.roacg.core.utils.bean.BeanMapper;
 import com.roacg.service.tc.flow.model.enums.ContentTypeEnum;
 import com.roacg.service.tc.flow.model.enums.DocumentStateEnum;
@@ -44,7 +45,7 @@ public class DocumentServiceImpl implements DocumentService {
     public void createDir(CreateDirREQ req) {
         DocumentObjectPO entity = new DocumentObjectPO();
 
-        entity.setDocumentName(req.getDirName());
+        entity.setDocumentName(req.getDirName().trim());
         entity.setDocumentType(DocumentTypeEnum.DIR);
         entity.setDocumentState(DocumentStateEnum.COMPLETED);
         entity.setContentType(ContentTypeEnum.OTHER);
@@ -52,6 +53,7 @@ public class DocumentServiceImpl implements DocumentService {
         entity.setWorkflowHeadNode(0L);
         entity.setWorkflowTailNode(0L);
         entity.setWorkflowNodePointer(0L);
+        entity.setDeleted(DeletedStatusEnum.UN_DELETE);
 
         documentRepository.saveAndFlush(entity);
         treeService.createNode(req.getParentId(), entity.getDocumentId());

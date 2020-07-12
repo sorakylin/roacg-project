@@ -1,5 +1,8 @@
 package com.roacg.service.tc.flow.model.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.roacg.core.utils.serialize.LocalDateTimeSerializer;
 import com.roacg.service.tc.flow.model.enums.ContentTypeEnum;
 import com.roacg.service.tc.flow.model.enums.DocumentStateEnum;
 import com.roacg.service.tc.flow.model.enums.DocumentTypeEnum;
@@ -10,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 public class DocInfoVO {
 
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long documentId;
 
     //文档名, 同一层下不能重名
@@ -26,5 +30,6 @@ public class DocInfoVO {
 
     private Integer size;
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime updateTime;
 }

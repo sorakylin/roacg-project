@@ -2,6 +2,7 @@ package com.roacg.service.tc.project.service;
 
 import com.roacg.service.tc.project.model.dto.SimpleProjectDTO;
 import com.roacg.service.tc.project.model.req.ProjectCreateREQ;
+import com.roacg.service.tc.project.model.vo.ProjectDetailVO;
 
 import java.util.Collection;
 import java.util.List;
@@ -42,4 +43,7 @@ public interface ProjectService {
 
     //给项目拉人,传个项目ID 和一堆用户ID
     void bindUsers(Long projectId, Long... userIds);
+
+    //查询项目详情的
+    Optional<ProjectDetailVO> findProjectDetail(Long pid);
 }

@@ -2,18 +2,29 @@ package com.roacg.service.tc.project.resource;
 
 
 import com.roacg.core.model.auth.enmus.PermissionType;
+import com.roacg.core.model.exception.ParameterValidationException;
 import com.roacg.core.model.resource.RoApiResponse;
 import com.roacg.core.web.security.annotation.ExposeResource;
+import com.roacg.service.tc.project.model.vo.ProjectDetailVO;
 import com.roacg.service.tc.project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/project")
+@ExposeResource
 public class ProjectResource {
 
     @Autowired
     private ProjectService projectService;
+
+    @GetMapping
+    public RoApiResponse findProjectDetail(@RequestParam("pid") Long pid) {
+        Optional<ProjectDetailVO> result = projectService.findProjectDetail(pid);
+        return result.map(RoApiResponse::ok).orElseThrow(() -> new ParameterValidationException("无此项目"));
+    }
 
     /**
      * 给项目拉人,  可以直接将用户拉到本项目里边来 (TODO 要经过同意么? )

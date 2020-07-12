@@ -16,4 +16,7 @@ public interface TeamRepository extends JpaRepository<TeamPO, Long> {
     @Modifying
     @Query("UPDATE TeamPO team SET team.projectNum=team.projectNum+1 WHERE team.teamId=:teamId")
     int incrementProjectNum(@Param("teamId") Long teamId);
+
+    @Query("SELECT teamName FROM TeamPO WHERE teamId=:teamId")
+    String findNameByTeamId(Long teamId);
 }

@@ -11,6 +11,7 @@ import com.roacg.service.tc.project.model.dto.SimpleProjectDTO;
 import com.roacg.service.tc.project.model.po.ProjectPO;
 import com.roacg.service.tc.project.model.po.ProjectUserPO;
 import com.roacg.service.tc.project.model.req.ProjectCreateREQ;
+import com.roacg.service.tc.project.model.vo.ProjectDetailVO;
 import com.roacg.service.tc.project.repository.ProjectRepository;
 import com.roacg.service.tc.project.repository.ProjectUserRepository;
 import com.roacg.service.tc.project.service.ProjectService;
@@ -210,5 +211,24 @@ public class ProjectServiceImpl implements ProjectService {
         }).collect(toList());
 
         projectUserRepository.saveAll(bindEntity);
+    }
+
+    @Override
+    public Optional<ProjectDetailVO> findProjectDetail(Long pid) {
+
+        Optional<ProjectPO> projectOptional = projectRepository.findById(pid);
+        if (projectOptional.isEmpty()) return Optional.empty();
+
+
+        ProjectPO project = projectOptional.get();
+
+        ProjectDetailVO result = BeanMapper.map(project, new ProjectDetailVO());
+        result.setCreateUserName(project.getCreateAt());
+        if (Objects.nonNull(project.getTeamId())) {
+            String teamName = teamRepository.findNameByTeamId(project.getTeamId());
+            result.setCreateTeamName(teamName);
+        }
+
+        return Optional.of(result);
     }
 }

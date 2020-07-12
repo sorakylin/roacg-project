@@ -27,7 +27,7 @@ public class DocumentVersionPO extends BaseEntity {
     private Integer documentVersion;
 
     //文档内容
-    @Column(columnDefinition = "varchar(20000)")
+    @Column(columnDefinition = "varchar(15000)")
     private String content;
 
     //可能指向一个附件表 or 其他的内容表等

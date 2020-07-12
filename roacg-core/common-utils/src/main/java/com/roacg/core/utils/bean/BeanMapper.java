@@ -29,7 +29,8 @@ public final class BeanMapper {
         return target;
     }
 
-    public static <S, T> void map(final S source, final T target) {
-        BeanUtils.copyProperties(source,target);
+    public static <S, T> T map(final S source, final T target) {
+        BeanUtils.copyProperties(source, target);
+        return target;
     }
 }

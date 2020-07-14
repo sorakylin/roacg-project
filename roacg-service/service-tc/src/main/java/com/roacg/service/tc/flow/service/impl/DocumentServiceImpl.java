@@ -1,7 +1,9 @@
 package com.roacg.service.tc.flow.service.impl;
 
 import com.roacg.core.model.enums.DeletedStatusEnum;
+import com.roacg.core.model.exception.ParameterValidationException;
 import com.roacg.core.utils.bean.BeanMapper;
+import com.roacg.service.tc.flow.model.dto.DocumentNodeDTO;
 import com.roacg.service.tc.flow.model.enums.ContentTypeEnum;
 import com.roacg.service.tc.flow.model.enums.DocumentStateEnum;
 import com.roacg.service.tc.flow.model.enums.DocumentTypeEnum;
@@ -16,15 +18,16 @@ import com.roacg.service.tc.flow.repository.DocumentVersionRepository;
 import com.roacg.service.tc.flow.service.DocumentService;
 import com.roacg.service.tc.flow.service.DocumentTreeService;
 import com.roacg.service.tc.flow.service.DocumentWorkflowService;
+import com.roacg.service.tc.project.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
+
 
 @Service
 @Slf4j
@@ -39,6 +42,8 @@ public class DocumentServiceImpl implements DocumentService {
     private DocumentWorkflowService workflowService;
     @Resource
     private DocumentTreeService treeService;
+    @Resource
+    private ProjectService projectService;
 
     @Override
     @Transactional
@@ -103,6 +108,30 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.findAllById(childNodeId)
                 .stream()
                 .map(document -> BeanMapper.map(document, DocInfoVO.class))
-                .collect(Collectors.toList());
+                .collect(toList());
+    }
+
+    @Override
+    public List<DocumentNodeDTO> findNodeChain(Long nodeId) {
+
+        //查出所有的父节点ID, 第一个是根节点。 如果无根节点, 则入参就是根节点 (projectId)
+        Queue<Long> parentIds = treeService.findNodeAllParentId(nodeId);
+        Long projectId = parentIds.poll();
+        if (Objects.isNull(projectId)) return Collections.emptyList();
+        else parentIds.add(nodeId);
+
+        //判定一下项目存不存在
+        projectService.findSimpleProject(projectId).orElseThrow(() -> new ParameterValidationException("无此数据"));
+
+        List<DocumentObjectPO> nodes = documentRepository.findAllById(parentIds);
+
+        List<DocumentNodeDTO> chain = nodes.stream().map(doc -> {
+            DocumentNodeDTO documentNode = new DocumentNodeDTO();
+            documentNode.setDocumentId(doc.getDocumentId());
+            documentNode.setDocumentName(doc.getDocumentName());
+            return documentNode;
+        }).collect(toList());
+
+        return chain;
     }
 }

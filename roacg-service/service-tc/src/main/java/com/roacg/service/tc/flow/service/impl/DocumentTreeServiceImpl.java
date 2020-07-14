@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,5 +64,15 @@ public class DocumentTreeServiceImpl implements DocumentTreeService {
     @Override
     public Set<Long> findChildNodeId(Long nodeId) {
         return documentTreeRepository.findChildNodeId(nodeId);
+    }
+
+    @Override
+    public Queue<Long> findNodeAllParentId(Long nodeId) {
+        Queue<Long> result = documentTreeRepository.findByDescendant(nodeId).stream()
+                .sorted(Comparator.comparing(DocumentTreePO::getDistance).reversed())
+                .map(DocumentTreePO::getAncestor)
+                .collect(Collectors.toCollection(LinkedList::new));
+
+        return result;
     }
 }

@@ -3,6 +3,7 @@ package com.roacg.service.tc.flow.resource;
 import com.roacg.core.model.auth.enmus.PermissionType;
 import com.roacg.core.model.resource.RoApiResponse;
 import com.roacg.core.web.security.annotation.ExposeResource;
+import com.roacg.service.tc.flow.model.dto.DocumentNodeDTO;
 import com.roacg.service.tc.flow.model.req.CreateDirREQ;
 import com.roacg.service.tc.flow.model.req.CreateTextDocumentREQ;
 import com.roacg.service.tc.flow.model.vo.DocInfoVO;
@@ -49,9 +50,20 @@ public class DocumentResource {
      * @param nodeId 文档ID or 项目ID; 项目ID为根目录
      * @return 文档列表
      */
-    @GetMapping("/child-node/{nodeId}")
-    public RoApiResponse findChildNode(@PathVariable Long nodeId) {
+    @GetMapping("/child-node")
+    public RoApiResponse findChildNode(@RequestParam("nodeId") Long nodeId) {
         List<DocInfoVO> result = documentService.findChildDocument(nodeId);
+        return RoApiResponse.ok(result);
+    }
+
+    /**
+     * 查询从根节点到当前节点的关系
+     *
+     * @return
+     */
+    @GetMapping("/chain")
+    public RoApiResponse findNodeChain(@RequestParam("nodeId") Long nodeId) {
+        List<DocumentNodeDTO> result = documentService.findNodeChain(nodeId);
         return RoApiResponse.ok(result);
     }
 }

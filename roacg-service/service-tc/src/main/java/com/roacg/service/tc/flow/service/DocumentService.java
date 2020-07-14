@@ -1,5 +1,6 @@
 package com.roacg.service.tc.flow.service;
 
+import com.roacg.service.tc.flow.model.dto.DocumentNodeDTO;
 import com.roacg.service.tc.flow.model.req.CreateDirREQ;
 import com.roacg.service.tc.flow.model.req.CreateTextDocumentREQ;
 import com.roacg.service.tc.flow.model.vo.DocInfoVO;
@@ -25,4 +26,11 @@ public interface DocumentService {
      * @return 文档列表
      */
     List<DocInfoVO> findChildDocument(Long nodeId);
+
+    /**
+     * 查询从根节点到当前节点的关系
+     *
+     * @return 节点链条
+     */
+    List<DocumentNodeDTO>  findNodeChain(Long nodeId);
 }

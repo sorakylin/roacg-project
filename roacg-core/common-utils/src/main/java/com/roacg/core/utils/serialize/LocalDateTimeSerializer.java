@@ -11,6 +11,15 @@ import java.time.format.DateTimeFormatter;
 
 public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
 
+
+    public static LocalDateTimeSerializer INSTANCE = new LocalDateTimeSerializer();
+
+    private LocalDateTimeSerializer() {
+        if (INSTANCE != null) {
+            throw new UnsupportedOperationException();
+        }
+    }
+
     @Override
     public void serialize(LocalDateTime dateTime, JsonGenerator generator, SerializerProvider sp)
             throws IOException, JsonProcessingException {

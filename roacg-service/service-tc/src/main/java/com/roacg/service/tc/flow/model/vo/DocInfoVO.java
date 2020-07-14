@@ -2,7 +2,6 @@ package com.roacg.service.tc.flow.model.vo;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.roacg.core.utils.serialize.LocalDateTimeSerializer;
 import com.roacg.service.tc.flow.model.enums.ContentTypeEnum;
 import com.roacg.service.tc.flow.model.enums.DocumentStateEnum;
 import com.roacg.service.tc.flow.model.enums.DocumentTypeEnum;
@@ -30,6 +29,5 @@ public class DocInfoVO {
 
     private Integer size;
 
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime updateTime;
 }

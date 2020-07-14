@@ -1,12 +1,18 @@
-package com.roacg.core.base.config;
+package com.roacg.core.utils.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.roacg.core.utils.serialize.LocalDateSerializer;
+import com.roacg.core.utils.serialize.LocalDateTimeSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Configuration
 public class CommonConfig {
@@ -27,6 +33,15 @@ public class CommonConfig {
         objectMapper.configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, false);
         //使用JSR310提供的序列化类,里面包含了大量的JDK8时间序列化类
         objectMapper.registerModule(new JavaTimeModule());
+
+
+        //自定义的序列化类
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(LocalDate.class, LocalDateSerializer.INSTANCE);
+        module.addSerializer(LocalDateTime.class, LocalDateTimeSerializer.INSTANCE);
+
+        objectMapper.registerModule(module);
+
         return objectMapper;
     }
 }

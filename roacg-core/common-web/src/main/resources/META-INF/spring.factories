@@ -3,5 +3,6 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.roacg.core.web.config.RedisCacheConfig,\
   com.roacg.core.web.config.WebAppConfigurer,\
   com.roacg.core.web.config.DubboConfig,\
-  com.roacg.core.web.security.repository.RedisTokenRepository
+  com.roacg.core.web.security.repository.RedisTokenRepository,\
+  com.roacg.core.web.config.JacksonConfig
 

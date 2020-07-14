@@ -1,7 +1,5 @@
 package com.roacg.service.tc.team.model.vo;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.roacg.core.utils.serialize.LocalDateSerializer;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -37,7 +35,6 @@ public class TeamDetailVO {
     private Integer projectNum;
 
     //创建时间
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate createTime;
 
     /**

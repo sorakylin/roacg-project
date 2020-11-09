@@ -1,21 +1,22 @@
-# roacg-project
-一个社区应用
-暂定域名为 roacg.com \ roacg.co
-
----
-
-### 大事记:
-2020-01-22 正式决定立项，进入研发阶段
-
-<br/>
-<br/>
-<br/>
-
-### 架构设计:
-
-service-gateway: Api gateway, 鉴权、认证需要在此进行  
-service-system: 综合OAuth2认证服务、用户/权限/角色等相关操作
 
 
-所有服务均提供相应的 Dubbo Service 供系统内部进行远程服务调用  
-除了service-system服务外, 其他服务均需要提供 HTTP 访问接口供网关层路由。
+# 项目终止
+
+
+一个已经被废弃的项目， 大概除了作为一个项目工程的demo以外已经没有任何其他用处了吧。。
+
+<br>
+<br>
+
+#### 涉及:
+* SpringCloudAlibaba全家桶
+* SpringSecurityOAuth2
+* SpringCloudGateway
+* SpringDataJPA
+* Gradle多模块
+
+<br>
+<br>
+
+
+另一个项目已经成功上线一段时间， 目前也有接近300commit了。 彻底放弃这个项目了， 哎。算是告别第一次
